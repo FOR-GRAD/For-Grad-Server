@@ -8,6 +8,7 @@ public class ForGradApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(ForGradApplication.class, args);
+        // ezeun test
     }
 
 }
