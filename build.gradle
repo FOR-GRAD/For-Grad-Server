@@ -47,7 +47,7 @@ tasks.named('test') {
 sourceSets {
     main {
         resources {
-            srcDirs 'src/main/resources', '../Submodule/application-prod.yml'
+            srcDirs "src/main/resources", "./Submodule"
         }
     }
 }
