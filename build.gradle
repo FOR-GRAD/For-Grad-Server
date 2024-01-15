@@ -36,10 +36,18 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-processResources.dependsOn('copySubmodule')
+//processResources.dependsOn('copySubmodule')
+//
+//tasks.register('copySubmodule', Copy) {
+//    from './Submodule' // 서브 모듈 디렉토리 경로
+//    include "*.yml"  // 설정 파일 복사
+//    into 'src/main/resources'  // 붙여넣을 위치
+//}
 
-tasks.register('copySubmodule', Copy) {
-    from './Submodule' // 서브 모듈 디렉토리 경로
-    include "*.yml"  // 설정 파일 복사
-    into 'src/main/resources'  // 붙여넣을 위치
+sourceSets {
+    main {
+        resources {
+            srcDirs 'src/main/resources', '../Submodule/application-prod.yml'
+        }
+    }
 }
