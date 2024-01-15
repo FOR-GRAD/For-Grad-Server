@@ -36,8 +36,10 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-jar {
-    from("./Submodule/application.yml") {
-        into "bin/"
-    }
+processResources.dependsOn('copySubmodule')
+
+tasks.register('copySubmodule', Copy) {
+    from './submodule' // 서브 모듈 디렉토리 경로
+    include "*.properties"  // 설정 파일 복사
+    into 'src/main/resources'  // 붙여넣을 위치
 }
