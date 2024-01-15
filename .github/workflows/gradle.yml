@@ -32,10 +32,10 @@ jobs:
 
       # 2. submodule 추가
       - name: Add Submodule
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
         with:
           token: ${{ secrets.ACTION_TOKEN }}
-          submodules: true
+          submodules: recursive
 
       # 3. Spring Boot 애플리케이션 빌드
       - name: Build with Gradle
