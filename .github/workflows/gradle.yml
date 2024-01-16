@@ -19,6 +19,7 @@ permissions:
 jobs:
   # Spring Boot 애플리케이션을 빌드하여 도커허브에 푸시하는 과정
   build-docker-image:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
