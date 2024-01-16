@@ -39,7 +39,7 @@ tasks.named('test') {
 sourceSets {
     main {
         resources {
-            srcDirs "src/main/resources", "./Submodule"
+            srcDirs "src/main/resources", "./submodule"
         }
     }
 }
