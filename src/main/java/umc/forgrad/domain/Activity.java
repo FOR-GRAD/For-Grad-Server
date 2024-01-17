@@ -10,6 +10,8 @@ import umc.forgrad.domain.common.BaseEntity;
 import umc.forgrad.domain.enums.Category;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Builder
 @Entity
@@ -38,5 +40,10 @@ public class Activity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Category category; //CERTIFICATIONS, COMPETITIONS, VOLUNTEERS, AWARDS;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "student_id")
+    private Student student;
 
+    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL)
+    private List<ActivityFile> activityFileList = new ArrayList<>();
 }
