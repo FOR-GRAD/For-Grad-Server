@@ -23,5 +23,3 @@ public class Subject extends BaseEntity {
     @Column(nullable = false)
     private Integer credit;
 }
-
-//
