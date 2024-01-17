@@ -33,4 +33,8 @@ public class Student {
     @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL)
     private List<Activity> activityList = new ArrayList<>();
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "memo_id")
+    private Free free;
+
 }
