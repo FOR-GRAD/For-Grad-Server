@@ -9,6 +9,9 @@ name: Java CI with Gradle
 
 # 동작 조건 설정 : master 브랜치에 pr이 closed 되었을 때 동작한다.
 on:
+  push:
+    branches:
+      - main
   pull_request:
     types:
       - closed
