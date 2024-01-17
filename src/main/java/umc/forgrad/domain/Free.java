@@ -1,4 +1,4 @@
-package umc.forgrad.domain.common;
+package umc.forgrad.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
