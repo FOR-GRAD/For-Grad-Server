@@ -30,7 +30,7 @@ public class Student {
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private List<Semester> semesterList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private List<Activity> activityList = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY)
