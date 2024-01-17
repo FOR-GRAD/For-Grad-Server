@@ -23,5 +23,5 @@ public class Certificate extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id")
-    private Student student;
+    private Student student; //Student 엔티티와 연결
 }
