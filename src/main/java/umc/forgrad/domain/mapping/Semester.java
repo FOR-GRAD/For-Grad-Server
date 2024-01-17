@@ -2,6 +2,7 @@ package umc.forgrad.domain.mapping;
 
 import jakarta.persistence.*;
 import lombok.*;
+import umc.forgrad.domain.Student;
 import umc.forgrad.domain.Subject;
 import umc.forgrad.domain.common.BaseEntity;
 
