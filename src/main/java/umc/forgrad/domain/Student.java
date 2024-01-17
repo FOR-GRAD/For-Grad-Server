@@ -1,11 +1,12 @@
 package umc.forgrad.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+import umc.forgrad.domain.mapping.Semester;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -25,5 +26,11 @@ public class Student {
     private String track1; // 1트랙
 
     private String track2; // 2트랙
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    private List<Semester> semesterList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL)
+    private List<Activity> activityList = new ArrayList<>();
 
 }

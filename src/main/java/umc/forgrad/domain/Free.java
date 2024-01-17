@@ -1,5 +1,7 @@
 package umc.forgrad.domain;
 
+import jakarta.persistence.Entity;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
