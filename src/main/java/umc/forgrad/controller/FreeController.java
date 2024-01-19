@@ -1,6 +1,5 @@
 package umc.forgrad.controller;
 
-import umc.forgrad.domain.common.Free;
 import umc.forgrad.service.FreeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

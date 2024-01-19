@@ -1,7 +1,5 @@
 package umc.forgrad.repository;
 
-import umc.forgrad.domain.common.Free;
-
 import java.util.List;
 import java.util.Optional;
 
