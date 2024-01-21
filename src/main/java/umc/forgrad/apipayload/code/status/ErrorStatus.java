@@ -11,7 +11,10 @@ import umc.forgrad.apipayload.code.ReasonDto;
 public enum ErrorStatus implements BaseCode {
 
     // 에러 응답
-    INTERNER_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", "서버 에러");
+    INTERNER_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", "서버 에러"),
+
+    // 로그인 실패
+    LOGIN_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "LOGIN FAIL", "아이디 또는 비밀번호를 확인하세요");
 
     private final HttpStatus httpStatus;
     private final String code;
