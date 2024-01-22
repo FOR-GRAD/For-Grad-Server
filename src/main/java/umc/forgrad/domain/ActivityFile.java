@@ -1,9 +1,6 @@
 package umc.forgrad.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,6 +34,7 @@ public class ActivityFile extends BaseEntity {
     @JoinColumn(name = "activity_id")
     private Activity activity;
 
+
     //==객체 생성 메서드==//
     public void createActivity(Activity activity) {
         this.activity = activity;
@@ -44,3 +42,4 @@ public class ActivityFile extends BaseEntity {
     }
 
 }
+

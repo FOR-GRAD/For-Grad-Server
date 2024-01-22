@@ -53,5 +53,10 @@ public class Activity extends BaseEntity {
 
     private Category category; //CERTIFICATIONS, COMPETITIONS, VOLUNTEERS, AWARDS;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "student_id")
+    private Student student;
 
+    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL)
+    private List<ActivityFile> activityFileList = new ArrayList<>();
 }

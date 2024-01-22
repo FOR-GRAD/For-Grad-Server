@@ -11,7 +11,7 @@ import umc.forgrad.apipayload.code.ReasonDto;
 public enum SuccessStatus implements BaseCode {
 
     // 성공 응답
-    OK(HttpStatus.OK, "정상처리 되었습니다.", "OK");
+    OK(HttpStatus.OK, "COMMON200", "OK");
 
     private final HttpStatus httpStatus;
     private final String code;
