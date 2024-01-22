@@ -8,7 +8,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Service;
 import umc.forgrad.apipayload.code.status.ErrorStatus;
-import umc.forgrad.converter.StudentConverter;
+import umc.forgrad.converter.FuturePlansCoverter;
 import umc.forgrad.domain.Semester;
 import umc.forgrad.domain.Student;
 import umc.forgrad.domain.Subject;
@@ -81,7 +81,7 @@ public class StudentQueryServiceImpl implements StudentQueryService {
                 .toList();
 
         // FutureTimeTableDto 변경
-        List<StudentResponseDto.FutureTimeTableDto> futureTimeTableDto = StudentConverter.toFutureTimeTableDto(subjectList);
+        List<StudentResponseDto.FutureTimeTableDto> futureTimeTableDto = FuturePlansCoverter.toFutureTimeTableDto(subjectList);
 
         return StudentResponseDto.HomeResponseDto.builder()
                 .name(name)
