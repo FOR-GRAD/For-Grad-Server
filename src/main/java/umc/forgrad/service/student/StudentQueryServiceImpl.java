@@ -9,16 +9,30 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
+import umc.forgrad.apipayload.code.status.ErrorStatus;
+import umc.forgrad.domain.Student;
+import umc.forgrad.domain.Subject;
+import umc.forgrad.domain.mapping.Semester;
 import umc.forgrad.dto.student.StudentResponseDto;
+import umc.forgrad.exception.GeneralException;
+import umc.forgrad.repository.SemesterRepository;
+import umc.forgrad.repository.StudentRepository;
+import umc.forgrad.repository.SubjectRepository;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class StudentQueryServiceImpl implements StudentQueryService {
+
+    private final StudentRepository studentRepository;
+    private final SemesterRepository semesterRepository;
+    private final SubjectRepository subjectRepository;
 
     @Override
     public StudentResponseDto.HomeResponseDto queryHome(HttpSession session) throws IOException {
@@ -29,6 +43,19 @@ public class StudentQueryServiceImpl implements StudentQueryService {
 
         Document document = gradesResponse.parse();
         String text = Objects.requireNonNull(document.select("strong.objHeading_h3").first()).text(); // 황준현 (1871456) 컴퓨터공학부 4 학년 일반휴학
+        // 괄호를 제거하고, 공백을 기준으로 문자열 분리
+        String[] parts = text.replace("(", "").replace(")", "").split(" ");
+        String name = parts[0];
+        String id = parts[1];
+        String department = parts[2];
+        String grade = parts[3] + parts[4];
+        String status = parts[5];
+
+        log.info(name);
+        log.info(id);
+        log.info(department);
+        log.info(grade);
+        log.info(status);
 
         // 졸업요건 조회
         String gradUrl = "https://info.hansung.ac.kr/jsp_21/student/graduation/graduation_requirement.jsp";
@@ -48,6 +75,22 @@ public class StudentQueryServiceImpl implements StudentQueryService {
         log.info(trackRequirement2);
         log.info(note1);
         log.info(note2);
+
+        // 응원의 한마디 조회
+        Optional<Student> optionalStudent = studentRepository.findById(Long.parseLong(id));
+        Student student = optionalStudent.orElseThrow(() -> new GeneralException(ErrorStatus.STUDENT_NOT_FOUND));
+        String message = student.getMessage();
+
+        // 시간표 조회
+        Optional<Semester> optionalSemester = semesterRepository.findByStudentId(Long.parseLong(id));
+        Semester semester = optionalSemester.orElseThrow(() -> new GeneralException(ErrorStatus.SEMESTER_NOT_FOUND));
+
+//        subjectList.forEach(subject -> {
+//            log.info(subject.getType());
+//            log.info(subject.getName());
+//            log.info(String.valueOf(subject.getCredit()));
+//        });
+
 
         return null;
     }
