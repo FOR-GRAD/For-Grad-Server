@@ -10,8 +10,8 @@ import umc.forgrad.apipayload.ApiResponse;
 import umc.forgrad.converter.StudentConverter;
 import umc.forgrad.dto.student.StudentRequestDto;
 import umc.forgrad.dto.student.StudentResponseDto;
+import umc.forgrad.service.home.HomeQueryService;
 import umc.forgrad.service.student.StudentCommandService;
-import umc.forgrad.service.student.StudentQueryService;
 
 import java.io.IOException;
 
@@ -20,7 +20,7 @@ import java.io.IOException;
 public class StudentController {
 
     private final StudentCommandService studentCommandService;
-    private final StudentQueryService studentQueryService;
+    private final HomeQueryService homeQueryService;
 
     @PostMapping("/login")
     public ApiResponse<StudentResponseDto.LoginResponseDto> login(@ModelAttribute StudentRequestDto.LoginRequestDto loginRequestDto, HttpSession session) throws IOException {
@@ -30,7 +30,7 @@ public class StudentController {
 
     @GetMapping("/home")
     public ApiResponse<StudentResponseDto.HomeResponseDto> home(HttpSession session) throws IOException {
-        StudentResponseDto.HomeResponseDto homeResponseDto = studentQueryService.queryHome(session);
+        StudentResponseDto.HomeResponseDto homeResponseDto = homeQueryService.queryHome(session);
         return ApiResponse.onSuccess(homeResponseDto);
     }
 

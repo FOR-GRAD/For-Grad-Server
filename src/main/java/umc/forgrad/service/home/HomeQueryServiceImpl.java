@@ -1,4 +1,4 @@
-package umc.forgrad.service.student;
+package umc.forgrad.service.home;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class StudentQueryServiceImpl implements StudentQueryService {
+public class HomeQueryServiceImpl implements HomeQueryService {
 
     private final StudentRepository studentRepository;
     private final SemesterRepository semesterRepository;
