@@ -1,5 +1,6 @@
 package umc.forgrad.controller;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,6 +11,8 @@ import umc.forgrad.dto.student.StudentRequestDto;
 import umc.forgrad.dto.student.StudentResponseDto;
 import umc.forgrad.service.student.StudentCommandServiceImpl;
 
+import java.io.IOException;
+
 @RestController
 @RequiredArgsConstructor
 public class StudentController {
@@ -17,8 +20,8 @@ public class StudentController {
     private final StudentCommandServiceImpl studentCommandService;
 
     @PostMapping("/login")
-    public ApiResponse<StudentResponseDto.LoginResponseDto> login(@ModelAttribute StudentRequestDto.LoginRequestDto loginRequestDto) {
-        String loginResultMessage = studentCommandService.login(loginRequestDto);
+    public ApiResponse<StudentResponseDto.LoginResponseDto> login(@ModelAttribute StudentRequestDto.LoginRequestDto loginRequestDto, HttpSession session) throws IOException {
+        String loginResultMessage = studentCommandService.login(loginRequestDto, session);
         return ApiResponse.onSuccess(StudentConverter.toLoginResultDto(loginResultMessage));
     }
 
