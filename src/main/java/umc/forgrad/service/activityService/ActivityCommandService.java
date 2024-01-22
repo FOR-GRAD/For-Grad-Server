@@ -19,6 +19,7 @@ import java.util.List;
 public class ActivityCommandService {
     private final S3Service s3Service;
     private final ActivityRepository activityRepository;
+    private final ActivityFileService activityFileService;
 
     @Transactional
     public void save(Activity activity) {
@@ -33,11 +34,13 @@ public class ActivityCommandService {
                 .content(postActivityReq.getContent())
                 .fileList(new ArrayList<>())
                 .build();
+
         save(activity);
 
 
         if (multipartFiles != null) {
             List<GetS3Res> imgUrls = s3Service.uploadFile(multipartFiles);
+            activityFileService.saveAllActivityFileByActivity(imgUrls, activity);
         }
 
         return "activityId: " + activity.getId() + "인 게시글을 생성했습니다.";

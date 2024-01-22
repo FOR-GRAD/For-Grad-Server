@@ -31,6 +31,11 @@ public class Activity extends BaseEntity {
 
     private String image_url;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "student_id")
+    private Student student;
+
+
     @OneToMany(mappedBy = "activity")
     private List<ActivityFile> fileList = new ArrayList<>();
 
@@ -38,8 +43,6 @@ public class Activity extends BaseEntity {
         fileList.add(activityFile);
         activityFile.createActivity(this);
     }
-
-
 
 
     private String prize;
