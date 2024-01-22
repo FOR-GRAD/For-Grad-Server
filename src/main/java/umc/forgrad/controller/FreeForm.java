@@ -1,11 +1,8 @@
 package umc.forgrad.controller;
 
+import lombok.Data;
+
+@Data
 public class FreeForm {
-    private String name;
-    public String getMemo() {
-        return memo;
-    }
-    public void setMemo(String memo) {
-        this.memo = memo;
-    }
+    private String memo;
 }
