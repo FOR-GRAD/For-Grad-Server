@@ -3,6 +3,8 @@ package umc.forgrad.dto.student;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.List;
+
 public class StudentResponseDto {
 
     @Getter
@@ -20,7 +22,7 @@ public class StudentResponseDto {
 
         private String department; // 학부
 
-        private Integer grade; // 학년
+        private String grade; // 학년
 
         private String status; // 재학중, 휴학중과 같은 상태
 
@@ -38,7 +40,7 @@ public class StudentResponseDto {
 
         private String note2; // 2트랙 졸업요건 비고
 
-        private FutureTimeTableDto futureTimeTableDto;
+        private List<FutureTimeTableDto> futureTimeTableDto;
     }
 
     @Getter
