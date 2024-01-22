@@ -4,13 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import umc.forgrad.converter.ActivityConverter;
 import umc.forgrad.domain.Activity;
+import umc.forgrad.domain.Student;
 import umc.forgrad.dto.GetS3Res;
-import umc.forgrad.dto.PostActivityRequest;
+import umc.forgrad.dto.activity.PostActivityRequest;
 import umc.forgrad.repository.ActivityRepository;
 
-import javax.swing.text.StyledEditorKit;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,22 +27,18 @@ public class ActivityCommandService {
     }
 
     @Transactional
-    public String createBoard(PostActivityRequest postActivityReq, List<MultipartFile> multipartFiles) {
+    public Activity createBoard(PostActivityRequest.RegistActivity postActivityReq, List<MultipartFile> multipartFiles) {
 
-        Activity activity = Activity.builder()
-                .title(postActivityReq.getTitle())
-                .content(postActivityReq.getContent())
-                .fileList(new ArrayList<>())
-                .build();
+        Activity activity = ActivityConverter.toActivity(postActivityReq, multipartFiles);
+        System.out.println(activity);
 
         save(activity);
-
-
         if (multipartFiles != null) {
             List<GetS3Res> imgUrls = s3Service.uploadFile(multipartFiles);
             activityFileService.saveAllActivityFileByActivity(imgUrls, activity);
         }
 
-        return "activityId: " + activity.getId() + "인 게시글을 생성했습니다.";
+
+        return activity;
     }
 }

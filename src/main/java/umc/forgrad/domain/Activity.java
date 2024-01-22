@@ -24,26 +24,9 @@ public class Activity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     private String title;
 
     private String content;
-
-    private String image_url;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "student_id")
-    private Student student;
-
-
-    @OneToMany(mappedBy = "activity")
-    private List<ActivityFile> fileList = new ArrayList<>();
-
-    public void addFileList(ActivityFile activityFile) {
-        fileList.add(activityFile);
-        activityFile.createActivity(this);
-    }
-
 
     private String prize;
 
@@ -51,12 +34,19 @@ public class Activity extends BaseEntity {
 
     private LocalDate endDate;
 
+    @Enumerated(EnumType.STRING)
     private Category category; //CERTIFICATIONS, COMPETITIONS, VOLUNTEERS, AWARDS;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id")
     private Student student;
 
+
     @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL)
-    private List<ActivityFile> activityFileList = new ArrayList<>();
+    private List<ActivityFile> fileList = new ArrayList<>();
+
+    public void addFileList(ActivityFile activityFile) {
+        fileList.add(activityFile);
+        activityFile.createActivity(this);
+    }
 }
