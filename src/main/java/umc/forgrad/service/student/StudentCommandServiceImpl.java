@@ -1,5 +1,6 @@
 package umc.forgrad.service.student;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -9,17 +10,13 @@ import umc.forgrad.dto.student.StudentRequestDto;
 import umc.forgrad.exception.GeneralException;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 @Slf4j
 public class StudentCommandServiceImpl implements StudentCommandService {
 
-    private Map<String, String> cookieMap = new HashMap<>();
-
     @Override
-    public String login(StudentRequestDto.LoginRequestDto loginRequestDto) throws IOException {
+    public String login(StudentRequestDto.LoginRequestDto loginRequestDto, HttpSession session) throws IOException {
 
         String url = "https://info.hansung.ac.kr/servlet/s_gong.gong_login_ssl";
 
@@ -29,7 +26,7 @@ public class StudentCommandServiceImpl implements StudentCommandService {
                 .execute();
 
         // 쿠키 저장
-        cookieMap = response.cookies();
+        session.setAttribute("cookies", response.cookies());
 
         if (response.hasCookie("ssotoken")) {
             return "login success";
