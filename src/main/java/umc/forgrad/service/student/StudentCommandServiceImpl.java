@@ -1,19 +1,26 @@
 package umc.forgrad.service.student;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.springframework.stereotype.Service;
 import umc.forgrad.apipayload.code.status.ErrorStatus;
+import umc.forgrad.converter.StudentConverter;
+import umc.forgrad.domain.Student;
 import umc.forgrad.dto.student.StudentRequestDto;
 import umc.forgrad.exception.GeneralException;
+import umc.forgrad.repository.StudentRepository;
 
 import java.io.IOException;
 
 @Service
+@RequiredArgsConstructor
 @Slf4j
 public class StudentCommandServiceImpl implements StudentCommandService {
+
+    private final StudentRepository studentRepository;
 
     @Override
     public String login(StudentRequestDto.LoginRequestDto loginRequestDto, HttpSession session) throws IOException {
@@ -29,6 +36,8 @@ public class StudentCommandServiceImpl implements StudentCommandService {
         session.setAttribute("cookies", response.cookies());
 
         if (response.hasCookie("ssotoken")) {
+            Student student = StudentConverter.toStudent(Long.parseLong(loginRequestDto.getId()));
+            studentRepository.save(student);
             return "login success";
         } else {
             throw new GeneralException(ErrorStatus.LOGIN_UNAUTHORIZED);
