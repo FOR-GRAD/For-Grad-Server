@@ -30,8 +30,8 @@ public class StudentController {
 
     @GetMapping("/home")
     public ApiResponse<StudentResponseDto.HomeResponseDto> home(HttpSession session) throws IOException {
-        StudentResponseDto.HomeResponseDto homeResponseDto = studentCommandService.queryHome(session);
-        return ApiResponse.onSuccess(StudentConverter.toQueryHomeResultDto(homeResponseDto));
+        StudentResponseDto.HomeResponseDto homeResponseDto = studentQueryService.queryHome(session);
+        return ApiResponse.onSuccess(homeResponseDto);
     }
 
 }
