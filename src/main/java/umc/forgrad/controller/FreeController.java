@@ -34,12 +34,12 @@ public class FreeController {
     }
 
     @GetMapping(value = "/plans/memo/stuId/{stuId}")
-    public ApiResponse<List<Free>> getMemo(@PathParam("stuId") String stuId) {
+    public ApiResponse<Free> getMemo(@PathParam("stuId") String stuId) {
 
         // 학생 repo에서 메모ID를 알아내서 메모정보를 가져와야하나?
 
-        List<Free> memos = freeService.findMemos(Long.parseLong(stuId));
+        Free memo = freeService.findMemos(Long.parseLong(stuId));
 
-        return ApiResponse.onSuccess(memos);
+        return ApiResponse.onSuccess(memo);
     }
 }

@@ -30,8 +30,8 @@ public class FreeService{
     /**
      * 메모 조회하기
      */
-    public List<Free> findMemos(Long stuId){
-        return freeRepository.findAllByStuId(stuId);
+    public Free findMemos(Long stuId){
+        return freeRepository.findByStuId(stuId);
     }
 
 //    public Optional<Free> findOne(Long memoId){
