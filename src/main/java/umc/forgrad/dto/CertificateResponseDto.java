@@ -14,11 +14,4 @@ import java.time.LocalDateTime;
 public class CertificateResponseDto {
     Long certificateId;
     LocalDateTime createdAt;
-
-    public static CertificateResponseDto toAddResultDto(Certificate certificate) {
-        return CertificateResponseDto.builder()
-                .certificateId(certificate.getId())
-                .createdAt(LocalDateTime.now())
-                .build();
-    }
 }

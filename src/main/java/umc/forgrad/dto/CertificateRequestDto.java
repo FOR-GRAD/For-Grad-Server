@@ -22,11 +22,4 @@ public class CertificateRequestDto {
         this.date = date;
         this.student = student;
     }
-    public Certificate toEntity() {
-        return Certificate.builder()
-                .name(name)
-                .date(date)
-                .student(student)
-                .build();
-    }
 }
