@@ -2,6 +2,7 @@ package umc.forgrad.controller;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,6 +11,7 @@ import umc.forgrad.converter.StudentConverter;
 import umc.forgrad.dto.student.StudentRequestDto;
 import umc.forgrad.dto.student.StudentResponseDto;
 import umc.forgrad.service.student.StudentCommandServiceImpl;
+import umc.forgrad.service.student.StudentQueryService;
 
 import java.io.IOException;
 
@@ -18,11 +20,18 @@ import java.io.IOException;
 public class StudentController {
 
     private final StudentCommandServiceImpl studentCommandService;
+    private final StudentQueryService studentQueryService;
 
     @PostMapping("/login")
     public ApiResponse<StudentResponseDto.LoginResponseDto> login(@ModelAttribute StudentRequestDto.LoginRequestDto loginRequestDto, HttpSession session) throws IOException {
         String loginResultMessage = studentCommandService.login(loginRequestDto, session);
         return ApiResponse.onSuccess(StudentConverter.toLoginResultDto(loginResultMessage));
+    }
+
+    @GetMapping("/home")
+    public ApiResponse<StudentResponseDto.HomeResponseDto> home(HttpSession session) throws IOException {
+        StudentResponseDto.HomeResponseDto homeResponseDto = studentCommandService.queryHome(session);
+        return ApiResponse.onSuccess(StudentConverter.toQueryHomeResultDto(homeResponseDto));
     }
 
 }
