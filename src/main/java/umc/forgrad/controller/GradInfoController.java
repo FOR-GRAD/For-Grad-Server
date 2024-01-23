@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import umc.forgrad.apipayload.ApiResponse;
 import umc.forgrad.dto.gradinfo.GradInfoResponseDto;
-import umc.forgrad.service.gradinfo.GradInfoQueryService;
+import umc.forgrad.service.info.GradInfoQueryService;
 
 import java.io.IOException;
 
