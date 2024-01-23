@@ -2,7 +2,6 @@ package umc.forgrad.service.info;
 
 import jakarta.servlet.http.HttpSession;
 import org.jsoup.Connection;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -12,6 +11,8 @@ import umc.forgrad.dto.gradinfo.GradInfoResponseDto;
 
 import java.io.IOException;
 import java.util.*;
+
+import static umc.forgrad.service.common.ConnectionResponse.getResponse;
 
 @Service
 public class CompletionQueryServiceImpl implements CompletionQueryService {
@@ -67,7 +68,6 @@ public class CompletionQueryServiceImpl implements CompletionQueryService {
         Elements majorRows = majorTable.select("tr");
 
         Map<String, List<String>> majorMap = new LinkedHashMap<>();
-        String totalCredits2 = majorTable.select("#td_juntotal").text();
 
         for (Element row : majorRows) {
             Elements ths = row.select("th");
@@ -95,18 +95,6 @@ public class CompletionQueryServiceImpl implements CompletionQueryService {
                 .build();
 
         return GradInfoConverter.toCompletionDto(generalCompletionDto, majorCompletionDto);
-
-    }
-
-    private static Connection.Response getResponse(HttpSession session, String url) throws IOException {
-
-        @SuppressWarnings(value = "unchecked")
-        Map<String, String> cookies = (Map<String, String>) session.getAttribute("cookies");
-
-        return Jsoup.connect(url)
-                .cookies(cookies)
-                .method(Connection.Method.GET)
-                .execute();
 
     }
 

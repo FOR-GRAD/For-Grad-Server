@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import static umc.forgrad.service.common.ConnectionResponse.getResponse;
+
 @Service
 @Slf4j
 public class PointQueryServiceImpl implements PointQueryService {
@@ -88,18 +90,6 @@ public class PointQueryServiceImpl implements PointQueryService {
                 .build();
 
         return PointConverter.toMyPointResponseDto(listSize, pageSize, pointSummaryDto, myPointList);
-
-    }
-
-    private static Connection.Response getResponse(HttpSession session, String url) throws IOException {
-
-        @SuppressWarnings(value = "unchecked")
-        Map<String, String> cookies = (Map<String, String>) session.getAttribute("cookies");
-
-        return Jsoup.connect(url)
-                .cookies(cookies)
-                .method(Connection.Method.GET)
-                .execute();
 
     }
 
