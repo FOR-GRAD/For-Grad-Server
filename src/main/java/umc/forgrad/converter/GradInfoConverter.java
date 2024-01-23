@@ -22,4 +22,12 @@ public class GradInfoConverter {
                 .build();
     }
 
+    public static GradInfoResponseDto.CompletionStatusDto toCompletionDto(GradInfoResponseDto.GeneralCompletionDto generalCompletionDto, GradInfoResponseDto.MajorCompletionDto majorCompletionDto) {
+
+        return GradInfoResponseDto.CompletionStatusDto.builder()
+                .generalCompletionDto(generalCompletionDto)
+                .majorCompletionDto(majorCompletionDto)
+                .build();
+
+    }
 }
