@@ -1,4 +1,4 @@
-package umc.forgrad.service.gradinfo;
+package umc.forgrad.service.info;
 
 import jakarta.servlet.http.HttpSession;
 import umc.forgrad.dto.gradinfo.GradInfoResponseDto;
