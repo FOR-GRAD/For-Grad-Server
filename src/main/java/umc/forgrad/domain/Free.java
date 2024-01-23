@@ -10,7 +10,10 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Table(name = "Free")
+@IdClass(FreePk.class)
 public class Free {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,7 +21,7 @@ public class Free {
 
     @Id
     @Column(name = "STUID")
-    private Long stuId;
+    private Long stuid;
 
     @Column(name = "MEMO")
     private String memo;

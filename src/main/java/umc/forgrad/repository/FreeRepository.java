@@ -15,5 +15,5 @@ public interface FreeRepository extends JpaRepository<Free, FreePk> {
 //    Optional<Free> findById(Long id);
 //    List<Free> findAll();
 
-    Free findByStuId(Long stuId);
+    Free findByStuid(Long stuid);
 }
