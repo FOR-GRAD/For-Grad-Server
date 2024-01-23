@@ -1,15 +1,13 @@
 package umc.forgrad.converter;
 
-import umc.forgrad.dto.student.StudentRequestDto;
+import umc.forgrad.domain.Student;
 import umc.forgrad.dto.student.StudentResponseDto;
 
 public class StudentConverter {
 
-    // id, passwd를 Dto로 반환
-    public static StudentRequestDto.LoginRequestDto toLoginForm(StudentRequestDto.LoginRequestDto loginRequestDto) {
-        return StudentRequestDto.LoginRequestDto.builder()
-                .id(loginRequestDto.getId())
-                .passwd(loginRequestDto.getPasswd())
+    public static Student toStudent(Long id) {
+        return Student.builder()
+                .id(id)
                 .build();
     }
 
