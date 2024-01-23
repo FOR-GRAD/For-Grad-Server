@@ -1,6 +1,7 @@
 package umc.forgrad.converter;
 
 import umc.forgrad.domain.Certificate;
+import umc.forgrad.domain.Student;
 import umc.forgrad.dto.CertificateRequestDto;
 import umc.forgrad.dto.CertificateResponseDto;
 
@@ -14,11 +15,11 @@ public class CertificateConverter {
                 .build();
     }
 
-    public static Certificate toCertificate(CertificateRequestDto certificateRequestDto) {
+    public static Certificate toCertificate(CertificateRequestDto certificateRequestDto, Student student) {
         return Certificate.builder()
                 .name(certificateRequestDto.getName())
                 .date(certificateRequestDto.getDate())
-                .student(certificateRequestDto.getStudent())
+                .student(student)
                 .build();
     }
 }

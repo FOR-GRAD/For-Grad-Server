@@ -1,6 +1,7 @@
 package umc.forgrad.controller;
 
 import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,8 +19,8 @@ public class CertificateController {
     private final CertificateService certificateService;
 
     @PostMapping(value = "/plans/certifications/stuId/{stuId}")
-    public ApiResponse<CertificateResponseDto> addCertificate(@RequestBody @Valid CertificateRequestDto certificateRequestDto) {
-        Certificate certificate = certificateService.addCertificate(certificateRequestDto);
+    public ApiResponse<CertificateResponseDto> addCertificate(@RequestBody CertificateRequestDto certificateRequestDto,@PathParam("stuId") String stuId) {
+        Certificate certificate = certificateService.addCertificate(certificateRequestDto, Long.parseLong(stuId));
         return ApiResponse.onSuccess(CertificateConverter.toAddResultDto(certificate));
     }
 

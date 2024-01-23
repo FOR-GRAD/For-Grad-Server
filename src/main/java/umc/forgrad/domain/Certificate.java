@@ -25,10 +25,4 @@ public class Certificate extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id")
     private Student student; //Student 엔티티와 연결
-
-    public Certificate(CertificateRequestDto certificateRequestDto) {
-        this.name = certificateRequestDto.getName();
-        this.date = certificateRequestDto.getDate();
-        this.student = certificateRequestDto.getStudent();
-    }
 }

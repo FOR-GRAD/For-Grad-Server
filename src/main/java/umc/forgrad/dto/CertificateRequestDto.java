@@ -14,12 +14,10 @@ import java.time.LocalDate;
 public class CertificateRequestDto {
     private String name;
     private LocalDate date;
-    private Student student;
 
     @Builder
-    public CertificateRequestDto(String name, LocalDate date, Student student) {
+    public CertificateRequestDto(String name, LocalDate date) {
         this.name = name;
         this.date = date;
-        this.student = student;
     }
 }
