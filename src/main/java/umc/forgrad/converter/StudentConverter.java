@@ -17,4 +17,10 @@ public class StudentConverter {
                 .build();
     }
 
+    public static StudentResponseDto.LogoutResponseDto toLogoutResultDto(String logoutResultMessage) {
+        return StudentResponseDto.LogoutResponseDto.builder()
+                .message(logoutResultMessage)
+                .build();
+    }
+
 }
