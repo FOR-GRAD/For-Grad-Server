@@ -49,4 +49,8 @@ public class Activity extends BaseEntity {
         fileList.add(activityFile);
         activityFile.createActivity(this);
     }
+
+
+    ////////////////여기서부터 추가
+
 }
