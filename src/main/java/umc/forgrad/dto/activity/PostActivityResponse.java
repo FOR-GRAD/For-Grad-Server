@@ -6,7 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import umc.forgrad.domain.enums.Award;
 import umc.forgrad.domain.enums.Category;
+import umc.forgrad.domain.enums.CertificationType;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -51,6 +53,12 @@ public class PostActivityResponse {
 
         LocalDate endDate;
 
+        Award award;
+
+        CertificationType certificationType;
+
+        Integer volunteerHour;
+
     }
 
     @Builder
@@ -71,6 +79,8 @@ public class PostActivityResponse {
         LocalDate startDate;
 
         LocalDate endDate;
+
+        List<String> fileUrl;
 
     }
 

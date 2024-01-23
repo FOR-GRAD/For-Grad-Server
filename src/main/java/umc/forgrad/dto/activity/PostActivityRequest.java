@@ -5,7 +5,9 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import umc.forgrad.domain.enums.Award;
 import umc.forgrad.domain.enums.Category;
+import umc.forgrad.domain.enums.CertificationType;
 
 import java.time.LocalDate;
 
@@ -29,6 +31,12 @@ public class PostActivityRequest {
 
         private LocalDate endDate;
 
-        private Long StudentId;
+        private Long studentId;
+
+        private Integer volunteerHour;
+
+        private Award award;
+
+        private CertificationType certificationType;
     }
 }

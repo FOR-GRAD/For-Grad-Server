@@ -23,6 +23,9 @@ public class ActivityConverter {
                 .category(registActivity.getCategory())
                 .startDate(registActivity.getStartDate())
                 .endDate(registActivity.getEndDate())
+                .volunteerHour(registActivity.getVolunteerHour())
+                .award(registActivity.getAward())
+                .certificationType(registActivity.getCertificationType())
                 .fileList(new ArrayList<>())
                 .build();
         return  activity;
@@ -42,6 +45,9 @@ public class ActivityConverter {
                 .title(activity.getTitle())
                 .startDate(activity.getStartDate())
                 .endDate(activity.getEndDate())
+                .volunteerHour(activity.getVolunteerHour())
+                .award(activity.getAward())
+                .certificationType(activity.getCertificationType())
                 .build();
     }
 

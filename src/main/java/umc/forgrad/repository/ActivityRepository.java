@@ -15,4 +15,6 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
 
     Page<Activity> findAllByCategory(Category category, Pageable pageable);
 
+
+
 }

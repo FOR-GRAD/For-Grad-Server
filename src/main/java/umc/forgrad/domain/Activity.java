@@ -7,7 +7,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import umc.forgrad.domain.common.BaseEntity;
+import umc.forgrad.domain.enums.Award;
 import umc.forgrad.domain.enums.Category;
+import umc.forgrad.domain.enums.CertificationType;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -53,4 +55,11 @@ public class Activity extends BaseEntity {
 
     ////////////////여기서부터 추가
 
+    @Enumerated(EnumType.STRING)
+    private Award award;
+
+    @Enumerated(EnumType.STRING)
+    private CertificationType certificationType;
+
+    private Integer volunteerHour;
 }
