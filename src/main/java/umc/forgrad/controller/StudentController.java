@@ -9,7 +9,7 @@ import umc.forgrad.apipayload.ApiResponse;
 import umc.forgrad.converter.StudentConverter;
 import umc.forgrad.dto.student.StudentRequestDto;
 import umc.forgrad.dto.student.StudentResponseDto;
-import umc.forgrad.service.student.StudentCommandServiceImpl;
+import umc.forgrad.service.student.StudentCommandService;
 
 import java.io.IOException;
 
@@ -17,7 +17,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class StudentController {
 
-    private final StudentCommandServiceImpl studentCommandService;
+    private final StudentCommandService studentCommandService;
 
     @PostMapping("/login")
     public ApiResponse<StudentResponseDto.LoginResponseDto> login(@ModelAttribute StudentRequestDto.LoginRequestDto loginRequestDto, HttpSession session) throws IOException {
