@@ -25,6 +25,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+import static umc.forgrad.service.common.ConnectionResponse.getResponse;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -98,18 +100,6 @@ public class HomeQueryServiceImpl implements HomeQueryService {
                 .note2(note2)
                 .futureTimeTableDto(futureTimeTableDto)
                 .build();
-
-    }
-
-    private static Connection.Response getResponse(HttpSession session, String url) throws IOException {
-
-        @SuppressWarnings(value = "unchecked")
-        Map<String, String> cookies = (Map<String, String>) session.getAttribute("cookies");
-
-        return Jsoup.connect(url)
-                .cookies(cookies)
-                .method(Connection.Method.GET)
-                .execute();
 
     }
 
