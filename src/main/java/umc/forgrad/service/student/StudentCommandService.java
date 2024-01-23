@@ -9,4 +9,6 @@ public interface StudentCommandService {
 
     String login(StudentRequestDto.LoginRequestDto loginRequestDto, HttpSession session) throws IOException;
 
+    String logout(HttpSession session) throws IOException;
+
 }

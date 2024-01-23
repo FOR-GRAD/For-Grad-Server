@@ -11,4 +11,10 @@ public class StudentResponseDto {
         private String message;
     }
 
+    @Getter
+    @Builder
+    public static class LogoutResponseDto {
+        private String message;
+    }
+
 }
