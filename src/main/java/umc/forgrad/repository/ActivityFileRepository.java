@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface ActivityFileRepository extends JpaRepository<ActivityFile, Long> {
 
-
+    List<ActivityFile> findAllByActivityId(Long id);
 
 }

@@ -13,6 +13,7 @@ import umc.forgrad.domain.enums.Category;
 import umc.forgrad.dto.activity.PostActivityRequest;
 import umc.forgrad.dto.activity.PostActivityResponse;
 import umc.forgrad.service.activityService.ActivityCommandService;
+import umc.forgrad.service.activityService.ActivityFileService;
 import umc.forgrad.service.activityService.ActivityQueryService;
 
 import java.util.List;
@@ -24,12 +25,12 @@ public class ActivityController {
 
     private final ActivityCommandService activityCommandService;
     private final ActivityQueryService activityQueryService;
+    private final ActivityFileService activityFileService;
 
     @PostMapping("/activity")
     public ApiResponse<PostActivityResponse.RegistActivityResultDto> createActivity(@RequestPart(value = "requestDto", required = false) PostActivityRequest.RegistActivity registActivity,
                                                                                     @RequestPart(value = "image", required = false) List<MultipartFile> multipartFiles
-                                                                                    )
-    {
+    ) {
         Activity activity = activityCommandService.createBoard(registActivity, multipartFiles);
         return ApiResponse.onSuccess(ActivityConverter.activityResultDto(activity));
 
@@ -45,4 +46,10 @@ public class ActivityController {
         return ApiResponse.onSuccess(ActivityConverter.activityListDto(careerList));
     }
 
+    @GetMapping("/activity-list")
+    public ApiResponse<PostActivityResponse.ActivityDetailDto> getActivityDetail(@RequestParam Long activityId){
+        List<String> fileUrls = activityFileService.getFileUrls(activityId);
+        Activity activity = activityQueryService.findActivity(activityId);
+        return ApiResponse.onSuccess(ActivityConverter.activityDetailDto(activity, fileUrls));
+    }
 }

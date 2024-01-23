@@ -24,7 +24,7 @@ public class ActivityFileService {
 
     @Transactional
     public void saveAllActivityFileByActivity(List<GetS3Res> getS3ResList , Activity activity) {
-        // PostPhoto 리스트를 받아옴
+        // ActivityFile 리스트를 받아옴
         List<ActivityFile> activityFiles = new ArrayList<>();
         for (GetS3Res getS3Res : getS3ResList) {
             ActivityFile newActivityFile = ActivityFile.builder()
@@ -36,5 +36,15 @@ public class ActivityFileService {
         }
         saveActivityFile(activityFiles);
 
+    }
+
+    @Transactional(readOnly = true)
+    public List<String> getFileUrls(Long activityId){
+        List<ActivityFile> allByActivityId = activityFileRepository.findAllByActivityId(activityId);
+        List<String> fileUrls = new ArrayList<>();
+        for(ActivityFile activityFile: allByActivityId){
+            fileUrls.add(activityFile.getFileUrl());
+        }
+        return fileUrls;
     }
 }

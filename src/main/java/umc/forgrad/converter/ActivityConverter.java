@@ -65,4 +65,20 @@ public class ActivityConverter {
                 .build();
     }
 
+    public static PostActivityResponse.ActivityDetailDto activityDetailDto(Activity activity, List<String> fileUrls){
+
+        return PostActivityResponse.ActivityDetailDto.builder()
+                .fileUrls(fileUrls)
+                .title(activity.getTitle())
+                .prize(activity.getPrize())
+                .startDate(activity.getStartDate())
+                .endDate(activity.getEndDate())
+                .category(activity.getCategory())
+                .content(activity.getContent())
+                .award(activity.getAward())
+                .certificationType(activity.getCertificationType())
+                .volunteerHour(activity.getVolunteerHour())
+                .build();
+    }
+
 }

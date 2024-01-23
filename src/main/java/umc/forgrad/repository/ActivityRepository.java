@@ -17,4 +17,8 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
 
 
 
+
+
+
+
 }

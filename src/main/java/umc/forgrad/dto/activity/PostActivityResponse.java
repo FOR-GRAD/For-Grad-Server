@@ -80,7 +80,14 @@ public class PostActivityResponse {
 
         LocalDate endDate;
 
-        List<String> fileUrl;
+        List<String> fileUrls;
+
+        Award award;
+
+        CertificationType certificationType;
+
+        Integer volunteerHour;
+
 
     }
 

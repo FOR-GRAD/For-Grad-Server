@@ -11,6 +11,7 @@ import umc.forgrad.domain.enums.Category;
 import umc.forgrad.repository.ActivityRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -24,5 +25,10 @@ public class ActivityQueryService {
 
 
     }
+    public Activity findActivity(Long activityId) {
+        return activityRepository.findById(activityId)
+                .orElseThrow(() -> new RuntimeException("Activity not found with ID: " + activityId));
+    }
+
 
 }
