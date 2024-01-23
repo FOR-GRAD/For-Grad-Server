@@ -88,4 +88,24 @@ public class GradInfoResponseDto {
         private String percentile; // 백분위
     }
 
+    @Getter
+    @Builder
+    public static class CompletionStatusDto {
+        private GeneralCompletionDto generalCompletionDto;
+
+        private MajorCompletionDto majorCompletionDto;
+    }
+
+    @Getter
+    @Builder
+    public static class GeneralCompletionDto {
+        private Map<String, Map<String, String>> generalMap; // 교양 이수학점
+    }
+
+    @Getter
+    @Builder
+    public static class MajorCompletionDto {
+        private Map<String, List<String>> majorMap; // 전공 이수학점
+    }
+
 }
