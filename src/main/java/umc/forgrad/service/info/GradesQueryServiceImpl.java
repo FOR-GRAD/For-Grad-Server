@@ -3,13 +3,13 @@ package umc.forgrad.service.info;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Connection;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 import umc.forgrad.converter.GradInfoConverter;
 import umc.forgrad.dto.gradinfo.GradInfoResponseDto;
+import umc.forgrad.service.common.ConnectionResponse;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class GradesQueryServiceImpl implements GradesQueryService {
         Map<String, GradInfoResponseDto.GradesListDtoAndTotalDto> myGradesInfoListDto = new HashMap<>();
 
         String gradesUrl = "https://info.hansung.ac.kr/jsp_21/student/grade/total_grade.jsp";
-        Connection.Response gradesResponse = getResponse(session, gradesUrl);
+        Connection.Response gradesResponse = ConnectionResponse.getResponse(session, gradesUrl);
 
         Document gradesDocument = gradesResponse.parse();
 
@@ -86,18 +86,6 @@ public class GradesQueryServiceImpl implements GradesQueryService {
         }
 
         return GradInfoConverter.toMyGradesListMapDto(myGradesInfoListDto);
-
-    }
-
-    private static Connection.Response getResponse(HttpSession session, String url) throws IOException {
-
-        @SuppressWarnings(value = "unchecked")
-        Map<String, String> cookies = (Map<String, String>) session.getAttribute("cookies");
-
-        return Jsoup.connect(url)
-                .cookies(cookies)
-                .method(Connection.Method.GET)
-                .execute();
 
     }
 
