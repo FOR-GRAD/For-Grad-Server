@@ -68,7 +68,6 @@ public class CompletionQueryServiceImpl implements CompletionQueryService {
         Elements majorRows = majorTable.select("tr");
 
         Map<String, List<String>> majorMap = new LinkedHashMap<>();
-        String totalCredits2 = majorTable.select("#td_juntotal").text();
 
         for (Element row : majorRows) {
             Elements ths = row.select("th");
