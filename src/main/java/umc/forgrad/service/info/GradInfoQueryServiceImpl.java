@@ -3,14 +3,14 @@ package umc.forgrad.service.info;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Connection;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Service;
 import umc.forgrad.converter.GradInfoConverter;
 import umc.forgrad.dto.gradinfo.GradInfoResponseDto;
 
 import java.io.IOException;
-import java.util.Map;
+
+import static umc.forgrad.service.common.ConnectionResponse.getResponse;
 
 @Service
 @Slf4j
@@ -58,18 +58,6 @@ public class GradInfoQueryServiceImpl implements GradInfoQueryService {
                 .build();
 
         return GradInfoConverter.toGradRequirementDto(commonDto, trackDto);
-
-    }
-
-    private static Connection.Response getResponse(HttpSession session, String url) throws IOException {
-
-        @SuppressWarnings(value = "unchecked")
-        Map<String, String> cookies = (Map<String, String>) session.getAttribute("cookies");
-
-        return Jsoup.connect(url)
-                .cookies(cookies)
-                .method(Connection.Method.GET)
-                .execute();
 
     }
 
