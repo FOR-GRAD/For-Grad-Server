@@ -50,19 +50,24 @@ public class StudentCommandServiceImpl implements StudentCommandService {
     @Override
     public String logout(HttpSession session) throws IOException {
 
+        // 세션 유효성 검사
+        if (session == null || session.getAttribute("cookies") == null) {
+            throw new GeneralException(ErrorStatus.LOGIN_UNAUTHORIZED);
+        }
+
         String url = "https://info.hansung.ac.kr/sso_logout.jsp";
 
         @SuppressWarnings(value = "unchecked")
         Map<String, String> cookies = (Map<String, String>) session.getAttribute("cookies");
 
         Jsoup.connect(url)
-                .cookies(cookies)
+                .cookies(Objects.requireNonNull(cookies))
                 .method(Connection.Method.GET)
                 .execute();
 
         // 세션 삭제
         session.invalidate();
-
         return "logout success";
     }
+
 }
