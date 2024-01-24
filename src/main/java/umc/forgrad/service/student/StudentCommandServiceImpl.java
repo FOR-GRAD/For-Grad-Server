@@ -14,6 +14,7 @@ import umc.forgrad.exception.GeneralException;
 import umc.forgrad.repository.StudentRepository;
 
 import java.io.IOException;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +25,8 @@ public class StudentCommandServiceImpl implements StudentCommandService {
 
     @Override
     public String login(StudentRequestDto.LoginRequestDto loginRequestDto, HttpSession session) throws IOException {
+
+        log.info(session.getId());
 
         String url = "https://info.hansung.ac.kr/servlet/s_gong.gong_login_ssl";
 
@@ -45,4 +48,22 @@ public class StudentCommandServiceImpl implements StudentCommandService {
 
     }
 
+    @Override
+    public String logout(HttpSession session) throws IOException {
+
+        String url = "https://info.hansung.ac.kr/sso_logout.jsp";
+
+        @SuppressWarnings(value = "unchecked")
+        Map<String, String> cookies = (Map<String, String>) session.getAttribute("cookies");
+
+        Jsoup.connect(url)
+                .cookies(cookies)
+                .method(Connection.Method.GET)
+                .execute();
+
+        // 세션 삭제
+        session.invalidate();
+
+        return "logout success";
+    }
 }

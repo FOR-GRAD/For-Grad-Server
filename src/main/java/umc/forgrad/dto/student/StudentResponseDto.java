@@ -15,6 +15,12 @@ public class StudentResponseDto {
 
     @Getter
     @Builder
+    public static class LogoutResponseDto {
+        private String message;
+    }
+
+    @Getter
+    @Builder
     public static class HomeResponseDto {
         private String name; // 내 이름
 
