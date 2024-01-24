@@ -52,7 +52,7 @@ public class StudentCommandServiceImpl implements StudentCommandService {
 
         // 세션 유효성 검사
         if (session == null || session.getAttribute("cookies") == null) {
-            throw new GeneralException(ErrorStatus.LOGIN_UNAUTHORIZED);
+            throw new GeneralException(ErrorStatus.LOGOUT_UNAUTHORIZED);
         }
 
         String url = "https://info.hansung.ac.kr/sso_logout.jsp";
