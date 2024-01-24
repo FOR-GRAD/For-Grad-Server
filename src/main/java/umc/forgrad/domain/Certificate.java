@@ -3,7 +3,6 @@ package umc.forgrad.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import umc.forgrad.domain.common.BaseEntity;
-import umc.forgrad.dto.CertificateRequestDto;
 
 import java.time.LocalDate;
 
