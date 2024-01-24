@@ -35,9 +35,7 @@ public class HomeQueryServiceImpl implements HomeQueryService {
     private final SemesterSubjectRepository semesterSubjectRepository;
 
     @Override
-    public StudentResponseDto.HomeResponseDto queryHome(HttpSession session) throws IOException {
-
-        long studentId = (long) session.getAttribute("student");
+    public StudentResponseDto.HomeResponseDto queryHome(long studentId, HttpSession session) throws IOException {
 
         // 이름, 학번, 학부, 학년, 재학상태 조회
         String gradesUrl = "https://info.hansung.ac.kr/jsp_21/student/grade/total_grade.jsp";
