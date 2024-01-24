@@ -15,6 +15,7 @@ import umc.forgrad.repository.StudentRepository;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -24,9 +25,7 @@ public class StudentCommandServiceImpl implements StudentCommandService {
     private final StudentRepository studentRepository;
 
     @Override
-    public String login(StudentRequestDto.LoginRequestDto loginRequestDto, HttpSession session) throws IOException {
-
-        log.info(session.getId());
+    public Student login(StudentRequestDto.LoginRequestDto loginRequestDto, HttpSession session) throws IOException {
 
         String url = "https://info.hansung.ac.kr/servlet/s_gong.gong_login_ssl";
 
@@ -41,7 +40,7 @@ public class StudentCommandServiceImpl implements StudentCommandService {
         if (response.hasCookie("ssotoken")) {
             Student student = StudentConverter.toStudent(Long.parseLong(loginRequestDto.getId()));
             studentRepository.save(student);
-            return "login success";
+            return student;
         } else {
             throw new GeneralException(ErrorStatus.LOGIN_UNAUTHORIZED);
         }

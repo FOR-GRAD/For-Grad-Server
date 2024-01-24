@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import umc.forgrad.apipayload.ApiResponse;
 import umc.forgrad.converter.StudentConverter;
+import umc.forgrad.domain.Student;
 import umc.forgrad.dto.student.StudentRequestDto;
 import umc.forgrad.dto.student.StudentResponseDto;
 import umc.forgrad.service.student.StudentCommandService;
@@ -22,8 +23,9 @@ public class StudentController {
 
     @PostMapping("/login")
     public ApiResponse<StudentResponseDto.LoginResponseDto> login(@ModelAttribute StudentRequestDto.LoginRequestDto loginRequestDto, HttpSession session) throws IOException {
-        String loginResultMessage = studentCommandService.login(loginRequestDto, session);
-        return ApiResponse.onSuccess(StudentConverter.toLoginResultDto(loginResultMessage));
+        Student student = studentCommandService.login(loginRequestDto, session);
+        session.setAttribute("student", student.getId());
+        return ApiResponse.onSuccess(StudentConverter.toLoginResultDto("login success"));
     }
 
     @GetMapping("/logout")
