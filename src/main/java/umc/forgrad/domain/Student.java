@@ -16,7 +16,7 @@ public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // 학번
+    private Long id;
 
     private LocalDate gradDate; // 졸업 예정일
 
