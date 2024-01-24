@@ -15,7 +15,8 @@ import java.util.List;
 public class Student {
 
     @Id
-    private Long id; // 학번
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private LocalDate gradDate; // 졸업 예정일
 
