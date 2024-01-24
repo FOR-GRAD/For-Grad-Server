@@ -22,11 +22,9 @@ public class CertificateController {
         Certificate certificate = certificateService.addCertificate(addCertificateRequestDto, stuId);
         return ApiResponse.onSuccess(CertificateConverter.toAddResultDto(certificate));
     }
-    /*
     @GetMapping(value = "/plans/certifications/stuId/{stuId}")
-    public ApiResponse<ViewCertificateResponseDto> viewCertificate(@PathVariable Long stuId) {
-        List<Certificate> = certificateService.viewCertificate(stuId);
-        return ApiResponse.onSuccess(CertificateConverter.toViewResultDto(certificate));
+    public ApiResponse<List<ViewCertificateResponseDto>> viewCertificate(@PathVariable Long stuId) {
+        List<Certificate> certificates= certificateService.viewCertificate(stuId);
+        return ApiResponse.onSuccess(CertificateConverter.toViewResultDto(certificates));
     }
-     */
 }

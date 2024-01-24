@@ -7,6 +7,8 @@ import umc.forgrad.dto.AddCertificateResponseDto;
 import umc.forgrad.dto.ViewCertificateResponseDto;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class CertificateConverter {
     public static AddCertificateResponseDto toAddResultDto(Certificate certificate) {
@@ -16,14 +18,15 @@ public class CertificateConverter {
                 .build();
     }
 
-    /*
-    public static ViewCertificateResponseDto toViewResultDto(Certificate certificate) {
-        return ViewCertificateResponseDto.builder()
-                .name(certificate.getName())
-                .date(certificate.getDate())
-                .build();
+    public static List<ViewCertificateResponseDto> toViewResultDto(List<Certificate> certificates) {
+        return certificates.stream()
+                .map(certificate -> ViewCertificateResponseDto.builder()
+                        .name(certificate.getName())
+                        .date(certificate.getDate())
+                        .build())
+                .collect(Collectors.toList());
     }
-*/
+
     public static Certificate toCertificate(AddCertificateRequestDto addCertificateRequestDto, Student student) {
         return Certificate.builder()
                 .name(addCertificateRequestDto.getName())
