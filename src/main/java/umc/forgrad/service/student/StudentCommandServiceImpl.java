@@ -14,6 +14,7 @@ import umc.forgrad.exception.GeneralException;
 import umc.forgrad.repository.StudentRepository;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -27,17 +28,27 @@ public class StudentCommandServiceImpl implements StudentCommandService {
     @Override
     public Student login(StudentRequestDto.LoginRequestDto loginRequestDto, HttpSession session) throws IOException {
 
-        String url = "https://info.hansung.ac.kr/servlet/s_gong.gong_login_ssl";
-
-        Connection.Response response = Jsoup.connect(url)
+        // 종정시 로그인
+        String jjsUrl = "https://info.hansung.ac.kr/servlet/s_gong.gong_login_ssl";
+        Connection.Response jjsResponse = Jsoup.connect(jjsUrl)
                 .data("id", loginRequestDto.getId(), "passwd", loginRequestDto.getPasswd())
                 .method(Connection.Method.POST)
                 .execute();
 
-        // 쿠키 저장
-        session.setAttribute("cookies", response.cookies());
+        // 비교과 포인트 페이지 로그인
+        String hsportalUrl = "https://hsportal.hansung.ac.kr/ko/process/member/login";
+        Connection.Response hsportalResponse = Jsoup.connect(hsportalUrl)
+                .data("email", loginRequestDto.getId(), "password", loginRequestDto.getPasswd())
+                .method(Connection.Method.POST)
+                .execute();
 
-        if (response.hasCookie("ssotoken")) {
+        // 쿠키 저장
+        Map<String, String> cookies = new HashMap<>();
+        cookies.putAll(jjsResponse.cookies());
+        cookies.putAll(hsportalResponse.cookies());
+        session.setAttribute("cookies", cookies);
+
+        if (jjsResponse.hasCookie("ssotoken")) {
             Student student = StudentConverter.toStudent(Long.parseLong(loginRequestDto.getId()));
             studentRepository.save(student);
             return student;
