@@ -24,7 +24,7 @@ public class TimetableConverter {
                 .student(student)
                 .build();
     }
-    public static Subject toSubject(AddTimetableRequestDto.SubjectDto subjectDto, Student student) {
+    public static Subject toSubject(AddTimetableRequestDto.SubjectDto subjectDto) {
         return Subject.builder()
                 .type(subjectDto.getType())
                 .name(subjectDto.getName())

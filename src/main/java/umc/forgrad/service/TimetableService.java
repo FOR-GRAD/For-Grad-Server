@@ -26,7 +26,7 @@ public class TimetableService {
         Student student = studentRepository.findById(stuId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 학번이 존재하지 않습니다. id=" + stuId));
         Semester semester = semesterRepository.save(TimetableConverter.toSemester(timetableDto.getSemesterDto(), student));
-        Subject subject = subjectRepository.save(TimetableConverter.toSubject(timetableDto.getSubjectDto(), student));
+        Subject subject = subjectRepository.save(TimetableConverter.toSubject(timetableDto.getSubjectDto()));
         return TimetableConverter.toAddResultDto(semester, subject);
     }
 }
