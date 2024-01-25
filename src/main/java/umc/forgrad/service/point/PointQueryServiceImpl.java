@@ -3,19 +3,16 @@ package umc.forgrad.service.point;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Connection;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 import umc.forgrad.converter.PointConverter;
 import umc.forgrad.dto.point.PointResponseDto;
-import umc.forgrad.dto.student.StudentRequestDto;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import static umc.forgrad.service.common.ConnectionResponse.getResponse;
@@ -24,24 +21,8 @@ import static umc.forgrad.service.common.ConnectionResponse.getResponse;
 @Slf4j
 public class PointQueryServiceImpl implements PointQueryService {
 
-    private static void hsportalLogin(StudentRequestDto.LoginRequestDto loginRequestDto, HttpSession session) throws IOException {
-        String hsportalLoginUrl = "https://hsportal.hansung.ac.kr/ko/process/member/login";
-
-        // 스마트자기관리시스템 로그인 요청
-        Connection.Response response = Jsoup.connect(hsportalLoginUrl)
-                .data("email", loginRequestDto.getId(), "password", loginRequestDto.getPasswd())
-                .method(Connection.Method.POST)
-                .execute();
-
-        session.setAttribute("cookies", response.cookies());
-
-        log.info(response.body());
-    }
-
     @Override
-    public PointResponseDto.MyPointResponseDto getMyPointList(StudentRequestDto.LoginRequestDto loginRequestDto, int page, HttpSession session) throws IOException {
-
-        hsportalLogin(loginRequestDto, session);
+    public PointResponseDto.MyPointResponseDto getMyPointList(int page, HttpSession session) throws IOException {
 
         String hsportalUrl = "https://hsportal.hansung.ac.kr/ko/mypage/point/" + page;
 
