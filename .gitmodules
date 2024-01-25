@@ -1,6 +1,0 @@
-[submodule "Submodule"]
-	path = Submodule
-	url = https://github.com/FOR-GRAD/Submodule
-[submodule "submodule"]
-	path = submodule
-	url = https://github.com/FOR-GRAD/Submodule
