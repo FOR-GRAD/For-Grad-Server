@@ -1,4 +1,5 @@
 package umc.forgrad.domain;
+/*
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,8 +11,9 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+ */
 public class Free {
-
+/*
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,5 +24,5 @@ public class Free {
 
     @Column(name = "MEMO")
     private String memo;
-
+*/
 }
