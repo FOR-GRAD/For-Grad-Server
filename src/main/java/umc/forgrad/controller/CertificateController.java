@@ -17,13 +17,13 @@ import java.util.List;
 public class CertificateController {
     private final CertificateService certificateService;
 
-    @PostMapping(value = "/plans/certifications/stuId/{stuId}")
-    public ApiResponse<AddCertificateResponseDto> addCertificate(@RequestBody AddCertificateRequestDto addCertificateRequestDto, @PathVariable Long stuId) {
+    @PostMapping(value = "/plans/certifications/stuId")
+    public ApiResponse<AddCertificateResponseDto> addCertificate(@RequestBody AddCertificateRequestDto addCertificateRequestDto, @SessionAttribute(name="student") Long stuId) {
         Certificate certificate = certificateService.addCertificate(addCertificateRequestDto, stuId);
         return ApiResponse.onSuccess(CertificateConverter.toAddResultDto(certificate));
     }
-    @GetMapping(value = "/plans/certifications/stuId/{stuId}")
-    public ApiResponse<List<ViewCertificateResponseDto>> viewCertificate(@PathVariable Long stuId) {
+    @GetMapping(value = "/plans/certifications/stuId")
+    public ApiResponse<List<ViewCertificateResponseDto>> viewCertificate(@SessionAttribute(name="student") Long stuId) {
         List<Certificate> certificates= certificateService.viewCertificate(stuId);
         return ApiResponse.onSuccess(CertificateConverter.toViewResultDto(certificates));
     }
