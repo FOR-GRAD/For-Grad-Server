@@ -1,6 +1,7 @@
 package umc.forgrad.service.activityService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -12,10 +13,12 @@ import umc.forgrad.repository.ActivityRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Slf4j
 public class ActivityQueryService {
     private final ActivityRepository activityRepository;
     public Page<Activity> getCareerList(Category category, Pageable pageable){
@@ -28,6 +31,13 @@ public class ActivityQueryService {
     public Activity findActivity(Long activityId) {
         return activityRepository.findById(activityId)
                 .orElseThrow(() -> new RuntimeException("Activity not found with ID: " + activityId));
+    }
+
+    public Integer sumHour(){
+        Integer i = activityRepository.sumVolunteerHour();
+        log.info(i.toString());
+
+        return activityRepository.sumVolunteerHour();
     }
 
 

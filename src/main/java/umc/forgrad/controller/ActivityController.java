@@ -38,6 +38,12 @@ public class ActivityController {
 
     }
 
+    @PostMapping("/a")
+    public void creay() {
+        activityQueryService.sumHour();
+        return;
+
+    }
     @GetMapping("/activity-list/{category}")
     public ApiResponse<PostActivityResponse.ActivityListDto> getActivityList(@PathVariable Category category,
                                                                              @RequestParam(defaultValue = "0") int page,
