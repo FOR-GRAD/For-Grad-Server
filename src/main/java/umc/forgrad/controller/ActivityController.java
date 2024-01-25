@@ -1,5 +1,6 @@
 package umc.forgrad.controller;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,16 +23,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ActivityController {
 
-
     private final ActivityCommandService activityCommandService;
     private final ActivityQueryService activityQueryService;
     private final ActivityFileService activityFileService;
 
     @PostMapping("/activity")
     public ApiResponse<PostActivityResponse.RegistActivityResultDto> createActivity(@RequestPart(value = "requestDto", required = false) PostActivityRequest.RegistActivity registActivity,
-                                                                                    @RequestPart(value = "image", required = false) List<MultipartFile> multipartFiles
+                                                                                    @RequestPart(value = "image", required = false) List<MultipartFile> multipartFiles,
+                                                                                    HttpSession httpSession
     ) {
-        Activity activity = activityCommandService.createBoard(registActivity, multipartFiles);
+        String studentId = (String) httpSession.getAttribute("studentId");
+        Activity activity = activityCommandService.createBoard(registActivity, multipartFiles, studentId);
         return ApiResponse.onSuccess(ActivityConverter.activityResultDto(activity));
 
     }
@@ -43,10 +45,11 @@ public class ActivityController {
 
         Pageable pageable = PageRequest.of(page, size);
         Page<Activity> careerList = activityQueryService.getCareerList(category, pageable);
-        return ApiResponse.onSuccess(ActivityConverter.activityListDto(careerList));
+        PostActivityResponse.ActivityListDto activityListDto = ActivityConverter.activityListDto(careerList);
+        return ApiResponse.onSuccess(activityListDto);
     }
 
-    @GetMapping("/activity-list")
+    @GetMapping("/activity-detail")
     public ApiResponse<PostActivityResponse.ActivityDetailDto> getActivityDetail(@RequestParam Long activityId){
         List<String> fileUrls = activityFileService.getFileUrls(activityId);
         Activity activity = activityQueryService.findActivity(activityId);

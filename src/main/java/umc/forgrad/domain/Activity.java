@@ -30,8 +30,6 @@ public class Activity extends BaseEntity {
 
     private String content;
 
-    private String prize;
-
     private LocalDate startDate;
 
     private LocalDate endDate;

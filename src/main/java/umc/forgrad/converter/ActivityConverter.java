@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 import umc.forgrad.controller.ActivityController;
 import umc.forgrad.domain.Activity;
+import umc.forgrad.domain.Student;
 import umc.forgrad.domain.enums.Category;
 import umc.forgrad.dto.activity.PostActivityRequest;
 import umc.forgrad.dto.activity.PostActivityResponse;
@@ -14,12 +15,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ActivityConverter {
-    public static Activity toActivity(PostActivityRequest.RegistActivity registActivity, List<MultipartFile> multipartFiles) {
+    public static Activity toActivity(PostActivityRequest.RegistActivity registActivity, List<MultipartFile> multipartFiles, Student student) {
 
         Activity activity = Activity.builder()
                 .title(registActivity.getTitle())
                 .content(registActivity.getContent())
-                .prize(registActivity.getPrize())
                 .category(registActivity.getCategory())
                 .startDate(registActivity.getStartDate())
                 .endDate(registActivity.getEndDate())
@@ -27,7 +27,9 @@ public class ActivityConverter {
                 .award(registActivity.getAward())
                 .certificationType(registActivity.getCertificationType())
                 .fileList(new ArrayList<>())
+                .student(student)
                 .build();
+
         return  activity;
     }
 
@@ -70,7 +72,6 @@ public class ActivityConverter {
         return PostActivityResponse.ActivityDetailDto.builder()
                 .fileUrls(fileUrls)
                 .title(activity.getTitle())
-                .prize(activity.getPrize())
                 .startDate(activity.getStartDate())
                 .endDate(activity.getEndDate())
                 .category(activity.getCategory())

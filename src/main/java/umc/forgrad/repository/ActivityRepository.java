@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface ActivityRepository extends JpaRepository<Activity, Long> {
 
-    Page<Activity> findAllByCategory(Category category, Pageable pageable);
+    Page<Activity> findAllByCategoryOOrderByStartDateDesc(Category category, Pageable pageable);
 
 
 

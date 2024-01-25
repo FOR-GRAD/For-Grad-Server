@@ -20,7 +20,7 @@ public class ActivityQueryService {
     private final ActivityRepository activityRepository;
     public Page<Activity> getCareerList(Category category, Pageable pageable){
 
-        Page<Activity> byCategory = activityRepository.findAllByCategory(category, pageable);
+        Page<Activity> byCategory = activityRepository.findAllByCategoryOOrderByStartDateDesc(category, pageable);
         return byCategory;
 
 

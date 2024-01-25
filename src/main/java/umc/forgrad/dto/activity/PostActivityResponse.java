@@ -16,8 +16,6 @@ import java.util.List;
 public class PostActivityResponse {
     @Builder
     @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
     public static class RegistActivityResultDto {
 
         private Long id;
@@ -27,8 +25,6 @@ public class PostActivityResponse {
 
     @Builder
     @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
     public static class ActivityListDto {
         List<ActivityPreviewDto> activityList;
         Integer listSize;
@@ -60,7 +56,6 @@ public class PostActivityResponse {
         Integer volunteerHour;
 
     }
-
     @Builder
     @Getter
     @NoArgsConstructor
@@ -71,8 +66,6 @@ public class PostActivityResponse {
         String title;
 
         String content;
-
-        String prize;
 
         Category category;
 

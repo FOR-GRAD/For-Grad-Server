@@ -39,6 +39,8 @@ public class StudentCommandServiceImpl implements StudentCommandService {
         session.setAttribute("cookies", response.cookies());
 
         if (response.hasCookie("ssotoken")) {
+
+            session.setAttribute("studentId", loginRequestDto.getId());
             Student student = StudentConverter.toStudent(Long.parseLong(loginRequestDto.getId()));
             studentRepository.save(student);
             return "login success";
