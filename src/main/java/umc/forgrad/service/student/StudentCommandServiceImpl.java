@@ -38,7 +38,7 @@ public class StudentCommandServiceImpl implements StudentCommandService {
         // 쿠키 저장
         session.setAttribute("cookies", response.cookies());
 
-        if (response.hasCookie("ssotoken")) {
+        if (response.hasCookie("TS016c2283")) {
             Student student = StudentConverter.toStudent(Long.parseLong(loginRequestDto.getId()));
             studentRepository.save(student);
             return "login success";
