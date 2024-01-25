@@ -16,7 +16,7 @@ public class Free {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Id
+//    @Id
     @Column(name = "STUID")
     private Long stuId;
 
