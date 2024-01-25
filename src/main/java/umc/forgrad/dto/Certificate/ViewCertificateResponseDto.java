@@ -1,4 +1,4 @@
-package umc.forgrad.dto;
+package umc.forgrad.dto.Certificate;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

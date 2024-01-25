@@ -5,9 +5,9 @@ import org.springframework.web.bind.annotation.*;
 import umc.forgrad.apipayload.ApiResponse;
 import umc.forgrad.converter.CertificateConverter;
 import umc.forgrad.domain.Certificate;
-import umc.forgrad.dto.AddCertificateRequestDto;
-import umc.forgrad.dto.AddCertificateResponseDto;
-import umc.forgrad.dto.ViewCertificateResponseDto;
+import umc.forgrad.dto.Certificate.AddCertificateRequestDto;
+import umc.forgrad.dto.Certificate.AddCertificateResponseDto;
+import umc.forgrad.dto.Certificate.ViewCertificateResponseDto;
 import umc.forgrad.service.CertificateService;
 
 import java.util.List;

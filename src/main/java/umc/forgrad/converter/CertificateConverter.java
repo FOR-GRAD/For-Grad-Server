@@ -2,9 +2,9 @@ package umc.forgrad.converter;
 
 import umc.forgrad.domain.Certificate;
 import umc.forgrad.domain.Student;
-import umc.forgrad.dto.AddCertificateRequestDto;
-import umc.forgrad.dto.AddCertificateResponseDto;
-import umc.forgrad.dto.ViewCertificateResponseDto;
+import umc.forgrad.dto.Certificate.AddCertificateRequestDto;
+import umc.forgrad.dto.Certificate.AddCertificateResponseDto;
+import umc.forgrad.dto.Certificate.ViewCertificateResponseDto;
 
 import java.time.LocalDateTime;
 import java.util.List;

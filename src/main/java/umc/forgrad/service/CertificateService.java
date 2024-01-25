@@ -6,13 +6,11 @@ import org.springframework.transaction.annotation.Transactional;
 import umc.forgrad.converter.CertificateConverter;
 import umc.forgrad.domain.Certificate;
 import umc.forgrad.domain.Student;
-import umc.forgrad.dto.AddCertificateRequestDto;
-import umc.forgrad.dto.ViewCertificateResponseDto;
+import umc.forgrad.dto.Certificate.AddCertificateRequestDto;
 import umc.forgrad.repository.CertificateRepository;
 import umc.forgrad.repository.StudentRepository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
