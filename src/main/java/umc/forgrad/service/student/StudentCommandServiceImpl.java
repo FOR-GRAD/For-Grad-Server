@@ -48,7 +48,7 @@ public class StudentCommandServiceImpl implements StudentCommandService {
         cookies.putAll(hsportalResponse.cookies());
         session.setAttribute("cookies", cookies);
 
-        if (jjsResponse.hasCookie("ssotoken")) {
+        if (jjsResponse.hasCookie("TS016c2283")) {
             Student student = StudentConverter.toStudent(Long.parseLong(loginRequestDto.getId()));
             studentRepository.save(student);
             return student;
@@ -78,6 +78,7 @@ public class StudentCommandServiceImpl implements StudentCommandService {
 
         // 세션 삭제
         session.invalidate();
+
         return "logout success";
     }
 
