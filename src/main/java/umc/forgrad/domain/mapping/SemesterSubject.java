@@ -23,5 +23,5 @@ public class SemesterSubject {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subject_id")
     private Subject subject;
-
 }
+

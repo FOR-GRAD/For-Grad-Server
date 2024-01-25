@@ -12,7 +12,7 @@ import umc.forgrad.service.TimetableService;
 public class TimetableController {
     private final TimetableService timetableService;
 
-    @PostMapping(value = "/plans/timetable/stuId/{stuId}")
+    @PostMapping(value = "/plans/timetable/stuId")
     public ApiResponse<AddTimetableResponseDto> addTimetable(@RequestBody AddTimetableRequestDto.TimetableDto timetableDto, @SessionAttribute(name="student") Long stuId) {
         AddTimetableResponseDto addTimetableResponseDto = timetableService.addTimetable(timetableDto, stuId);
         return ApiResponse.onSuccess(addTimetableResponseDto);
