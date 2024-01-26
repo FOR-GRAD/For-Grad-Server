@@ -5,15 +5,13 @@
 # This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
 
-name: Java CI with Gradle
+name: CI/CD
 
-# 동작 조건 설정 : master 브랜치에 pr이 closed 되었을 때 동작한다.
+# 동작 조건 설정 : main 브랜치에 pr이 되었을 때 동작한다.
 on:
   pull_request:
     branches:
       - main
-    types:
-      - closed
 
 permissions:
   contents: read
@@ -21,7 +19,6 @@ permissions:
 jobs:
   # Spring Boot 애플리케이션을 빌드하여 도커허브에 푸시하는 과정
   build-docker-image:
-    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
