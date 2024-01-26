@@ -1,4 +1,4 @@
-name: Java CI with Gradle
+name: Deploy
 
 # main 브랜치에 pr이 생겼을 때 동작
 on:
