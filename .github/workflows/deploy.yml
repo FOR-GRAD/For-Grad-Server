@@ -50,28 +50,3 @@ jobs:
         # Docker Image push
       - name: docker Hub push
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/forgrad-app
-
-  run-docker-image-on-ec2:
-    # merge 되었을 때 실행
-    if: github.event.pull_request.merged == true
-    # 위의 과정들이 완료되어야 실행 됨
-    needs: build-docker-image
-
-    runs-on: self-hosted
-
-    steps:
-        # docker image 받기
-      - name: docker pull
-        run: sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/forgrad-app
-
-        # 기존의 컨테이너 중지
-      - name: docker stop container
-        run: sudo docker stop $(sudo docker ps -q) 2>/dev/null || true
-
-        # 새로운 컨테이너 실행
-      - name: docker run new container
-        run: sudo docker run --name forgrad-app --rm -d -p 8080:8080 -e TZ=Asia/Seoul -v /home/ubuntu/logs:/log ${{ secrets.DOCKERHUB_USERNAME }}/forgrad-app
-
-        # 미사용 이미지 정리
-      - name: delete old docker image
-        run: sudo docker system prune -f
