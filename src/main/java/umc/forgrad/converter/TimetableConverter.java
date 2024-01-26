@@ -5,8 +5,11 @@ import umc.forgrad.domain.Student;
 import umc.forgrad.domain.Subject;
 import umc.forgrad.dto.Timetable.AddTimetableRequestDto;
 import umc.forgrad.dto.Timetable.AddTimetableResponseDto;
+import umc.forgrad.dto.Timetable.ViewTimetableResponseDto;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class TimetableConverter {
     public static AddTimetableResponseDto toAddResultDto(Semester semester, Subject subject) {
@@ -30,5 +33,14 @@ public class TimetableConverter {
                 .name(subjectDto.getName())
                 .credit(subjectDto.getCredit())
                 .build();
+    }
+    public static List<ViewTimetableResponseDto> toViewResultDto(List<Subject> subjects) {
+        return subjects.stream()
+                .map(subject -> ViewTimetableResponseDto.builder()
+                        .type(subject.getType())
+                        .name(subject.getName())
+                        .credit(subject.getCredit())
+                        .build())
+                .collect(Collectors.toList());
     }
 }

@@ -9,7 +9,5 @@ import java.util.List;
 
 @Repository
 public interface SemesterSubjectRepository extends JpaRepository<SemesterSubject, Long> {
-
     List<SemesterSubject> findBySemester(Semester semester);
-
 }
