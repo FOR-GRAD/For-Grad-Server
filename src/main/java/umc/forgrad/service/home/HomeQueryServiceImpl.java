@@ -4,7 +4,6 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Connection;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Service;
 import umc.forgrad.apipayload.code.status.ErrorStatus;
@@ -21,9 +20,10 @@ import umc.forgrad.repository.StudentRepository;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+
+import static umc.forgrad.service.common.ConnectionResponse.getResponse;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +35,8 @@ public class HomeQueryServiceImpl implements HomeQueryService {
     private final SemesterSubjectRepository semesterSubjectRepository;
 
     @Override
-    public StudentResponseDto.HomeResponseDto queryHome(HttpSession session) throws IOException {
+    public StudentResponseDto.HomeResponseDto queryHome(long studentId, HttpSession session) throws IOException {
+
         // 이름, 학번, 학부, 학년, 재학상태 조회
         String gradesUrl = "https://info.hansung.ac.kr/jsp_21/student/grade/total_grade.jsp";
         Connection.Response gradesResponse = getResponse(session, gradesUrl);
@@ -63,7 +64,7 @@ public class HomeQueryServiceImpl implements HomeQueryService {
         String note2 = gradDocument.select("#div_print_area > div > div._obj._objHtml._absolute > ul > div > div > div > table > tbody > tr:nth-child(3) > td:nth-child(4)").text();
 
         // 응원의 한마디 조회
-        Optional<Student> optionalStudent = studentRepository.findById(Long.parseLong(id));
+        Optional<Student> optionalStudent = studentRepository.findById(studentId);
         Student student = optionalStudent.orElseThrow(() -> new GeneralException(ErrorStatus.STUDENT_NOT_FOUND));
         String message = student.getMessage();
 
@@ -98,18 +99,6 @@ public class HomeQueryServiceImpl implements HomeQueryService {
                 .note2(note2)
                 .futureTimeTableDto(futureTimeTableDto)
                 .build();
-
-    }
-
-    private static Connection.Response getResponse(HttpSession session, String url) throws IOException {
-
-        @SuppressWarnings(value = "unchecked")
-        Map<String, String> cookies = (Map<String, String>) session.getAttribute("cookies");
-
-        return Jsoup.connect(url)
-                .cookies(cookies)
-                .method(Connection.Method.GET)
-                .execute();
 
     }
 
