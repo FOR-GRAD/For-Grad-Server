@@ -7,6 +7,6 @@ import java.io.IOException;
 
 public interface HomeQueryService {
 
-    StudentResponseDto.HomeResponseDto queryHome(HttpSession session) throws IOException;
+    StudentResponseDto.HomeResponseDto queryHome(long studentId, HttpSession session) throws IOException;
 
 }
