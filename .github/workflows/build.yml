@@ -1,6 +1,6 @@
 name: Build
 
-# main 브랜치에 pr이 생겼을 때 동작
+# pr이 merged 되고 closed 되었을 때 동작
 on:
   pull_request:
     branches:
