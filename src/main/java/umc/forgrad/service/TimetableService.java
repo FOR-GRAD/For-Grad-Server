@@ -22,6 +22,7 @@ import umc.forgrad.repository.StudentRepository;
 import umc.forgrad.repository.SubjectRepository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,12 +62,16 @@ public class TimetableService {
     public List<ViewTimetableResponseDto> viewTimetable(Long stuId, Integer grade, Integer semester) {
         Student student = studentRepository.findById(stuId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 학번이 존재하지 않습니다. id=" + stuId));
-        Semester semesterE = semesterRepository.findByStudentAndGradeAndSemester(student, grade, semester)
-                .orElseThrow(() -> new IllegalArgumentException("잘못된 입력입니다"));
-        List<SemesterSubject> semesterSubjects = semesterSubjectRepository.findBySemester(semesterE);
+        List<Semester> semesters = semesterRepository.findAllByStudentAndGradeAndSemester(student, grade, semester);
+        List<SemesterSubject> semesterSubjects = new ArrayList<>();
+        for (Semester semesterE : semesters) {
+            List<SemesterSubject> semesterSubject = semesterSubjectRepository.findBySemester(semesterE);
+            semesterSubjects.addAll(semesterSubject);
+        }
         List<Subject> subjects = semesterSubjects.stream()
                 .map(SemesterSubject::getSubject)
                 .toList();
+
         return TimetableConverter.toViewResultDto(subjects);
     }
 }

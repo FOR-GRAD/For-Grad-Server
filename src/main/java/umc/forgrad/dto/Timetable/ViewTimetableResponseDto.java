@@ -9,12 +9,14 @@ import umc.forgrad.domain.Subject;
 @Getter
 @NoArgsConstructor
 public class ViewTimetableResponseDto {
+    private Long subjectId;
     private String type;
     private String name;
     private Integer credit;
 
     @Builder
-    public ViewTimetableResponseDto(String type, String name, Integer credit) {
+    public ViewTimetableResponseDto(Long subjectId, String type, String name, Integer credit) {
+        this.subjectId = subjectId;
         this.type = type;
         this.name = name;
         this.credit = credit;

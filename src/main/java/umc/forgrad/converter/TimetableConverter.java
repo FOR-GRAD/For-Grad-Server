@@ -43,6 +43,7 @@ public class TimetableConverter {
     public static List<ViewTimetableResponseDto> toViewResultDto(List<Subject> subjects) {
         return subjects.stream()
                 .map(subject -> ViewTimetableResponseDto.builder()
+                        .subjectId(subject.getId())
                         .type(subject.getType())
                         .name(subject.getName())
                         .credit(subject.getCredit())
