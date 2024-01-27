@@ -10,6 +10,7 @@ import umc.forgrad.dto.Certificate.AddCertificateRequestDto;
 import umc.forgrad.repository.CertificateRepository;
 import umc.forgrad.repository.StudentRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -19,10 +20,15 @@ public class CertificateService {
     private final StudentRepository studentRepository;
 
     @Transactional
-    public Certificate addCertificate(AddCertificateRequestDto addCertificateRequestDto, Long stuId) {
+    public List<Certificate> addCertificates(List<AddCertificateRequestDto> addCertificateRequestDtos, Long stuId) {
         Student student = studentRepository.findById(stuId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 학번이 존재하지 않습니다. id=" + stuId));
-        return certificateRepository.save(CertificateConverter.toCertificate(addCertificateRequestDto, student));
+        List<Certificate> certificates = new ArrayList<>();
+        for (AddCertificateRequestDto dto : addCertificateRequestDtos) {
+            Certificate certificate = CertificateConverter.toCertificate(dto, student);
+            certificates.add(certificate);
+        }
+        return certificateRepository.saveAll(certificates);
     }
 
     @Transactional(readOnly = true)
