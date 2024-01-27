@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
 import umc.forgrad.apipayload.code.status.ErrorStatus;
 import umc.forgrad.exception.GeneralException;
 
