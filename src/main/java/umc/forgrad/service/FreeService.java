@@ -2,36 +2,52 @@ package umc.forgrad.service;
 
 import org.springframework.stereotype.Service;
 import umc.forgrad.domain.Free;
+import umc.forgrad.domain.Student;
+import umc.forgrad.dto.FreeDto;
 import umc.forgrad.repository.FreeRepository;
+import umc.forgrad.repository.StudentRepository;
 
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-//@Transactional
 @Service
 public class FreeService{
 
     private final FreeRepository freeRepository;
 
-    public FreeService(FreeRepository freeRepository){
+    private final StudentRepository studentRepository;
+
+    public FreeService(FreeRepository freeRepository, StudentRepository studentTrpository){
         this.freeRepository = freeRepository;
+        this.studentRepository = studentTrpository;
     }
 
     /**
      * 메모 추가하기
      */
-    public Free addMemo(Free free) {
-        return freeRepository.save(free);
+    public FreeDto.MemoResponseDto addMemo(FreeDto.MemoRequestDto dto, long stuId) {
+
+        Student student = studentRepository.findById(stuId).orElseThrow();
+
+        Free free = Free.builder()
+                .memo(dto.getMemo())
+                .student(student)
+                .build();
+
+        Free savedFree = freeRepository.save(free);
+
+        return FreeDto.MemoResponseDto.builder()
+                .memo(savedFree.getMemo())
+                .build();
     }
 
     /**
      * 메모 조회하기
      */
-    public Free findMemos(Long stuid){
-        return freeRepository.findByStuid(stuid);
+    public FreeDto.MemoResponseDto findMemos(long stuId){
+
+        Free byStudentId = freeRepository.findByStudentId(stuId);
+
+        return FreeDto.MemoResponseDto.builder()
+                .memo(byStudentId.getMemo())
+                .build();
     }
 
 //    public Optional<Free> findOne(Long memoId){

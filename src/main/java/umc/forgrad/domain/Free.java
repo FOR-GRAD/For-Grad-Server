@@ -5,13 +5,9 @@ import lombok.*;
 
 @Entity
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-@Table(name = "Free")
-@IdClass(FreePk.class)
 public class Free {
 
 
@@ -19,11 +15,10 @@ public class Free {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Id
-    @Column(name = "STUID")
-    private Long stuid;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "student_id") //
+    private Student student;
 
-    @Column(name = "MEMO")
     private String memo;
 
 }
