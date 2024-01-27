@@ -16,9 +16,9 @@ public class TimetableController {
     private final TimetableService timetableService;
 
     @PostMapping(value = "/plans/timetable/stuId")
-    public ApiResponse<AddTimetableResponseDto> addTimetable(@RequestBody AddTimetableRequestDto.TimetableDto timetableDto, @SessionAttribute(name="student") Long stuId) {
-        AddTimetableResponseDto addTimetableResponseDto = timetableService.addTimetable(timetableDto, stuId);
-        return ApiResponse.onSuccess(addTimetableResponseDto);
+    public ApiResponse<AddTimetableResponseDto.addResponseDtoList> addTimetable(@RequestBody AddTimetableRequestDto.TimetableDto timetableDto, @SessionAttribute(name="student") Long stuId) {
+        AddTimetableResponseDto.addResponseDtoList addResponseDtoList = timetableService.addTimetable(timetableDto, stuId);
+        return ApiResponse.onSuccess(addResponseDtoList);
     }
 
     @GetMapping(value = "/plans/timetable/stuId")

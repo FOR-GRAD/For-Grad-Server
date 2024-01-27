@@ -2,6 +2,8 @@ package umc.forgrad.dto.Timetable;
 import lombok.Getter;
 import lombok.Builder;
 
+import java.util.List;
+
 public class AddTimetableRequestDto {
     @Getter
     @Builder
@@ -17,11 +19,16 @@ public class AddTimetableRequestDto {
         private String name;
         private Integer credit;
     }
+    @Getter
+    @Builder
+    public static class SubjectDtoList {
+        private List<SubjectDto> subjectDtos;
+    }
 
     @Getter
     @Builder
     public static class TimetableDto {
         private SemesterDto semesterDto;
-        private SubjectDto subjectDto;
+        private List<SubjectDto> subjectDtoList;
     }
 }

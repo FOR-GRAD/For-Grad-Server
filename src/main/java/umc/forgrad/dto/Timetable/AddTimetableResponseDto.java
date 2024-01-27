@@ -1,19 +1,21 @@
 package umc.forgrad.dto.Timetable;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-@Builder
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
 public class AddTimetableResponseDto {
-    private Integer grade;
-    private Integer semester;
-    private Long subjectId;
-    private LocalDateTime createdAt;
+    @Getter
+    @Builder
+    public static class addResponseDto {
+        private Long subjectId;
+        private LocalDateTime createdAt;
+    }
+    @Getter
+    @Builder
+    public static class addResponseDtoList {
+        private List<addResponseDto> addResponseDtos;
+    }
 }

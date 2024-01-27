@@ -21,6 +21,7 @@ import umc.forgrad.repository.SemesterSubjectRepository;
 import umc.forgrad.repository.StudentRepository;
 import umc.forgrad.repository.SubjectRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,17 +34,27 @@ public class TimetableService {
     private final SemesterSubjectRepository semesterSubjectRepository;
 
     @Transactional
-    public AddTimetableResponseDto addTimetable(AddTimetableRequestDto.TimetableDto timetableDto, Long stuId) {
+    public AddTimetableResponseDto.addResponseDtoList addTimetable(AddTimetableRequestDto.TimetableDto timetableDto, Long stuId) {
         Student student = studentRepository.findById(stuId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 학번이 존재하지 않습니다. id=" + stuId));
+
         Semester semester = semesterRepository.save(TimetableConverter.toSemester(timetableDto.getSemesterDto(), student));
-        Subject subject = subjectRepository.save(TimetableConverter.toSubject(timetableDto.getSubjectDto()));
-        SemesterSubject semesterSubject = SemesterSubject.builder()
-                .subject(subject)
-                .semester(semester)
-                .build();
-        semesterSubjectRepository.save(semesterSubject);
-        return TimetableConverter.toAddResultDto(semester, subject);
+
+        List<AddTimetableRequestDto.SubjectDto> subjectDtoList = timetableDto.getSubjectDtoList();
+        List<Subject> subjects = new ArrayList<>();
+        List<SemesterSubject> semesterSubjects = new ArrayList<>();
+        for(AddTimetableRequestDto.SubjectDto dto : subjectDtoList) {
+            Subject subject = TimetableConverter.toSubject(dto);
+            subjects.add(subject);
+            SemesterSubject semesterSubject = SemesterSubject.builder()
+                    .semester(semester)
+                    .subject(subject)
+                    .build();
+            semesterSubjects.add(semesterSubject);
+        }
+        subjectRepository.saveAll(subjects);
+        semesterSubjectRepository.saveAll(semesterSubjects);
+        return TimetableConverter.toAddResultDto(subjects);
     }
 
     @Transactional(readOnly = true)

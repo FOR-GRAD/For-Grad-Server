@@ -8,16 +8,22 @@ import umc.forgrad.dto.Timetable.AddTimetableResponseDto;
 import umc.forgrad.dto.Timetable.ViewTimetableResponseDto;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class TimetableConverter {
-    public static AddTimetableResponseDto toAddResultDto(Semester semester, Subject subject) {
-        return AddTimetableResponseDto.builder()
-                .grade(semester.getGrade())
-                .semester(semester.getSemester())
-                .subjectId(subject.getId())
-                .createdAt(LocalDateTime.now())
+    public static AddTimetableResponseDto.addResponseDtoList toAddResultDto(List<Subject> subjects) {
+        List<AddTimetableResponseDto.addResponseDto> addResponseDtos = new ArrayList<>();
+        for(Subject subject : subjects) {
+            AddTimetableResponseDto.addResponseDto addResponseDto = AddTimetableResponseDto.addResponseDto.builder()
+                    .subjectId(subject.getId())
+                    .createdAt(LocalDateTime.now())
+                    .build();
+            addResponseDtos.add(addResponseDto);
+        }
+        return AddTimetableResponseDto.addResponseDtoList.builder()
+                .addResponseDtos(addResponseDtos)
                 .build();
     }
     public static Semester toSemester(AddTimetableRequestDto.SemesterDto semesterDto, Student student) {
