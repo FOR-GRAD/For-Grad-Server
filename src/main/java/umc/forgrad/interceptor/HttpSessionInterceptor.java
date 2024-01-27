@@ -1,4 +1,4 @@
-package umc.forgrad.config;
+package umc.forgrad.interceptor;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
