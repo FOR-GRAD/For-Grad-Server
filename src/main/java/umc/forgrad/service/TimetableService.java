@@ -26,6 +26,7 @@ import umc.forgrad.repository.SemesterSubjectRepository;
 import umc.forgrad.repository.StudentRepository;
 import umc.forgrad.repository.SubjectRepository;
 
+import java.io.IOException;
 import java.util.*;
 
 import static umc.forgrad.service.common.ConnectionResponse.getResponse;
@@ -39,7 +40,7 @@ public class TimetableService {
     private final SemesterSubjectRepository semesterSubjectRepository;
 
     @Transactional
-    public List<AddTimetableRequestDto.HakkiDto> searchHakki(HttpSession session) {
+    public List<AddTimetableRequestDto.HakkiDto> searchHakki(HttpSession session) throws IOException {
         String hakkiSearchUrl = "https://info.hansung.ac.kr/jsp_21/student/kyomu/kyoyukgwajung_aui.jsp";
         Connection.Response hakkisResponse = getResponse(session, hakkiSearchUrl);
         Document document = hakkisResponse.parse();
@@ -59,7 +60,7 @@ public class TimetableService {
         return hakkiDtos;
     }
     @Transactional
-    public List<AddTimetableRequestDto.TrackDto> searchTrack(HttpSession session) {
+    public List<AddTimetableRequestDto.TrackDto> searchTrack(HttpSession session) throws IOException {
         String trackSearchUrl = "https://info.hansung.ac.kr/jsp_21/student/kyomu/kyoyukgwajung_aui.jsp";
         Connection.Response tracksResponse = getResponse(session, trackSearchUrl);
         Document document = tracksResponse.parse();
@@ -81,7 +82,7 @@ public class TimetableService {
     }
 
     @Transactional
-    public List<AddTimetableRequestDto.SearchSubjectDto> searchSubjects(HttpSession session, Integer hakki, String track) {
+    public List<AddTimetableRequestDto.SearchSubjectDto> searchSubjects(HttpSession session, Integer hakki, String track) throws IOException {
         String subjectSearchUrl = String.format("https://info.hansung.ac.kr/jsp_21/student/kyomu/kyoyukgwajung_aui.jsp?gubun=history&syearhakgi=%d&sjungong=%s", hakki, track);
         Connection.Response subjectsResponse = getResponse(session, subjectSearchUrl);
         Document document = subjectsResponse.parse();
