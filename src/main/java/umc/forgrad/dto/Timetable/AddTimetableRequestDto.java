@@ -31,4 +31,24 @@ public class AddTimetableRequestDto {
         private SemesterDto semesterDto;
         private List<SubjectDto> subjectDtoList;
     }
+    @Getter
+    @Builder
+    public static class HakkiDto {
+        private String hakkiText;
+        private Integer hakkiNum;
+    }
+    @Getter
+    @Builder
+    public static class TrackDto {
+        private String trackName;
+        private String trackCode;
+    }
+    @Getter
+    @Builder
+    public static class SearchSubjectDto {
+        private Integer searchGrade;
+        private String searchType;
+        private String searchName;
+        private Integer searchCredit;
+    }
 }
