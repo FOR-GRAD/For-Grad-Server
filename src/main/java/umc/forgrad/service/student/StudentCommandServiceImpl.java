@@ -37,6 +37,8 @@ public class StudentCommandServiceImpl implements StudentCommandService {
     @Override
     public Student login(StudentRequestDto.LoginRequestDto loginRequestDto, HttpSession session) {
 
+        long stuId = Long.parseLong(loginRequestDto.getId());
+
         // 종정시 로그인
         ResponseEntity<String> jjsResponse = getJjsResponse(loginRequestDto);
         Document jjsDocument = Jsoup.parse(Objects.requireNonNull(jjsResponse.getBody()));
@@ -53,16 +55,13 @@ public class StudentCommandServiceImpl implements StudentCommandService {
         JSONObject jsonObject = new JSONObject(jsonString);
         boolean success = jsonObject.getBoolean("success");
 
-
         Map<String, String> cookies = new HashMap<>();
         cookies.putAll(getCookies(jjsResponse));
         cookies.putAll(getCookies(hsportalResponse));
         session.setAttribute("cookies", cookies);
 
         if (redirectUrl.equals("http://info.hansung.ac.kr/h_dae/dae_main.html") && success) {
-            Student student = StudentConverter.toStudent(Long.parseLong(loginRequestDto.getId()));
-            studentRepository.save(student);
-            return student;
+            return studentRepository.findById(stuId).orElse(studentRepository.save(StudentConverter.toStudent(stuId)));
         } else {
             throw new GeneralException(ErrorStatus.LOGIN_UNAUTHORIZED);
         }
