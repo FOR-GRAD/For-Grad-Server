@@ -22,7 +22,7 @@ public class StudentController {
     private final StudentCommandService studentCommandService;
 
     @PostMapping("/login")
-    public ApiResponse<StudentResponseDto.LoginResponseDto> login(@ModelAttribute StudentRequestDto.LoginRequestDto loginRequestDto, HttpSession session) throws IOException {
+    public ApiResponse<StudentResponseDto.LoginResponseDto> login(@ModelAttribute StudentRequestDto.LoginRequestDto loginRequestDto, HttpSession session) {
         Student student = studentCommandService.login(loginRequestDto, session);
         session.setAttribute("student", student.getId());
         return ApiResponse.onSuccess(StudentConverter.toLoginResultDto("login success"));
