@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public interface StudentCommandService {
 
-    Student login(StudentRequestDto.LoginRequestDto loginRequestDto, HttpSession session);
+    Student login(StudentRequestDto.LoginRequestDto loginRequestDto, HttpSession session) throws IOException;
 
     String logout(HttpSession session) throws IOException;
 

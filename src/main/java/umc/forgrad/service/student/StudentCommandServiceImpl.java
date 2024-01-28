@@ -19,6 +19,7 @@ import umc.forgrad.domain.Student;
 import umc.forgrad.dto.student.StudentRequestDto;
 import umc.forgrad.exception.GeneralException;
 import umc.forgrad.repository.StudentRepository;
+import umc.forgrad.service.common.ConnectionResponse;
 
 import java.io.IOException;
 import java.util.AbstractMap;
@@ -35,7 +36,7 @@ public class StudentCommandServiceImpl implements StudentCommandService {
     private final StudentRepository studentRepository;
 
     @Override
-    public Student login(StudentRequestDto.LoginRequestDto loginRequestDto, HttpSession session) {
+    public Student login(StudentRequestDto.LoginRequestDto loginRequestDto, HttpSession session) throws IOException {
 
         long stuId = Long.parseLong(loginRequestDto.getId());
 
@@ -56,13 +57,13 @@ public class StudentCommandServiceImpl implements StudentCommandService {
         boolean success = jsonObject.getBoolean("success");
 
         // 세션에 쿠키 설정
-        Map<String, String> cookies = new HashMap<>();
-        cookies.putAll(getCookies(jjsResponse));
-        cookies.putAll(getCookies(hsportalResponse));
-        session.setAttribute("cookies", cookies);
+        setCookieToSession(session, jjsResponse, hsportalResponse);
+
+        // 학번, 1트랙, 2트랙으로 학생 정보 만들기
+        Student student = getStudent(session, stuId);
 
         if (redirectUrl.equals("http://info.hansung.ac.kr/h_dae/dae_main.html") && success) {
-            return studentRepository.findById(stuId).orElse(studentRepository.save(StudentConverter.toStudent(stuId)));
+            return studentRepository.findById(stuId).orElse(studentRepository.save(student));
         } else {
             throw new GeneralException(ErrorStatus.LOGIN_UNAUTHORIZED);
         }
@@ -115,6 +116,29 @@ public class StudentCommandServiceImpl implements StudentCommandService {
                     return new AbstractMap.SimpleEntry<>(nameValue[0], nameValue[1]);
                 })
                 .collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue));
+    }
+
+    private void setCookieToSession(HttpSession session, ResponseEntity<String> jjsResponse, ResponseEntity<String> hsportalResponse) {
+        Map<String, String> cookies = new HashMap<>();
+        cookies.putAll(getCookies(jjsResponse));
+        cookies.putAll(getCookies(hsportalResponse));
+        session.setAttribute("cookies", cookies);
+    }
+
+    private static Student getStudent(HttpSession session, long stuId) throws IOException {
+        String jjsUrl = "https://info.hansung.ac.kr/jsp_21/index.jsp";
+        Connection.Response response = ConnectionResponse.getResponse(session, jjsUrl);
+
+        Document doc = response.parse();
+        Element link = doc.select("a.d-block").first();
+
+        String text = link.html(); // "모바일소프트웨어트랙<br> 웹공학트랙<br> 황준현"
+        String[] split = text.split("<br>");
+
+        String track1 = split[0].trim(); // "모바일소프트웨어트랙"
+        String track2 = split[1].trim(); // "웹공학트랙"
+
+        return StudentConverter.toStudent(stuId, track1, track2);
     }
 
     @Override
