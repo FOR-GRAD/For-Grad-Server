@@ -18,17 +18,17 @@ public class TimetableController {
     private final TimetableService timetableService;
 
     @GetMapping(value = "/plans/timetable/searchHakki")
-    public ApiResponse<List<AddTimetableRequestDto.HakkiDto>> searchHakki(@SessionAttribute(name="student") Long stuId, HttpSession session) throws IOException {
+    public ApiResponse<List<AddTimetableRequestDto.HakkiDto>> searchHakki(HttpSession session) throws IOException {
         List<AddTimetableRequestDto.HakkiDto> hakkiDtos = timetableService.searchHakki(session);
         return ApiResponse.onSuccess(hakkiDtos);
     }
     @GetMapping(value = "/plans/timetable/searchTrack")
-    public ApiResponse<List<AddTimetableRequestDto.TrackDto>> searchTrack(@SessionAttribute(name="student") Long stuId, HttpSession session) throws IOException {
+    public ApiResponse<List<AddTimetableRequestDto.TrackDto>> searchTrack(HttpSession session) throws IOException {
         List<AddTimetableRequestDto.TrackDto> trackDtos = timetableService.searchTrack(session);
         return ApiResponse.onSuccess(trackDtos);
     }
     @GetMapping(value = "/plans/timetable/searchSubject")
-    public ApiResponse<List<AddTimetableRequestDto.SearchSubjectDto>> searchSubject(@SessionAttribute(name="student") Long stuId, HttpSession session, Integer hakki, String track) throws IOException {
+    public ApiResponse<List<AddTimetableRequestDto.SearchSubjectDto>> searchSubject(HttpSession session, Integer hakki, String track) throws IOException {
         List<AddTimetableRequestDto.SearchSubjectDto> searchSubjectDtos = timetableService.searchSubject(session, hakki, track);
         return ApiResponse.onSuccess(searchSubjectDtos);
     }
