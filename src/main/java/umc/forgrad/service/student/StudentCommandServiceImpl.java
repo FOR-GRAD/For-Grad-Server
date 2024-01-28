@@ -55,6 +55,7 @@ public class StudentCommandServiceImpl implements StudentCommandService {
         JSONObject jsonObject = new JSONObject(jsonString);
         boolean success = jsonObject.getBoolean("success");
 
+        // 세션에 쿠키 설정
         Map<String, String> cookies = new HashMap<>();
         cookies.putAll(getCookies(jjsResponse));
         cookies.putAll(getCookies(hsportalResponse));
