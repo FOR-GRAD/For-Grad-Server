@@ -82,7 +82,7 @@ public class TimetableService {
     }
 
     @Transactional
-    public List<AddTimetableRequestDto.SearchSubjectDto> searchSubjects(HttpSession session, Integer hakki, String track) throws IOException {
+    public List<AddTimetableRequestDto.SearchSubjectDto> searchSubject(HttpSession session, Integer hakki, String track) throws IOException {
         String subjectSearchUrl = String.format("https://info.hansung.ac.kr/jsp_21/student/kyomu/kyoyukgwajung_aui.jsp?gubun=history&syearhakgi=%d&sjungong=%s", hakki, track);
         Connection.Response subjectsResponse = getResponse(session, subjectSearchUrl);
         Document document = subjectsResponse.parse();

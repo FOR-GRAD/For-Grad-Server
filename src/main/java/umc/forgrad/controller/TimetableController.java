@@ -1,5 +1,6 @@
 package umc.forgrad.controller;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import umc.forgrad.apipayload.ApiResponse;
@@ -8,6 +9,7 @@ import umc.forgrad.dto.Timetable.AddTimetableResponseDto;
 import umc.forgrad.dto.Timetable.ViewTimetableResponseDto;
 import umc.forgrad.service.TimetableService;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -15,7 +17,23 @@ import java.util.List;
 public class TimetableController {
     private final TimetableService timetableService;
 
-    @PostMapping(value = "/plans/timetable")
+    @GetMapping(value = "/plans/timetable/searchHakki")
+    public ApiResponse<List<AddTimetableRequestDto.HakkiDto>> searchHakki(@SessionAttribute(name="student") Long stuId, HttpSession session) throws IOException {
+        List<AddTimetableRequestDto.HakkiDto> hakkiDtos = timetableService.searchHakki(session);
+        return ApiResponse.onSuccess(hakkiDtos);
+    }
+    @GetMapping(value = "/plans/timetable/searchTrack")
+    public ApiResponse<List<AddTimetableRequestDto.TrackDto>> searchTrack(@SessionAttribute(name="student") Long stuId, HttpSession session) throws IOException {
+        List<AddTimetableRequestDto.TrackDto> trackDtos = timetableService.searchTrack(session);
+        return ApiResponse.onSuccess(trackDtos);
+    }
+    @GetMapping(value = "/plans/timetable/searchSubject")
+    public ApiResponse<List<AddTimetableRequestDto.SearchSubjectDto>> searchSubject(@SessionAttribute(name="student") Long stuId, HttpSession session, Integer hakki, String track) throws IOException {
+        List<AddTimetableRequestDto.SearchSubjectDto> searchSubjectDtos = timetableService.searchSubject(session, hakki, track);
+        return ApiResponse.onSuccess(searchSubjectDtos);
+    }
+
+    @PostMapping(value = "/plans/timetable/searchTrack")
     public ApiResponse<AddTimetableResponseDto.addResponseDtoList> addTimetable(@RequestBody AddTimetableRequestDto.TimetableDto timetableDto, @SessionAttribute(name="student") Long stuId) {
         AddTimetableResponseDto.addResponseDtoList addResponseDtoList = timetableService.addTimetable(timetableDto, stuId);
         return ApiResponse.onSuccess(addResponseDtoList);
