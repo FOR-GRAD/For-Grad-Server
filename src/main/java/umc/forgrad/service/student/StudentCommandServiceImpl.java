@@ -76,7 +76,7 @@ public class StudentCommandServiceImpl implements StudentCommandService {
         map.add("id", loginRequestDto.getId());
         map.add("passwd", loginRequestDto.getPasswd());
 
-        return httpResponseAndSetCookies(map, url);
+        return httpResponse(map, url);
     }
 
     private static ResponseEntity<String> getHsportalResponse(StudentRequestDto.LoginRequestDto loginRequestDto) {
@@ -87,10 +87,10 @@ public class StudentCommandServiceImpl implements StudentCommandService {
         map.add("email", loginRequestDto.getId());
         map.add("password", loginRequestDto.getPasswd());
 
-        return httpResponseAndSetCookies(map, url);
+        return httpResponse(map, url);
     }
 
-    private static ResponseEntity<String> httpResponseAndSetCookies(MultiValueMap<String, String> map, String url) {
+    private static ResponseEntity<String> httpResponse(MultiValueMap<String, String> map, String url) {
         // Header 설정
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
