@@ -98,7 +98,7 @@ public class HomeQueryServiceImpl implements HomeQueryService {
                 .toList();
 
         // 향후 계획 시간표 학점 총 합 계산하기
-        Integer sumCredits = subjectRepository.sumCredits(subjectList);
+        Integer sumCredits = subjectRepository.sumCredits(subjectList).orElse(0);
 
         // FutureTimeTableDto 변경
         Map<String, StudentResponseDto.FutureTimeTableDto> futureTimeTableDto = FuturePlansCoverter.toFutureTimeTableDto(nextSemesterToString(nextGradeSemesterArr), sumCredits, subjectList);
