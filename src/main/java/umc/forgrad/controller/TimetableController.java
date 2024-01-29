@@ -32,7 +32,7 @@ public class TimetableController {
         return ApiResponse.onSuccess(searchSubjectDtos);
     }
 
-    @PostMapping(value = "/plans/timetable/searchTrack")
+    @PostMapping(value = "/plans/timetable")
     public ApiResponse<AddTimetableResponseDto.addResponseDtoList> addTimetable(@RequestBody AddTimetableRequestDto.TimetableDto timetableDto, @SessionAttribute(name="student") Long stuId) {
         AddTimetableResponseDto.addResponseDtoList addResponseDtoList = timetableService.addTimetable(timetableDto, stuId);
         return ApiResponse.onSuccess(addResponseDtoList);
