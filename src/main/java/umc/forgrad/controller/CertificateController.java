@@ -5,9 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import umc.forgrad.apipayload.ApiResponse;
 import umc.forgrad.converter.CertificateConverter;
 import umc.forgrad.domain.Certificate;
-import umc.forgrad.dto.Certificate.AddCertificateRequestDto;
-import umc.forgrad.dto.Certificate.AddCertificateResponseDto;
-import umc.forgrad.dto.Certificate.ViewCertificateResponseDto;
+import umc.forgrad.dto.Certificate.*;
 import umc.forgrad.service.CertificateService;
 
 import java.util.ArrayList;
@@ -27,6 +25,16 @@ public class CertificateController {
             addCertificateResponseDtos.add(addCertificateResponseDto);
         }
         return ApiResponse.onSuccess(addCertificateResponseDtos);
+    }
+    @PatchMapping(value = "/plans/certifications")
+    public ApiResponse<List<UpdateCertificateResponseDto>> updateCertificate(@RequestBody List<UpdateCertificateRequestDto> updateCertificateRequestDtos, @SessionAttribute(name="student") Long stuId) {
+        List<Certificate> certificates = certificateService.updateCertificates(updateCertificateRequestDtos, stuId);
+        List<UpdateCertificateResponseDto> updateCertificateResponseDtos = new ArrayList<>();
+        for(Certificate certificate: certificates) {
+            UpdateCertificateResponseDto updateCertificateResponseDto = CertificateConverter.toUpdateResultDto(certificate);
+            updateCertificateResponseDtos.add(updateCertificateResponseDto);
+        }
+        return ApiResponse.onSuccess(updateCertificateResponseDtos);
     }
     @GetMapping(value = "/plans/certifications")
     public ApiResponse<List<ViewCertificateResponseDto>> viewCertificate(@SessionAttribute(name="student") Long stuId) {
