@@ -4,14 +4,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import umc.forgrad.apipayload.code.status.ErrorStatus;
 import umc.forgrad.converter.ActivityConverter;
 import umc.forgrad.domain.Activity;
 import umc.forgrad.domain.Student;
 import umc.forgrad.dto.GetS3Res;
 import umc.forgrad.dto.activity.PostActivityRequest;
+import umc.forgrad.exception.GeneralException;
 import umc.forgrad.repository.ActivityRepository;
 import umc.forgrad.repository.StudentRepository;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,10 +33,10 @@ public class ActivityCommandService {
     }
 
     @Transactional
-    public Activity createBoard(PostActivityRequest.RegistActivity postActivityReq, List<MultipartFile> multipartFiles, String studentId) {
+    public Activity createBoard(PostActivityRequest.RegistActivity postActivityReq, List<MultipartFile> multipartFiles, Long studentId) throws IOException {
 
-        Student student = studentRepository.findById(Long.parseLong(studentId))
-                .orElseThrow(()-> new RuntimeException("현재사용자가 조회되지않습니다."));
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(()-> new GeneralException(ErrorStatus.STUDENT_NOT_FOUND));
 
         Activity activity = ActivityConverter.toActivity(postActivityReq, multipartFiles, student);
 

@@ -2,9 +2,6 @@ package umc.forgrad.controller;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import umc.forgrad.apipayload.ApiResponse;
@@ -17,6 +14,7 @@ import umc.forgrad.service.activityService.ActivityCommandService;
 import umc.forgrad.service.activityService.ActivityFileService;
 import umc.forgrad.service.activityService.ActivityQueryService;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -30,9 +28,9 @@ public class ActivityController {
     @PostMapping("/activity")
     public ApiResponse<PostActivityResponse.RegistActivityResultDto> createActivity(@RequestPart(value = "requestDto", required = false) PostActivityRequest.RegistActivity registActivity,
                                                                                     @RequestPart(value = "image", required = false) List<MultipartFile> multipartFiles,
-                                                                                    HttpSession httpSession
-    ) {
-        String studentId = (String) httpSession.getAttribute("studentId");
+                                                                                    @SessionAttribute(name = "student") long studentId, HttpSession httpSession) throws IOException {
+
+
         Activity activity = activityCommandService.createBoard(registActivity, multipartFiles, studentId);
         return ApiResponse.onSuccess(ActivityConverter.activityResultDto(activity));
 
@@ -44,21 +42,63 @@ public class ActivityController {
         return;
 
     }
-    @GetMapping("/activity-list/{category}")
-    public ApiResponse<PostActivityResponse.ActivityListDto> getActivityList(@PathVariable Category category,
-                                                                             @RequestParam(defaultValue = "0") int page,
-                                                                             @RequestParam(defaultValue = "10") int size) {
+//    @GetMapping("/activity-list/{category}")
+//    public ApiResponse<PostActivityResponse.ActivityListDto> getActivityList(@PathVariable Category category,
+//                                                                             @RequestParam(defaultValue = "0") int page,
+//                                                                             @RequestParam(defaultValue = "10") int size) throws IOException {
+//
+//        Pageable pageable = PageRequest.of(page, size);
+//        Page<Activity> careerList = activityQueryService.getCareerList(category, pageable);
+//        PostActivityResponse.ActivityListDto activityListDto = ActivityConverter.activityListDto(careerList);
+//        return ApiResponse.onSuccess(activityListDto);
+//    }
 
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Activity> careerList = activityQueryService.getCareerList(category, pageable);
-        PostActivityResponse.ActivityListDto activityListDto = ActivityConverter.activityListDto(careerList);
-        return ApiResponse.onSuccess(activityListDto);
-    }
-
-    @GetMapping("/activity-detail")
-    public ApiResponse<PostActivityResponse.ActivityDetailDto> getActivityDetail(@RequestParam Long activityId){
-        List<String> fileUrls = activityFileService.getFileUrls(activityId);
+    @GetMapping("/career-detail")
+    public ApiResponse<PostActivityResponse.ActivityDetailDto> getActivityDetail(@RequestParam Long activityId) throws IOException {
         Activity activity = activityQueryService.findActivity(activityId);
+        List<String> fileUrls = activityFileService.getFileUrls(activityId);
+
         return ApiResponse.onSuccess(ActivityConverter.activityDetailDto(activity, fileUrls));
     }
+
+    @GetMapping("/career-list/{category}")
+    public ApiResponse<PostActivityResponse.onlyAccumulatedList> getActivityAcc(@PathVariable Category category) throws IOException {
+
+        List<PostActivityResponse.ActivityWithAccumulatedHours> careerAccumulatedList = activityQueryService.getActivities(category);
+
+        return ApiResponse.onSuccess(ActivityConverter.activityResult(careerAccumulatedList));
+    }
+
+
+    @GetMapping("/career-list-search/{category}")
+    public ApiResponse<PostActivityResponse.onlyAccumulatedList> getActivitySearchResult(@PathVariable Category category,
+                                                                                         @RequestParam String searchWord
+                                                                                   ){
+        List<PostActivityResponse.ActivityWithAccumulatedHours> searchedList = activityQueryService.getActivitiesByTitleAndCategory(searchWord, category);
+        return ApiResponse.onSuccess(ActivityConverter.activityResult(searchedList));
+
+    }
+
+//    @GetMapping("/activity-list/{category}")
+//    public ApiResponse<PostActivityResponse.responseAccum> getActivityAcc(@PathVariable Category category,
+//                                                                          @RequestParam(defaultValue = "0") int page,
+//                                                                          @RequestParam(defaultValue = "10") int size) throws IOException {
+//
+//        Page<PostActivityResponse.ActivityWithAccumulatedHours> careerAccumulatedList = activityQueryService.getActivitiesWithAccumulatedHours(category, page, size);
+//
+//        PostActivityResponse.responseAccum responseAccum = ActivityConverter.convertToResponseAccum(careerAccumulatedList);
+//        return ApiResponse.onSuccess(responseAccum);
+//    }
+//
+//
+//    @GetMapping("/activity-list-search/{category}")
+//    public ApiResponse<PostActivityResponse.responseAccum> getActivitySearchResult(@PathVariable Category category,
+//                                                                                   @RequestParam String searchWord,
+//                                                                                   @RequestParam(defaultValue = "0") int page,
+//                                                                                   @RequestParam(defaultValue = "10") int size){
+//        Page<PostActivityResponse.ActivityWithAccumulatedHours> searchedList = activityQueryService.getActivitiesWithTitleAndCategory(searchWord, category, page, size);
+//        PostActivityResponse.responseAccum responseAccum = ActivityConverter.convertToResponseAccum(searchedList);
+//        return ApiResponse.onSuccess(responseAccum);
+//
+//    }
 }

@@ -1,19 +1,22 @@
 package umc.forgrad.dto.activity;
 
+import jakarta.persistence.ColumnResult;
+import jakarta.persistence.ConstructorResult;
+import jakarta.persistence.SqlResultSetMapping;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import software.amazon.ion.Decimal;
 import umc.forgrad.domain.enums.Award;
 import umc.forgrad.domain.enums.Category;
 import umc.forgrad.domain.enums.CertificationType;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
 public class PostActivityResponse {
+
     @Builder
     @Getter
     public static class RegistActivityResultDto {
@@ -32,7 +35,7 @@ public class PostActivityResponse {
         Long totalElements;
         Boolean isFirst;
         Boolean isLast;
-
+        Integer nowPage;
     }
 
     @Builder
@@ -56,6 +59,7 @@ public class PostActivityResponse {
         Integer volunteerHour;
 
     }
+
     @Builder
     @Getter
     @NoArgsConstructor
@@ -84,46 +88,48 @@ public class PostActivityResponse {
 
     }
 
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ActivityWithAccumulatedHours {
+
+        Long id;
+
+        String title;
+
+        LocalDate startDate; // start_Date -> startDate
+        LocalDate endDate; // end_Date -> endDate
+        Award award;
+
+        CertificationType certificationType; // certification_Type -> certificationType
+        Integer volunteerHour; // volunteer_Hour -> volunteerHour
+        Integer accum;
+
+        Integer reindex;
+
+    }
+
+    @Builder
+    @Getter
+    public static class onlyAccumulatedList {
+        List<ActivityWithAccumulatedHours> activityWithAccumulatedHours;
+
+    }
 
 
 
-//    @Builder
-//    @Getter
-//    @NoArgsConstructor
-//    @AllArgsConstructor
-//    public static class VolunteersListDto {
-//
-//        private Long id;
-//        private String title;
-//
-//    }
-//
-//    @Builder
-//    @Getter
-//    @NoArgsConstructor
-//    @AllArgsConstructor
-//    public static class VolunteersDetailDto {
-//
-//        private Long id;
-//        private String title;
-//
-//        private String content;
-//
-//        private String prize;
-//
-//        private Category category;
-//
-//        private LocalDate startDate;
-//
-//        private LocalDate endDate;
-//
-//    }
-//
-//
-//    @Builder
-//    @Getter
-//    @NoArgsConstructor
-//    @AllArgsConstructor
-//    public static class VolunteersPreviewDto {
-//    }
+    @Builder
+    @Getter
+    public static class responseAccum {
+        List<ActivityWithAccumulatedHours> activityWithAccumulatedHours;
+        Integer listSize;
+        Integer totalPage;
+        Long totalElements;
+        Boolean isFirst;
+        Boolean isLast;
+        Integer nowPage;
+    }
+
 }
