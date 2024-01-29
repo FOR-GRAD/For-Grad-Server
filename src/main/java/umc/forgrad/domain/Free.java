@@ -16,7 +16,7 @@ public class Free {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "student_id") //
+    @JoinColumn(name = "student_id")
     private Student student;
 
     private String memo;

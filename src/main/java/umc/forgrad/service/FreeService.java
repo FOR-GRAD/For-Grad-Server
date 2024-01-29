@@ -50,6 +50,26 @@ public class FreeService{
                 .build();
     }
 
+    /**
+     * 메모 수정하기
+     */
+    public FreeDto.MemoResponseDto updateMemo(FreeDto.MemoRequestDto dto, long stuId) {
+
+        Free byStudentId = freeRepository.findByStudentId(stuId);
+
+        Free updatedFree = Free.builder()
+                .id(byStudentId.getId())
+                .student(byStudentId.getStudent())
+                .memo(dto.getMemo())
+                .build();
+
+        updatedFree = freeRepository.save(updatedFree);
+
+        return FreeDto.MemoResponseDto.builder()
+                .memo(updatedFree.getMemo())
+                .build();
+    }
+
 //    public Optional<Free> findOne(Long memoId){
 //        return freeRepository.findById(memoId);
 //    }
