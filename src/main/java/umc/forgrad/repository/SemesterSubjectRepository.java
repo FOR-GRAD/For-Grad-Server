@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface SemesterSubjectRepository extends JpaRepository<SemesterSubject, Long> {
 
-    List<SemesterSubject> findBySemester(Semester semester);
+    List<SemesterSubject> findBySemesterIn(List<Semester> semester);
 
 }

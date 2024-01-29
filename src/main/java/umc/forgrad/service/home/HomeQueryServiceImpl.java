@@ -3,7 +3,6 @@ package umc.forgrad.service.home;
 import jakarta.servlet.http.HttpSession;
 import jakarta.xml.bind.DatatypeConverter;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Connection;
 import org.jsoup.nodes.Document;
 import org.springframework.http.*;
@@ -20,19 +19,24 @@ import umc.forgrad.exception.GeneralException;
 import umc.forgrad.repository.SemesterRepository;
 import umc.forgrad.repository.SemesterSubjectRepository;
 import umc.forgrad.repository.StudentRepository;
+import umc.forgrad.repository.SubjectRepository;
 
 import java.io.IOException;
-import java.util.*;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 import static umc.forgrad.service.common.ConnectionResponse.getResponse;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class HomeQueryServiceImpl implements HomeQueryService {
 
     private final StudentRepository studentRepository;
     private final SemesterRepository semesterRepository;
+    private final SubjectRepository subjectRepository;
     private final SemesterSubjectRepository semesterSubjectRepository;
 
     @Override
@@ -51,6 +55,14 @@ public class HomeQueryServiceImpl implements HomeQueryService {
         String department = parts[2];
         String grade = parts[3] + parts[4];
         String status = parts[5];
+
+        LocalDate date = LocalDate.now();
+        int monthValue = date.getMonthValue(); // 현재 달
+        int currentGrade = Integer.parseInt(parts[3]); // 현재 학년
+
+        int[] nextGradeSemesterArr = getNextSemester(monthValue, currentGrade);
+        int nextGrade = nextGradeSemesterArr[0];
+        int nextSemester = nextGradeSemesterArr[1];
 
         // 종정시 사진 to base64Image
         String base64Image = getBase64Image(studentId, session);
@@ -74,19 +86,22 @@ public class HomeQueryServiceImpl implements HomeQueryService {
 
         // 시간표 조회
         // 학생의 학년과 학기로 해당 학기 찾기
-        Optional<Semester> optionalSemester = semesterRepository.findByStudentAndGradeAndSemester(student, 4, 1);
-        Semester semester = optionalSemester.orElseThrow(() -> new GeneralException(ErrorStatus.SEMESTER_NOT_FOUND));
+        Optional<List<Semester>> optionalSemester = semesterRepository.findByStudentAndGradeAndSemester(student, nextGrade, nextSemester);
+        List<Semester> semester = optionalSemester.orElseThrow(() -> new GeneralException(ErrorStatus.SEMESTER_NOT_FOUND));
 
         // 해당 학기에 속하는 과목 리스트 찾기
-        List<SemesterSubject> semesterSubjectList = semesterSubjectRepository.findBySemester(semester);
+        List<SemesterSubject> semesterSubjectList = semesterSubjectRepository.findBySemesterIn(semester);
 
         // list로 변경
         List<Subject> subjectList = semesterSubjectList.stream()
                 .map(SemesterSubject::getSubject)
                 .toList();
 
+        // 향후 계획 시간표 학점 총 합 계산하기
+        Integer sumCredits = subjectRepository.sumCredits(subjectList);
+
         // FutureTimeTableDto 변경
-        List<StudentResponseDto.FutureTimeTableDto> futureTimeTableDto = FuturePlansCoverter.toFutureTimeTableDto(subjectList);
+        Map<String, StudentResponseDto.FutureTimeTableDto> futureTimeTableDto = FuturePlansCoverter.toFutureTimeTableDto(nextSemesterToString(nextGradeSemesterArr), sumCredits, subjectList);
 
         return StudentResponseDto.HomeResponseDto.builder()
                 .name(name)
@@ -105,6 +120,41 @@ public class HomeQueryServiceImpl implements HomeQueryService {
                 .futureTimeTableDto(futureTimeTableDto)
                 .build();
 
+    }
+
+    // 다음학기 toString()
+    private static String nextSemesterToString(int[] nextSemester) {
+        return nextSemester[0] + "학년" + nextSemester[1] + "학기";
+    }
+
+    // 다음 학기 계산 로직
+    public static int[] getNextSemester(int month, int grade) {
+        int[] semester = new int[2];
+
+        // 졸업 학년은 0학년으로 표시됨(4학년 2학기로 계산함)
+        if (grade == 0) {
+            semester[0] = 4;
+            semester[1] = 2;
+            return semester;
+        }
+
+        // 3월부터 9월까지는 현재 학년, 2학기를 저장
+        if (month >= 3 && month <= 9) {
+            semester[0] = grade;
+            semester[1] = 2;
+        }
+        // 나머지 달에 대해서는 다음 학년 1학기를 저장
+        else {
+            // 4학년 2학기일 경우 마지막 학기이므로 4학년 2학기를 저장
+            if (grade == 4) {
+                semester[0] = 4;
+                semester[1] = 2;
+            } else {
+                semester[0] = grade + 1;
+                semester[1] = 1;
+            }
+        }
+        return semester;
     }
 
     // 종정시 이미지 to Base64Image
