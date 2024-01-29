@@ -49,13 +49,20 @@ public class StudentResponseDto {
 
         private String note2; // 2트랙 졸업요건 비고
 
-        private Map<String, List<FutureTimeTableDto>> futureTimeTableDto; // key: 학년학기
+        private Map<String, FutureTimeTableDto> futureTimeTableDto; // key: 학년학기
     }
 
     @Getter
     @Builder
     public static class FutureTimeTableDto {
+        private Integer sumCredits;
 
+        private List<TimeTableDto> timeTableDtoList;
+    }
+
+    @Getter
+    @Builder
+    public static class TimeTableDto {
         private String majorType; // 전공선택, 전공필수, 전공기초 ...
 
         private String subject; // 교과목

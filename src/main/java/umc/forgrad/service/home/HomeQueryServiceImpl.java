@@ -3,7 +3,6 @@ package umc.forgrad.service.home;
 import jakarta.servlet.http.HttpSession;
 import jakarta.xml.bind.DatatypeConverter;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Connection;
 import org.jsoup.nodes.Document;
 import org.springframework.http.*;
@@ -20,6 +19,7 @@ import umc.forgrad.exception.GeneralException;
 import umc.forgrad.repository.SemesterRepository;
 import umc.forgrad.repository.SemesterSubjectRepository;
 import umc.forgrad.repository.StudentRepository;
+import umc.forgrad.repository.SubjectRepository;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -32,11 +32,11 @@ import static umc.forgrad.service.common.ConnectionResponse.getResponse;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class HomeQueryServiceImpl implements HomeQueryService {
 
     private final StudentRepository studentRepository;
     private final SemesterRepository semesterRepository;
+    private final SubjectRepository subjectRepository;
     private final SemesterSubjectRepository semesterSubjectRepository;
 
     @Override
@@ -86,19 +86,22 @@ public class HomeQueryServiceImpl implements HomeQueryService {
 
         // 시간표 조회
         // 학생의 학년과 학기로 해당 학기 찾기
-        Optional<Semester> optionalSemester = semesterRepository.findByStudentAndGradeAndSemester(student, nextGrade, nextSemester);
-        Semester semester = optionalSemester.orElseThrow(() -> new GeneralException(ErrorStatus.SEMESTER_NOT_FOUND));
+        Optional<List<Semester>> optionalSemester = semesterRepository.findByStudentAndGradeAndSemester(student, nextGrade, nextSemester);
+        List<Semester> semester = optionalSemester.orElseThrow(() -> new GeneralException(ErrorStatus.SEMESTER_NOT_FOUND));
 
         // 해당 학기에 속하는 과목 리스트 찾기
-        List<SemesterSubject> semesterSubjectList = semesterSubjectRepository.findBySemester(semester);
+        List<SemesterSubject> semesterSubjectList = semesterSubjectRepository.findBySemesterIn(semester);
 
         // list로 변경
         List<Subject> subjectList = semesterSubjectList.stream()
                 .map(SemesterSubject::getSubject)
                 .toList();
 
+        // 향후 계획 시간표 학점 총 합 계산하기
+        Integer sumCredits = subjectRepository.sumCredits(subjectList);
+
         // FutureTimeTableDto 변경
-        Map<String, List<StudentResponseDto.FutureTimeTableDto>> futureTimeTableDto = FuturePlansCoverter.toFutureTimeTableDto(nextSemesterToString(nextGradeSemesterArr), subjectList);
+        Map<String, StudentResponseDto.FutureTimeTableDto> futureTimeTableDto = FuturePlansCoverter.toFutureTimeTableDto(nextSemesterToString(nextGradeSemesterArr), sumCredits, subjectList);
 
         return StudentResponseDto.HomeResponseDto.builder()
                 .name(name)
