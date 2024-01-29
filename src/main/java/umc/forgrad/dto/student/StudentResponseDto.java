@@ -38,6 +38,8 @@ public class StudentResponseDto {
 
         private String track2; // 2트랙 이름
 
+        private String base64Image; // 종정시 사진
+
         private String trackRequirement1; // 1트랙 졸업요건
 
         private String trackRequirement2; // 2트랙 졸업요건
