@@ -10,6 +10,7 @@ import umc.forgrad.dto.Certificate.AddCertificateResponseDto;
 import umc.forgrad.dto.Certificate.ViewCertificateResponseDto;
 import umc.forgrad.service.CertificateService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -17,12 +18,17 @@ import java.util.List;
 public class CertificateController {
     private final CertificateService certificateService;
 
-    @PostMapping(value = "/plans/certifications/stuId")
-    public ApiResponse<AddCertificateResponseDto> addCertificate(@RequestBody AddCertificateRequestDto addCertificateRequestDto, @SessionAttribute(name="student") Long stuId) {
-        Certificate certificate = certificateService.addCertificate(addCertificateRequestDto, stuId);
-        return ApiResponse.onSuccess(CertificateConverter.toAddResultDto(certificate));
+    @PostMapping(value = "/plans/certifications")
+    public ApiResponse<List<AddCertificateResponseDto>> addCertificate(@RequestBody List<AddCertificateRequestDto> addCertificateRequestDtos, @SessionAttribute(name="student") Long stuId) {
+        List<Certificate> certificates = certificateService.addCertificates(addCertificateRequestDtos, stuId);
+        List<AddCertificateResponseDto> addCertificateResponseDtos = new ArrayList<>();
+        for (Certificate certificate: certificates) {
+            AddCertificateResponseDto addCertificateResponseDto = CertificateConverter.toAddResultDto(certificate);
+            addCertificateResponseDtos.add(addCertificateResponseDto);
+        }
+        return ApiResponse.onSuccess(addCertificateResponseDtos);
     }
-    @GetMapping(value = "/plans/certifications/stuId")
+    @GetMapping(value = "/plans/certifications")
     public ApiResponse<List<ViewCertificateResponseDto>> viewCertificate(@SessionAttribute(name="student") Long stuId) {
         List<Certificate> certificates= certificateService.viewCertificate(stuId);
         return ApiResponse.onSuccess(CertificateConverter.toViewResultDto(certificates));
