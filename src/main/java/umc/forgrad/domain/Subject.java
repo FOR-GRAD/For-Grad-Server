@@ -30,4 +30,10 @@ public class Subject extends BaseEntity {
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
     private List<SemesterSubject> semesterSubjectList = new ArrayList<>();
 
+    public void update(String type, String name, Integer credit) {
+        this.type = type;
+        this.name = name;
+        this.credit = credit;
+    }
+
 }

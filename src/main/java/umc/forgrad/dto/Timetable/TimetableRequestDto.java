@@ -4,7 +4,7 @@ import lombok.Builder;
 
 import java.util.List;
 
-public class AddTimetableRequestDto {
+public class TimetableRequestDto {
     @Getter
     @Builder
     public static class SemesterDto {

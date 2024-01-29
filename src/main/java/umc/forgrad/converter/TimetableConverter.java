@@ -3,7 +3,7 @@ package umc.forgrad.converter;
 import umc.forgrad.domain.Semester;
 import umc.forgrad.domain.Student;
 import umc.forgrad.domain.Subject;
-import umc.forgrad.dto.Timetable.AddTimetableRequestDto;
+import umc.forgrad.dto.Timetable.TimetableRequestDto;
 import umc.forgrad.dto.Timetable.AddTimetableResponseDto;
 import umc.forgrad.dto.Timetable.ViewTimetableResponseDto;
 
@@ -26,14 +26,14 @@ public class TimetableConverter {
                 .addResponseDtos(addResponseDtos)
                 .build();
     }
-    public static Semester toSemester(AddTimetableRequestDto.SemesterDto semesterDto, Student student) {
+    public static Semester toSemester(TimetableRequestDto.SemesterDto semesterDto, Student student) {
         return Semester.builder()
                 .grade(semesterDto.getGrade())
                 .semester(semesterDto.getSemester())
                 .student(student)
                 .build();
     }
-    public static Subject toSubject(AddTimetableRequestDto.SubjectDto subjectDto) {
+    public static Subject toSubject(TimetableRequestDto.SubjectDto subjectDto) {
         return Subject.builder()
                 .type(subjectDto.getType())
                 .name(subjectDto.getName())
