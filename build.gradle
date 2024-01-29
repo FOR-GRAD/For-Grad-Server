@@ -43,6 +43,10 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // JSONObject
+    implementation 'org.json:json:20231013'
+
 }
 
 tasks.named('test') {
