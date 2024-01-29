@@ -4,6 +4,7 @@ package umc.forgrad.service;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.Connection;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -29,6 +30,7 @@ import umc.forgrad.repository.SubjectRepository;
 import java.io.IOException;
 import java.util.*;
 
+import static org.hibernate.query.sqm.tree.SqmNode.log;
 import static umc.forgrad.service.common.ConnectionResponse.getResponse;
 
 @RequiredArgsConstructor
@@ -41,72 +43,87 @@ public class TimetableService {
 
     @Transactional
     public List<AddTimetableRequestDto.HakkiDto> searchHakki(HttpSession session) throws IOException {
-        String hakkiSearchUrl = "https://info.hansung.ac.kr/jsp_21/student/kyomu/kyoyukgwajung_aui.jsp";
-        Connection.Response hakkisResponse = getResponse(session, hakkiSearchUrl);
-        Document document = hakkisResponse.parse();
+        String hakkiSearchUrl = "https://info.hansung.ac.kr/jsp_21/student/kyomu/kyoyukgwajung_data_aui.jsp";
 
+        Map<String, String> cookies = (Map<String, String>) session.getAttribute("cookies");
+
+        Connection.Response execute = Jsoup.connect(hakkiSearchUrl)
+                .cookies(cookies)
+                .data("gubun", "yearhakgilist")
+                .method(Connection.Method.POST)
+                .execute();
+
+        Document doc = execute.parse();
+        Elements items = doc.select("item");
         List<AddTimetableRequestDto.HakkiDto> hakkiDtos = new ArrayList<>();
-        Elements hakkis = document.select("#yearhakgi > option");
-        for( Element element : hakkis ) {
-            final String hakki = element.text();
-            String[] parts = hakki.replace("년", "").replace("학기", "").split(" ");
-            final Integer yearSemester = Integer.parseInt(parts[0] + parts[1]);
+        for (Element item : items) {
+            final String hakkiNum = item.select("tcd").text();
+            final String hakkiText = item.select("tnm").text();
             AddTimetableRequestDto.HakkiDto hakkiDto = AddTimetableRequestDto.HakkiDto.builder()
-                    .hakkiText(hakki)
-                    .hakkiNum(yearSemester)
+                    .hakkiNum(hakkiNum)
+                    .hakkiText(hakkiText)
                     .build();
             hakkiDtos.add(hakkiDto);
         }
         return hakkiDtos;
     }
     @Transactional
-    public List<AddTimetableRequestDto.TrackDto> searchTrack(HttpSession session) throws IOException {
-        String trackSearchUrl = "https://info.hansung.ac.kr/jsp_21/student/kyomu/kyoyukgwajung_aui.jsp";
-        Connection.Response tracksResponse = getResponse(session, trackSearchUrl);
-        Document document = tracksResponse.parse();
+    public List<AddTimetableRequestDto.TrackDto> searchTrack(HttpSession session, String hakki) throws IOException {
+        String trackSearchUrl = "https://info.hansung.ac.kr/jsp_21/student/kyomu/kyoyukgwajung_data_aui.jsp";
 
+        Map<String, String> cookies = (Map<String, String>) session.getAttribute("cookies");
+
+        Connection.Response execute = Jsoup.connect(trackSearchUrl)
+                .cookies(cookies)
+                .data("gubun", "jungonglist", "syearhakgi", hakki)
+                .method(Connection.Method.POST)
+                .execute();
+
+        Document doc = execute.parse();
+        Elements items = doc.select("item");
         List<AddTimetableRequestDto.TrackDto> trackDtos = new ArrayList<>();
-        Elements tracks = document.select("#jungong > option");
-        for( Element element : tracks ) {
-            final String text = element.text();
-            String[] parts = text.split(" ");
-            final String trackCode = parts[0];
-            final String trackName = parts[1];
+        for (Element item : items) {
+            final String trackCode = item.select("tcd").text();
+            final String trackName = item.select("tnm").text();
             AddTimetableRequestDto.TrackDto trackDto = AddTimetableRequestDto.TrackDto.builder()
-                    .trackName(trackName)
                     .trackCode(trackCode)
+                    .trackName(trackName)
                     .build();
             trackDtos.add(trackDto);
         }
         return trackDtos;
     }
 
-    @Transactional
-    public List<AddTimetableRequestDto.SearchSubjectDto> searchSubject(HttpSession session, Integer hakki, String track) throws IOException {
-        String subjectSearchUrl = String.format("https://info.hansung.ac.kr/jsp_21/student/kyomu/kyoyukgwajung_aui.jsp?gubun=history&syearhakgi=%d&sjungong=%s", hakki, track);
-        Connection.Response subjectsResponse = getResponse(session, subjectSearchUrl);
-        Document document = subjectsResponse.parse();
+    public List<AddTimetableRequestDto.SearchSubjectDto> searchSubject(HttpSession session, String hakki, String track) throws IOException {
+        String subjectSearchUrl = "https://info.hansung.ac.kr/jsp_21/student/kyomu/kyoyukgwajung_data_aui.jsp";
 
+        Map<String, String> cookies = (Map<String, String>) session.getAttribute("cookies");
+
+        Connection.Response execute = Jsoup.connect(subjectSearchUrl)
+                .cookies(cookies)
+                .data("gubun", "history", "syearhakgi", hakki, "sjungong", track)
+                .method(Connection.Method.POST)
+                .execute();
+
+        Document doc = execute.parse();
+        Elements rows = doc.select("row");
         List<AddTimetableRequestDto.SearchSubjectDto> searchSubjectDtos = new ArrayList<>();
-        Elements grades = document.select("#grid_wrap > div > div.aui-grid-content-panel-mask > div > div.aui-grid-main-panel > div.aui-grid-body-panel > table > tbody > tr > td:nth-child(4) > div");
-        Elements types = document.select("#grid_wrap > div > div.aui-grid-content-panel-mask > div > div.aui-grid-main-panel > div.aui-grid-body-panel > table > tbody > tr > td:nth-child(5) > div");
-        Elements names = document.select("#grid_wrap > div > div.aui-grid-content-panel-mask > div > div.aui-grid-main-panel > div.aui-grid-body-panel > table > tbody > tr > td.aui-grid-default-column.text-start > div");
-        Elements credits = document.select("#grid_wrap > div > div.aui-grid-content-panel-mask > div > div.aui-grid-main-panel > div.aui-grid-body-panel > table > tbody > tr > td:nth-child(6) > div");
-        for( int i =0; i< names.size(); i++ ) {
-            final Integer grade = Integer.parseInt(grades.get(i).text());
-            final String type = types.get(i).text();
-            final String name = names.get(i).text();
-            final Integer credit = Integer.parseInt(credits.get(i).text());
+        for (Element row : rows) {
+            final String grade = row.select("haknean").text();
+            final String type = row.select("isugubun").text();
+            final String name = row.select("kwamokname").text();
+            final String credit = row.select("hakjum").text();
             AddTimetableRequestDto.SearchSubjectDto searchSubjectDto = AddTimetableRequestDto.SearchSubjectDto.builder()
-                    .searchGrade(grade)
-                    .searchType(type)
-                    .searchName(name)
-                    .searchCredit(credit)
-                    .build();
+                        .searchGrade(grade)
+                        .searchType(type)
+                        .searchName(name)
+                        .searchCredit(credit)
+                        .build();
             searchSubjectDtos.add(searchSubjectDto);
         }
         return searchSubjectDtos;
     }
+
     @Transactional
     public AddTimetableResponseDto.addResponseDtoList addTimetable(AddTimetableRequestDto.TimetableDto timetableDto, Long stuId) {
         Student student = studentRepository.findById(stuId)

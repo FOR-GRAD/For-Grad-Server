@@ -34,21 +34,21 @@ public class AddTimetableRequestDto {
     @Getter
     @Builder
     public static class HakkiDto {
+        private String hakkiNum;
         private String hakkiText;
-        private Integer hakkiNum;
     }
     @Getter
     @Builder
     public static class TrackDto {
-        private String trackName;
         private String trackCode;
+        private String trackName;
     }
     @Getter
     @Builder
     public static class SearchSubjectDto {
-        private Integer searchGrade;
+        private String searchGrade;
         private String searchType;
         private String searchName;
-        private Integer searchCredit;
+        private String searchCredit;
     }
 }
