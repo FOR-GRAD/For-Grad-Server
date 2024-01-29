@@ -1,11 +1,14 @@
 package umc.forgrad.service.home;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.xml.bind.DatatypeConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Connection;
 import org.jsoup.nodes.Document;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import umc.forgrad.apipayload.code.status.ErrorStatus;
 import umc.forgrad.converter.FuturePlansCoverter;
 import umc.forgrad.domain.Semester;
@@ -19,9 +22,7 @@ import umc.forgrad.repository.SemesterSubjectRepository;
 import umc.forgrad.repository.StudentRepository;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 import static umc.forgrad.service.common.ConnectionResponse.getResponse;
 
@@ -50,6 +51,9 @@ public class HomeQueryServiceImpl implements HomeQueryService {
         String department = parts[2];
         String grade = parts[3] + parts[4];
         String status = parts[5];
+
+        // 종정시 사진 to base64Image
+        String base64Image = getBase64Image(studentId, session);
 
         // 졸업요건 조회
         String gradUrl = "https://info.hansung.ac.kr/jsp_21/student/graduation/graduation_requirement.jsp";
@@ -93,6 +97,7 @@ public class HomeQueryServiceImpl implements HomeQueryService {
                 .message(message)
                 .track1(track1)
                 .track2(track2)
+                .base64Image(base64Image)
                 .trackRequirement1(trackRequirement1)
                 .trackRequirement2(trackRequirement2)
                 .note1(note1)
@@ -100,6 +105,33 @@ public class HomeQueryServiceImpl implements HomeQueryService {
                 .futureTimeTableDto(futureTimeTableDto)
                 .build();
 
+    }
+
+    // 종정시 이미지 to Base64Image
+    private static String getBase64Image(long studentId, HttpSession session) {
+        String imgUrl = "https://info.hansung.ac.kr/tonicsoft/jik/register/haksang_sajin.jsp?hakbun=" + studentId;
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        Map<String, String> cookies = (Map<String, String>) session.getAttribute("cookies");
+        StringBuilder sb = new StringBuilder();
+        for (String key : cookies.keySet()) {
+            sb.append(key).append("=").append(cookies.get(key)).append(";");
+        }
+        headers.setAccept(List.of(MediaType.APPLICATION_OCTET_STREAM));
+        headers.add("Cookie", String.valueOf(sb));
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        ResponseEntity<byte[]> response = restTemplate.exchange(imgUrl, HttpMethod.GET, entity, byte[].class);
+
+        if (response.getStatusCode() == HttpStatus.OK) {
+            byte[] imageBytes = response.getBody();
+
+            return DatatypeConverter.printBase64Binary(imageBytes);
+        }
+        return null;
     }
 
 }
