@@ -13,10 +13,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import umc.forgrad.apipayload.code.status.ErrorStatus;
 import umc.forgrad.domain.Activity;
+import umc.forgrad.domain.Student;
 import umc.forgrad.domain.enums.Category;
 import umc.forgrad.dto.activity.PostActivityResponse;
 import umc.forgrad.exception.GeneralException;
 import umc.forgrad.repository.ActivityRepository;
+import umc.forgrad.repository.StudentRepository;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,6 +32,7 @@ import java.util.logging.Logger;
 @Slf4j
 public class ActivityQueryService {
     private final ActivityRepository activityRepository;
+    private final StudentRepository studentRepository;
     public Page<Activity> getCareerList(Category category, Pageable pageable) throws IOException{
 
         Page<Activity> allByCategoryOrderByStartDateDesc = activityRepository.findAllByCategoryOrderByStartDateDesc(category, pageable);
@@ -42,23 +45,20 @@ public class ActivityQueryService {
                 .orElseThrow(() -> new GeneralException(ErrorStatus.ACTIVITY_NOT_FOUND));
     }
 
-    public Integer sumHour(){
-        Integer i = activityRepository.sumVolunteerHour();
-        log.info(i.toString());
 
-        return activityRepository.sumVolunteerHour();
-    }
 
     //수정중
 
-    public List<PostActivityResponse.ActivityWithAccumulatedHours> getActivities(Category category) {
-        List<Activity> activities = activityRepository.getActivitiesWithAccumulatedHours(category);
+    public List<PostActivityResponse.ActivityWithAccumulatedHours> getActivities(Category category, Long studentId) throws IOException{
+        Student student = studentRepository.findById(studentId).orElseThrow(() -> new GeneralException(ErrorStatus.STUDENT_NOT_FOUND));
+        System.out.println(studentId);
+        List<Activity> activities = activityRepository.getActivitiesWithAccumulatedHours(category, studentId );
 
         return createActivitiesAccumulated(activities);
     }
 
-    public List<PostActivityResponse.ActivityWithAccumulatedHours> getActivitiesByTitleAndCategory(String title, Category category) {
-        List<Activity> activities = activityRepository.findByTitleContainingAndCategory(title, category);
+    public List<PostActivityResponse.ActivityWithAccumulatedHours> getActivitiesByTitleAndCategory(String title, Category category, Long studentId) {
+        List<Activity> activities = activityRepository.findByTitleContainingAndCategoryAndStudentId(title, category, studentId);
         return createActivitiesAccumulated(activities);
     }
 

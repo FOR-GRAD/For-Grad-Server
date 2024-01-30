@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import umc.forgrad.domain.Activity;
+import umc.forgrad.domain.Student;
 import umc.forgrad.domain.enums.Category;
 import umc.forgrad.dto.activity.PostActivityResponse;
 
@@ -18,21 +19,14 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
 
     Page<Activity> findAllByCategoryOrderByStartDateDesc(Category category, Pageable pageable);
 
-    @Query("select sum(a.volunteerHour) from Activity a where a.category = 'volunteers'")
-    Integer sumVolunteerHour();
-
-
-
-
-
     int countByCategory(Category category);
 
     @Query("SELECT a FROM Activity a " +
-            "WHERE a.category = :category " +
+            "WHERE (a.category = :category and a.student.id = :studentId)" +
             "ORDER BY a.startDate DESC")
-    List<Activity> getActivitiesWithAccumulatedHours(@Param("category") Category category);
+    List<Activity> getActivitiesWithAccumulatedHours(@Param("category") Category category, Long studentId);
 
-    List<Activity> findByTitleContainingAndCategory(String title, Category category);
+    List<Activity> findByTitleContainingAndCategoryAndStudentId(String title, Category category, Long studentId);
 
 
 

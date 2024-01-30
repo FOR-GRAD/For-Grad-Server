@@ -28,18 +28,11 @@ public class ActivityController {
     @PostMapping("/activity")
     public ApiResponse<PostActivityResponse.RegistActivityResultDto> createActivity(@RequestPart(value = "requestDto", required = false) PostActivityRequest.RegistActivity registActivity,
                                                                                     @RequestPart(value = "image", required = false) List<MultipartFile> multipartFiles,
-                                                                                    @SessionAttribute(name = "student") long studentId, HttpSession httpSession) throws IOException {
+                                                                                    @SessionAttribute(name = "student") long studentId) throws IOException {
 
 
         Activity activity = activityCommandService.createBoard(registActivity, multipartFiles, studentId);
         return ApiResponse.onSuccess(ActivityConverter.activityResultDto(activity));
-
-    }
-
-    @PostMapping("/a")
-    public void creay() {
-        activityQueryService.sumHour();
-        return;
 
     }
 
@@ -52,9 +45,9 @@ public class ActivityController {
     }
 
     @GetMapping("/career-list/{category}")
-    public ApiResponse<PostActivityResponse.onlyAccumulatedList> getActivityAcc(@PathVariable Category category) throws IOException {
+    public ApiResponse<PostActivityResponse.onlyAccumulatedList> getActivityAcc(@PathVariable Category category, @SessionAttribute(name = "student") long studentId) throws IOException {
 
-        List<PostActivityResponse.ActivityWithAccumulatedHours> careerAccumulatedList = activityQueryService.getActivities(category);
+        List<PostActivityResponse.ActivityWithAccumulatedHours> careerAccumulatedList = activityQueryService.getActivities(category, studentId);
 
         return ApiResponse.onSuccess(ActivityConverter.activityResult(careerAccumulatedList));
     }
@@ -62,9 +55,12 @@ public class ActivityController {
 
     @GetMapping("/career-list-search/{category}")
     public ApiResponse<PostActivityResponse.onlyAccumulatedList> getActivitySearchResult(@PathVariable Category category,
-                                                                                         @RequestParam String searchWord
-                                                                                   ){
-        List<PostActivityResponse.ActivityWithAccumulatedHours> searchedList = activityQueryService.getActivitiesByTitleAndCategory(searchWord, category);
+                                                                                         @RequestParam String searchWord,
+                                                                                         @SessionAttribute(name = "student") long studentId
+
+
+                                                                                   ) throws IOException{
+        List<PostActivityResponse.ActivityWithAccumulatedHours> searchedList = activityQueryService.getActivitiesByTitleAndCategory(searchWord, category, studentId);
         return ApiResponse.onSuccess(ActivityConverter.activityResult(searchedList));
 
     }
