@@ -16,22 +16,22 @@ public class FreeController {
         this.freeService = freeService;
     }
 
-    @PostMapping("/plans/memo/stuId/{stuId}")
-    public ApiResponse<FreeDto.MemoResponseDto> create(@RequestBody FreeDto.MemoRequestDto freeDto, @PathVariable("stuId") long stuId) {
+    @PostMapping("/plans/memo")
+    public ApiResponse<FreeDto.MemoResponseDto> create(@RequestBody FreeDto.MemoRequestDto freeDto, @SessionAttribute long stuId) {
 
         return ApiResponse.onSuccess(freeService.addMemo(freeDto, stuId));
     }
 
-    @GetMapping("/plans/memo/stuId/{stuId}")
-    public ApiResponse<FreeDto.MemoResponseDto> getMemo(@PathVariable("stuId") long stuId) {
+    @GetMapping("/plans/memo")
+    public ApiResponse<FreeDto.MemoResponseDto> getMemo(@SessionAttribute long stuId) {
 
         FreeDto.MemoResponseDto responseDto = freeService.findMemos(stuId);
 
         return ApiResponse.onSuccess(responseDto);
     }
 
-    @PatchMapping("/plans/memo/stuId/{stuId}")
-    public ApiResponse<FreeDto.MemoResponseDto> update(@RequestBody FreeDto.MemoRequestDto freeDto, @PathVariable("stuId") long stuId) {
+    @PatchMapping("/plans/memo")
+    public ApiResponse<FreeDto.MemoResponseDto> update(@RequestBody FreeDto.MemoRequestDto freeDto, @SessionAttribute long stuId) {
 
         return ApiResponse.onSuccess(freeService.updateMemo(freeDto, stuId));
     }
