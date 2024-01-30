@@ -33,12 +33,6 @@ public class ActivityQueryService {
     public Page<Activity> getCareerList(Category category, Pageable pageable) throws IOException{
 
         Page<Activity> allByCategoryOrderByStartDateDesc = activityRepository.findAllByCategoryOrderByStartDateDesc(category, pageable);
-//        if (allByCategoryOrderByStartDateDesc.isEmpty()){
-//
-//            throw new GeneralException(ErrorStatus.ACTIVITYLIST_EMPTY);
-//
-//        }
-
         return allByCategoryOrderByStartDateDesc;
 
 
@@ -101,48 +95,7 @@ public class ActivityQueryService {
         return result;
     }
 
-//    public List<PostActivityResponse.ActivityWithAccumulatedHours> getActivitiesList(Category category, int page, int size) {
-//        List<Activity> activities = activityRepository.getActivitiesWithAccumulatedHours(category);
-//        return createActivityPage(activities, page, size);
-//    }
-//
-//    public List<PostActivityResponse.ActivityWithAccumulatedHours> getActivitiesSearch(String title, Category category, int page, int size) {
-//        List<Activity> activities = activityRepository.findByTitleContainingAndCategory(title, category);
-//        return createActivityPage(activities, page, size);
-//    }
 
-//    private Page<PostActivityResponse.ActivityWithAccumulatedHours> createActivityPage(List<Activity> activities, int page, int size) {
-//        int totalActivities = activities.size();
-//        int start = page * size;
-//        int end = Math.min(start + size, totalActivities);
-//
-//        List<PostActivityResponse.ActivityWithAccumulatedHours> result = new ArrayList<>();
-//        int accumulatedHours = 0;
-//        int toIndex= totalActivities;
-//
-//        for (int i = 0; i < totalActivities; i++) {
-//            Activity activity = activities.get(i);
-//            accumulatedHours += activity.getVolunteerHour();
-//
-//            if (i >= start && i < end) {
-//                result.add(PostActivityResponse.ActivityWithAccumulatedHours.builder()
-//                        .id(activity.getId())
-//                        .title((activity.getTitle()))
-//                        .accum(accumulatedHours)
-//                        .startDate(activity.getStartDate())
-//                        .endDate(activity.getEndDate())
-//                        .award(activity.getAward())
-//                        .certificationType(activity.getCertificationType())
-//                        .volunteerHour(activity.getVolunteerHour())
-//                        .reindex(toIndex)
-//                        .build()
-//                );
-//            }
-//            toIndex -= 1;
-//        }
-//
-//        return new PageImpl<>(result, PageRequest.of(page, size), totalActivities);
-//    }
 
 
 

@@ -26,39 +26,6 @@ public class PostActivityResponse {
 
     }
 
-    @Builder
-    @Getter
-    public static class ActivityListDto {
-        List<ActivityPreviewDto> activityList;
-        Integer listSize;
-        Integer totalPage;
-        Long totalElements;
-        Boolean isFirst;
-        Boolean isLast;
-        Integer nowPage;
-    }
-
-    @Builder
-    @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class ActivityPreviewDto {
-
-        Long id;
-
-        String title;
-
-        LocalDate startDate;
-
-        LocalDate endDate;
-
-        Award award;
-
-        CertificationType certificationType;
-
-        Integer volunteerHour;
-
-    }
 
     @Builder
     @Getter
@@ -116,20 +83,6 @@ public class PostActivityResponse {
     public static class onlyAccumulatedList {
         List<ActivityWithAccumulatedHours> activityWithAccumulatedHours;
 
-    }
-
-
-
-    @Builder
-    @Getter
-    public static class responseAccum {
-        List<ActivityWithAccumulatedHours> activityWithAccumulatedHours;
-        Integer listSize;
-        Integer totalPage;
-        Long totalElements;
-        Boolean isFirst;
-        Boolean isLast;
-        Integer nowPage;
     }
 
 }

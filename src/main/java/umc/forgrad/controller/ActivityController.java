@@ -42,16 +42,6 @@ public class ActivityController {
         return;
 
     }
-//    @GetMapping("/activity-list/{category}")
-//    public ApiResponse<PostActivityResponse.ActivityListDto> getActivityList(@PathVariable Category category,
-//                                                                             @RequestParam(defaultValue = "0") int page,
-//                                                                             @RequestParam(defaultValue = "10") int size) throws IOException {
-//
-//        Pageable pageable = PageRequest.of(page, size);
-//        Page<Activity> careerList = activityQueryService.getCareerList(category, pageable);
-//        PostActivityResponse.ActivityListDto activityListDto = ActivityConverter.activityListDto(careerList);
-//        return ApiResponse.onSuccess(activityListDto);
-//    }
 
     @GetMapping("/career-detail")
     public ApiResponse<PostActivityResponse.ActivityDetailDto> getActivityDetail(@RequestParam Long activityId) throws IOException {
@@ -79,26 +69,5 @@ public class ActivityController {
 
     }
 
-//    @GetMapping("/activity-list/{category}")
-//    public ApiResponse<PostActivityResponse.responseAccum> getActivityAcc(@PathVariable Category category,
-//                                                                          @RequestParam(defaultValue = "0") int page,
-//                                                                          @RequestParam(defaultValue = "10") int size) throws IOException {
-//
-//        Page<PostActivityResponse.ActivityWithAccumulatedHours> careerAccumulatedList = activityQueryService.getActivitiesWithAccumulatedHours(category, page, size);
-//
-//        PostActivityResponse.responseAccum responseAccum = ActivityConverter.convertToResponseAccum(careerAccumulatedList);
-//        return ApiResponse.onSuccess(responseAccum);
-//    }
-//
-//
-//    @GetMapping("/activity-list-search/{category}")
-//    public ApiResponse<PostActivityResponse.responseAccum> getActivitySearchResult(@PathVariable Category category,
-//                                                                                   @RequestParam String searchWord,
-//                                                                                   @RequestParam(defaultValue = "0") int page,
-//                                                                                   @RequestParam(defaultValue = "10") int size){
-//        Page<PostActivityResponse.ActivityWithAccumulatedHours> searchedList = activityQueryService.getActivitiesWithTitleAndCategory(searchWord, category, page, size);
-//        PostActivityResponse.responseAccum responseAccum = ActivityConverter.convertToResponseAccum(searchedList);
-//        return ApiResponse.onSuccess(responseAccum);
-//
-//    }
+
 }
