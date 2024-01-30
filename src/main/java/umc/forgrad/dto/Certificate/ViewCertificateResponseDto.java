@@ -12,11 +12,13 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor
 public class ViewCertificateResponseDto {
+    private Long certificateId;
     private String name;
     private LocalDate date;
 
     @Builder
-    public ViewCertificateResponseDto(String name, LocalDate date) {
+    public ViewCertificateResponseDto(Long certificateId, String name, LocalDate date) {
+        this.certificateId = certificateId;
         this.name = name;
         this.date = date;
     }

@@ -21,6 +21,7 @@ public class CertificateConverter {
     public static List<ViewCertificateResponseDto> toViewResultDto(List<Certificate> certificates) {
         return certificates.stream()
                 .map(certificate -> ViewCertificateResponseDto.builder()
+                        .certificateId(certificate.getId())
                         .name(certificate.getName())
                         .date(certificate.getDate())
                         .build())

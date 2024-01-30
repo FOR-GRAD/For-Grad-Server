@@ -5,9 +5,11 @@ import umc.forgrad.dto.student.StudentResponseDto;
 
 public class StudentConverter {
 
-    public static Student toStudent(Long id) {
+    public static Student toStudent(Long id, String track1, String track2) {
         return Student.builder()
                 .id(id)
+                .track1(track1)
+                .track2(track2)
                 .build();
     }
 
