@@ -2,7 +2,6 @@ package umc.forgrad.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import umc.forgrad.domain.mapping.Semester;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
