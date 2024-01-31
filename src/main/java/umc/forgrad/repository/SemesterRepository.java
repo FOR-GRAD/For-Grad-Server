@@ -11,6 +11,6 @@ import java.util.Optional;
 @Repository
 public interface SemesterRepository extends JpaRepository<Semester, Long> {
 
-    Optional<List<Semester>> findByStudentAndGradeAndSemester(Student student, Integer grade, Integer semester);
+    Optional<Semester> findByStudentAndGradeAndSemester(Student student, Integer grade, Integer semester);
 
 }

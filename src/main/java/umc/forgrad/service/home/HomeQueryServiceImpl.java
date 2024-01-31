@@ -13,11 +13,9 @@ import umc.forgrad.converter.FuturePlansCoverter;
 import umc.forgrad.domain.Semester;
 import umc.forgrad.domain.Student;
 import umc.forgrad.domain.Subject;
-import umc.forgrad.domain.mapping.SemesterSubject;
 import umc.forgrad.dto.student.StudentResponseDto;
 import umc.forgrad.exception.GeneralException;
 import umc.forgrad.repository.SemesterRepository;
-import umc.forgrad.repository.SemesterSubjectRepository;
 import umc.forgrad.repository.StudentRepository;
 import umc.forgrad.repository.SubjectRepository;
 
@@ -37,7 +35,6 @@ public class HomeQueryServiceImpl implements HomeQueryService {
     private final StudentRepository studentRepository;
     private final SemesterRepository semesterRepository;
     private final SubjectRepository subjectRepository;
-    private final SemesterSubjectRepository semesterSubjectRepository;
 
     @Override
     public StudentResponseDto.HomeResponseDto queryHome(long studentId, HttpSession session) throws IOException {
@@ -86,16 +83,11 @@ public class HomeQueryServiceImpl implements HomeQueryService {
 
         // 시간표 조회
         // 학생의 학년과 학기로 해당 학기 찾기
-        Optional<List<Semester>> optionalSemester = semesterRepository.findByStudentAndGradeAndSemester(student, nextGrade, nextSemester);
-        List<Semester> semester = optionalSemester.orElseThrow(() -> new GeneralException(ErrorStatus.SEMESTER_NOT_FOUND));
+        Optional<Semester> optionalSemester = semesterRepository.findByStudentAndGradeAndSemester(student, nextGrade, nextSemester);
+        Semester semester = optionalSemester.orElseThrow(() -> new GeneralException(ErrorStatus.SEMESTER_NOT_FOUND));
 
         // 해당 학기에 속하는 과목 리스트 찾기
-        List<SemesterSubject> semesterSubjectList = semesterSubjectRepository.findBySemesterIn(semester);
-
-        // list로 변경
-        List<Subject> subjectList = semesterSubjectList.stream()
-                .map(SemesterSubject::getSubject)
-                .toList();
+        List<Subject> subjectList = subjectRepository.findBySemester(semester);
 
         // 향후 계획 시간표 학점 총 합 계산하기
         Integer sumCredits = subjectRepository.sumCredits(subjectList).orElse(0);
