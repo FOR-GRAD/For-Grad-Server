@@ -45,6 +45,10 @@ public class ActivityQueryService {
                 .orElseThrow(() -> new GeneralException(ErrorStatus.ACTIVITY_NOT_FOUND));
     }
 
+    public Student findStudent(Long studentId) throws IOException{
+        return studentRepository.findById(studentId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.STUDENT_NOT_FOUND));
+    }
 
 
     //수정중

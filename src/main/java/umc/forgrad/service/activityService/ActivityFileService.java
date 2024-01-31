@@ -23,7 +23,7 @@ public class ActivityFileService {
     }
 
     @Transactional
-    public void saveAllActivityFileByActivity(List<GetS3Res> getS3ResList , Activity activity) {
+    public void saveAllActivityFileByActivity(List<GetS3Res> getS3ResList, Activity activity) {
         // ActivityFile 리스트를 받아옴
         List<ActivityFile> activityFiles = new ArrayList<>();
         for (GetS3Res getS3Res : getS3ResList) {
@@ -39,12 +39,32 @@ public class ActivityFileService {
     }
 
     @Transactional(readOnly = true)
-    public List<String> getFileUrls(Long activityId){
+    public List<String> getFileUrls(Long activityId) {
         List<ActivityFile> allByActivityId = activityFileRepository.findAllByActivityId(activityId);
         List<String> fileUrls = new ArrayList<>();
-        for(ActivityFile activityFile: allByActivityId){
+        for (ActivityFile activityFile : allByActivityId) {
             fileUrls.add(activityFile.getFileUrl());
         }
         return fileUrls;
+    }
+
+    public List<ActivityFile> findAllByActivityId(Long activityId){
+        return activityFileRepository.findAllByActivityId(activityId);
+
+    }
+
+    public void deleteAllActivityFilesInS3(List<ActivityFile> activityFiles) {
+
+        for (ActivityFile activityFile : activityFiles) {
+            s3Service.deleteFile(activityFile.getFileName());
+        }
+    }
+    public List<Long> findAllId(Long id){
+        return activityFileRepository.findAllId(id);
+    }
+
+    public void deleteAllActivityFiles(List<Long> ids) {
+
+        activityFileRepository.deleteAllByActivityIds(ids);
     }
 }

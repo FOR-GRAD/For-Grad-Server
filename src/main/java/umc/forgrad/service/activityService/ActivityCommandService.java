@@ -1,14 +1,17 @@
 package umc.forgrad.service.activityService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import umc.forgrad.apipayload.code.status.ErrorStatus;
 import umc.forgrad.converter.ActivityConverter;
 import umc.forgrad.domain.Activity;
+import umc.forgrad.domain.ActivityFile;
 import umc.forgrad.domain.Student;
 import umc.forgrad.dto.GetS3Res;
+import umc.forgrad.dto.activity.DeleteActivityRequest;
 import umc.forgrad.dto.activity.PostActivityRequest;
 import umc.forgrad.exception.GeneralException;
 import umc.forgrad.repository.ActivityRepository;
@@ -21,18 +24,21 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
+@Transactional
 public class ActivityCommandService {
     private final S3Service s3Service;
     private final ActivityRepository activityRepository;
     private final ActivityFileService activityFileService;
     private final StudentRepository studentRepository;
+    private final ActivityQueryService activityQueryService;
 
-    @Transactional
+
     public void save(Activity activity) {
         activityRepository.save(activity);
     }
 
-    @Transactional
+
     public Activity createBoard(PostActivityRequest.RegistActivity postActivityReq, List<MultipartFile> multipartFiles, Long studentId) throws IOException {
 
         Student student = studentRepository.findById(studentId)
@@ -49,5 +55,34 @@ public class ActivityCommandService {
         }
 
         return activity;
+    }
+
+
+
+    public String deleteActivity(DeleteActivityRequest deleteActivityRequest) throws IOException{
+
+        Activity activity = activityQueryService.findActivity(deleteActivityRequest.getActivityId());
+
+        Student author = activity.getStudent();
+        Student user = activityQueryService.findStudent(deleteActivityRequest.getStudentId());
+
+        if (author.getId() == user.getId()) {
+            //s3의 파일들 삭제
+            List<ActivityFile> allByActivityId = activityFileService.findAllByActivityId(activity.getId());
+            activityFileService.deleteAllActivityFilesInS3(allByActivityId);
+
+            List<Long> ids = activityFileService.findAllId(activity.getId());
+            activityFileService.deleteAllActivityFiles(ids);
+
+            activityRepository.delete(activity);
+
+            String result = "게시글 삭제가 완료되었습니다";
+            return result;
+
+        }
+        else{
+            throw new GeneralException(ErrorStatus.USER_WITHOUT_PERMISSION);
+        }
+
     }
 }

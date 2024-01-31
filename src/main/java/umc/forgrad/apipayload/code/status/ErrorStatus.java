@@ -32,7 +32,10 @@ public enum ErrorStatus implements BaseCode {
     ACTIVITY_NOT_FOUND(HttpStatus.NOT_FOUND, "ACTIVITY NOT FOUND","존재하지 않는 활동입니다."),
 
     //카테고리별리스트
-    ACTIVITYLIST_EMPTY(HttpStatus.NO_CONTENT, "ACTIVITYLIST EMPTY", "아무 활동도 등록되어있지않습니다.");
+    ACTIVITYLIST_EMPTY(HttpStatus.NO_CONTENT, "ACTIVITYLIST EMPTY", "아무 활동도 등록되어있지않습니다."),
+
+    //작성자가 아닌 사람이 글 수정, 삭제를 시도.
+    USER_WITHOUT_PERMISSION(HttpStatus.UNAUTHORIZED, "USER WITHOUT PERMISSION", "해당 활동을 관리할 권한이 없습니다");
 
     private final HttpStatus httpStatus;
     private final String code;

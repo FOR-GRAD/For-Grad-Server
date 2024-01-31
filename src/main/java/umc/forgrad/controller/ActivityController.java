@@ -8,6 +8,7 @@ import umc.forgrad.apipayload.ApiResponse;
 import umc.forgrad.converter.ActivityConverter;
 import umc.forgrad.domain.Activity;
 import umc.forgrad.domain.enums.Category;
+import umc.forgrad.dto.activity.DeleteActivityRequest;
 import umc.forgrad.dto.activity.PostActivityRequest;
 import umc.forgrad.dto.activity.PostActivityResponse;
 import umc.forgrad.service.activityService.ActivityCommandService;
@@ -63,6 +64,16 @@ public class ActivityController {
         List<PostActivityResponse.ActivityWithAccumulatedHours> searchedList = activityQueryService.getActivitiesByTitleAndCategory(searchWord, category, studentId);
         return ApiResponse.onSuccess(ActivityConverter.activityResult(searchedList));
 
+    }
+
+    @DeleteMapping("/career-delete")
+    public ApiResponse<String> deleteActivity(@RequestParam Long activityId, @SessionAttribute(name = "student") long studentId) throws IOException
+    {
+        DeleteActivityRequest build = DeleteActivityRequest.builder()
+                .activityId(activityId)
+                .studentId(studentId)
+                .build();
+        return ApiResponse.onSuccess(activityCommandService.deleteActivity(build));
     }
 
 
