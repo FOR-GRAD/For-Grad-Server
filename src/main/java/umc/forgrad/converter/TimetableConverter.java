@@ -5,6 +5,7 @@ import umc.forgrad.domain.Student;
 import umc.forgrad.domain.Subject;
 import umc.forgrad.dto.Timetable.TimetableRequestDto;
 import umc.forgrad.dto.Timetable.AddTimetableResponseDto;
+import umc.forgrad.dto.Timetable.UpdateTimetableResponseDto;
 import umc.forgrad.dto.Timetable.ViewTimetableResponseDto;
 
 import java.time.LocalDateTime;
@@ -18,7 +19,7 @@ public class TimetableConverter {
         for(Subject subject : subjects) {
             AddTimetableResponseDto.addResponseDto addResponseDto = AddTimetableResponseDto.addResponseDto.builder()
                     .subjectId(subject.getId())
-                    .createdAt(LocalDateTime.now())
+                    .createdAt(subject.getCreatedAt())
                     .build();
             addResponseDtos.add(addResponseDto);
         }
@@ -33,11 +34,12 @@ public class TimetableConverter {
                 .student(student)
                 .build();
     }
-    public static Subject toSubject(TimetableRequestDto.SubjectDto subjectDto) {
+    public static Subject toSubject(TimetableRequestDto.SubjectDto subjectDto, Semester semester) {
         return Subject.builder()
                 .type(subjectDto.getType())
                 .name(subjectDto.getName())
                 .credit(subjectDto.getCredit())
+                .semester(semester)
                 .build();
     }
     public static List<ViewTimetableResponseDto> toViewResultDto(List<Subject> subjects) {
@@ -49,5 +51,19 @@ public class TimetableConverter {
                         .credit(subject.getCredit())
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    public static UpdateTimetableResponseDto.updateResponseDtoList toUpdateResultDto(List<Subject> subjects) {
+        List<UpdateTimetableResponseDto.updateResponseDto> updateResponseDtos = new ArrayList<>();
+        for(Subject subject : subjects) {
+            UpdateTimetableResponseDto.updateResponseDto updateResponseDto = UpdateTimetableResponseDto.updateResponseDto.builder()
+                    .subjectId(subject.getId())
+                    .updatedAt(subject.getUpdatedAt())
+                    .build();
+            updateResponseDtos.add(updateResponseDto);
+        }
+        return UpdateTimetableResponseDto.updateResponseDtoList.builder()
+                .updateResponseDtos(updateResponseDtos)
+                .build();
     }
 }

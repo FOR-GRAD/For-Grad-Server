@@ -14,10 +14,8 @@ import umc.forgrad.converter.TimetableConverter;
 import umc.forgrad.domain.Semester;
 import umc.forgrad.domain.Student;
 import umc.forgrad.domain.Subject;
-import umc.forgrad.domain.mapping.SemesterSubject;
 import umc.forgrad.dto.Timetable.*;
 import umc.forgrad.repository.SemesterRepository;
-import umc.forgrad.repository.SemesterSubjectRepository;
 import umc.forgrad.repository.StudentRepository;
 import umc.forgrad.repository.SubjectRepository;
 
@@ -30,7 +28,6 @@ public class TimetableService {
     private final SemesterRepository semesterRepository;
     private final SubjectRepository subjectRepository;
     private final StudentRepository studentRepository;
-    private final SemesterSubjectRepository semesterSubjectRepository;
 
     @Transactional
     public List<TimetableRequestDto.HakkiDto> searchHakki(HttpSession session) throws IOException {
@@ -58,6 +55,7 @@ public class TimetableService {
         }
         return hakkiDtos;
     }
+
     @Transactional
     public List<TimetableRequestDto.TrackDto> searchTrack(HttpSession session, String hakki) throws IOException {
         String trackSearchUrl = "https://info.hansung.ac.kr/jsp_21/student/kyomu/kyoyukgwajung_data_aui.jsp";
@@ -85,6 +83,7 @@ public class TimetableService {
         return trackDtos;
     }
 
+    @Transactional
     public List<TimetableRequestDto.SearchSubjectDto> searchSubject(HttpSession session, String hakki, String track) throws IOException {
         String subjectSearchUrl = "https://info.hansung.ac.kr/jsp_21/student/kyomu/kyoyukgwajung_data_aui.jsp";
 
@@ -103,67 +102,77 @@ public class TimetableService {
             final String grade = row.select("haknean").text();
             final String type = row.select("isugubun").text();
             final String name = row.select("kwamokname").text();
-            final String credit = row.select("hakjum").text();
+            final Integer credit =  Integer.parseInt(row.select("hakjum").text());
             TimetableRequestDto.SearchSubjectDto searchSubjectDto = TimetableRequestDto.SearchSubjectDto.builder()
-                        .searchGrade(grade)
-                        .searchType(type)
-                        .searchName(name)
-                        .searchCredit(credit)
-                        .build();
+                    .searchGrade(grade)
+                    .searchType(type)
+                    .searchName(name)
+                    .searchCredit(credit)
+                    .build();
             searchSubjectDtos.add(searchSubjectDto);
         }
         return searchSubjectDtos;
     }
-
     @Transactional
     public AddTimetableResponseDto.addResponseDtoList addTimetable(TimetableRequestDto.TimetableDto timetableDto, Long stuId) {
         Student student = studentRepository.findById(stuId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 학번이 존재하지 않습니다. id=" + stuId));
 
-        Semester semester = semesterRepository.save(TimetableConverter.toSemester(timetableDto.getSemesterDto(), student));
+        Semester semester = TimetableConverter.toSemester(timetableDto.getSemesterDto(), student);
+        Optional<Semester> existingSemester = semesterRepository.findByStudentAndGradeAndSemester(student, timetableDto.getSemesterDto().getGrade(), timetableDto.getSemesterDto().getSemester());
+        if (existingSemester.isPresent()) {
+            semester = existingSemester.get();
+        } else {
+            semester = semesterRepository.save(semester);
+        }
+
         List<TimetableRequestDto.SubjectDto> subjectDtoList = timetableDto.getSubjectDtoList();
         List<Subject> subjects = new ArrayList<>();
-        List<SemesterSubject> semesterSubjects = new ArrayList<>();
-        for(TimetableRequestDto.SubjectDto dto : subjectDtoList) {
-            Subject subject = TimetableConverter.toSubject(dto);
+
+        for (TimetableRequestDto.SubjectDto dto : subjectDtoList) {
+            Subject subject = TimetableConverter.toSubject(dto, semester);
             subjects.add(subject);
-            SemesterSubject semesterSubject = SemesterSubject.builder()
-                    .semester(semester)
-                    .subject(subject)
-                    .build();
-            semesterSubjects.add(semesterSubject);
         }
         subjectRepository.saveAll(subjects);
-        semesterSubjectRepository.saveAll(semesterSubjects);
         return TimetableConverter.toAddResultDto(subjects);
     }
     @Transactional
-    public UpdateTimetableResponseDto updateTimetable(TimetableRequestDto.TimetableDto timetableDto, Long stuId) {
+    public UpdateTimetableResponseDto.updateResponseDtoList updateTimetable(TimetableRequestDto.TimetableDto timetableDto, Long stuId) {
         Student student = studentRepository.findById(stuId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 학번이 존재하지 않습니다. id=" + stuId));
-        Semester semester = TimetableConverter.toSemester(timetableDto.getSemesterDto(), student);
+
+        Optional<Semester> optionalSemester = semesterRepository.findByStudentAndGradeAndSemester(student, timetableDto.getSemesterDto().getGrade(), timetableDto.getSemesterDto().getSemester());
+        Semester semester = optionalSemester.get();
         List<TimetableRequestDto.SubjectDto> subjectDtoList = timetableDto.getSubjectDtoList();
         List<Subject> subjects = new ArrayList<>();
         for(TimetableRequestDto.SubjectDto dto: subjectDtoList) {
-            Subject subject = subjectRepository.findByIdAndSemester(,semester);
-
+            Subject subject = subjectRepository.findByIdAndSemester_id(dto.getSubjuctId(), semester.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("해당 과목이 존재하지 않습니다."));
+            subject.update(dto.getType(), dto.getName(), dto.getCredit());
+            subjects.add(subject);
         }
+        return TimetableConverter.toUpdateResultDto(subjects);
     }
 
     @Transactional(readOnly = true)
     public List<ViewTimetableResponseDto> viewTimetable(Long stuId, Integer grade, Integer semester) {
         Student student = studentRepository.findById(stuId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 학번이 존재하지 않습니다. id=" + stuId));
-        List<Semester> semesters = semesterRepository.findAllByStudentAndGradeAndSemester(student, grade, semester);
-        List<SemesterSubject> semesterSubjects = new ArrayList<>();
-        for (Semester semesterE : semesters) {
-            List<SemesterSubject> semesterSubject = semesterSubjectRepository.findBySemester(semesterE);
-            semesterSubjects.addAll(semesterSubject);
-        }
-        List<Subject> subjects = semesterSubjects.stream()
-                .map(SemesterSubject::getSubject)
-                .toList();
-
+        Semester semesterE = semesterRepository.findByStudentAndGradeAndSemester(student, grade, semester)
+                .orElseThrow(() -> new IllegalArgumentException("해당 학년 학기가 존재하지 않습니다."));
+        List<Subject> subjects = semesterE.getSubjectList();
         return TimetableConverter.toViewResultDto(subjects);
+    }
+
+    @Transactional
+    public List<ViewTimetableResponseDto> deleteTimetable(Long stuId, Integer grade, Integer semester, Long subjectId) {
+        Student student = studentRepository.findById(stuId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 학번이 존재하지 않습니다. id=" + stuId));
+        Optional<Semester> optionalSemester = semesterRepository.findByStudentAndGradeAndSemester(student, grade, semester);
+        Semester semesterE = optionalSemester.get();
+        Subject subject = subjectRepository.findByIdAndSemester_id(subjectId, semesterE.getId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 과목이 존재하지 않습니다."));
+        subjectRepository.delete(subject);
+        return viewTimetable(stuId, grade, semester);
     }
 }

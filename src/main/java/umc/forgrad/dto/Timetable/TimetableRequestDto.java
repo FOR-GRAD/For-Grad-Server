@@ -15,6 +15,7 @@ public class TimetableRequestDto {
     @Getter
     @Builder
     public static class SubjectDto {
+        private Long subjuctId;
         private String type;
         private String name;
         private Integer credit;
@@ -49,6 +50,6 @@ public class TimetableRequestDto {
         private String searchGrade;
         private String searchType;
         private String searchName;
-        private String searchCredit;
+        private Integer searchCredit;
     }
 }

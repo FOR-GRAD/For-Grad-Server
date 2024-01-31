@@ -11,11 +11,9 @@ import umc.forgrad.converter.FuturePlansCoverter;
 import umc.forgrad.domain.Semester;
 import umc.forgrad.domain.Student;
 import umc.forgrad.domain.Subject;
-import umc.forgrad.domain.mapping.SemesterSubject;
 import umc.forgrad.dto.student.StudentResponseDto;
 import umc.forgrad.exception.GeneralException;
 import umc.forgrad.repository.SemesterRepository;
-import umc.forgrad.repository.SemesterSubjectRepository;
 import umc.forgrad.repository.StudentRepository;
 
 import java.io.IOException;
@@ -32,7 +30,6 @@ public class HomeQueryServiceImpl implements HomeQueryService {
 
     private final StudentRepository studentRepository;
     private final SemesterRepository semesterRepository;
-    private final SemesterSubjectRepository semesterSubjectRepository;
 
     @Override
     public StudentResponseDto.HomeResponseDto queryHome(long studentId, HttpSession session) throws IOException {
@@ -72,7 +69,7 @@ public class HomeQueryServiceImpl implements HomeQueryService {
         // 학생의 학년과 학기로 해당 학기 찾기
         Optional<Semester> optionalSemester = semesterRepository.findByStudentAndGradeAndSemester(student, 4, 1);
         Semester semester = optionalSemester.orElseThrow(() -> new GeneralException(ErrorStatus.SEMESTER_NOT_FOUND));
-
+/*
         // 해당 학기에 속하는 과목 리스트 찾기
         List<SemesterSubject> semesterSubjectList = semesterSubjectRepository.findBySemester(semester);
 
@@ -83,7 +80,7 @@ public class HomeQueryServiceImpl implements HomeQueryService {
 
         // FutureTimeTableDto 변경
         List<StudentResponseDto.FutureTimeTableDto> futureTimeTableDto = FuturePlansCoverter.toFutureTimeTableDto(subjectList);
-
+*/
         return StudentResponseDto.HomeResponseDto.builder()
                 .name(name)
                 .id(Integer.parseInt(id))
@@ -97,7 +94,7 @@ public class HomeQueryServiceImpl implements HomeQueryService {
                 .trackRequirement2(trackRequirement2)
                 .note1(note1)
                 .note2(note2)
-                .futureTimeTableDto(futureTimeTableDto)
+                //.futureTimeTableDto(futureTimeTableDto)
                 .build();
 
     }
