@@ -14,7 +14,7 @@ permissions:
 jobs:
   run-docker-image-on-ec2:
     # merge 되었을 때 실행
-#    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true
 
     runs-on: self-hosted
     steps:
