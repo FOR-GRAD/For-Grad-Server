@@ -17,13 +17,13 @@ public class FreeController {
     }
 
     @PostMapping("/plans/memo")
-    public ApiResponse<FreeDto.MemoResponseDto> create(@RequestBody FreeDto.MemoRequestDto freeDto, @SessionAttribute long stuId) {
+    public ApiResponse<FreeDto.MemoResponseDto> create(@RequestBody FreeDto.MemoRequestDto freeDto, @SessionAttribute(name="student") long stuId) {
 
         return ApiResponse.onSuccess(freeService.addMemo(freeDto, stuId));
     }
 
     @GetMapping("/plans/memo")
-    public ApiResponse<FreeDto.MemoResponseDto> getMemo(@SessionAttribute long stuId) {
+    public ApiResponse<FreeDto.MemoResponseDto> getMemo(@SessionAttribute(name="student") long stuId) {
 
         FreeDto.MemoResponseDto responseDto = freeService.findMemos(stuId);
 
@@ -31,7 +31,7 @@ public class FreeController {
     }
 
     @PatchMapping("/plans/memo")
-    public ApiResponse<FreeDto.MemoResponseDto> update(@RequestBody FreeDto.MemoRequestDto freeDto, @SessionAttribute long stuId) {
+    public ApiResponse<FreeDto.MemoResponseDto> update(@RequestBody FreeDto.MemoRequestDto freeDto, @SessionAttribute(name="student") long stuId) {
 
         return ApiResponse.onSuccess(freeService.updateMemo(freeDto, stuId));
     }
