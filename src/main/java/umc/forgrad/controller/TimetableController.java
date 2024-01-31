@@ -51,10 +51,18 @@ public class TimetableController {
         List<ViewTimetableResponseDto> viewTimetableResponseDtos = timetableService.viewTimetable(stuId, grade, semester);
         return ApiResponse.onSuccess(viewTimetableResponseDtos);
     }
-
+/*
     @DeleteMapping(value = "/plans/timetable")
-    public ApiResponse<List<ViewTimetableResponseDto>> deleteTimetable(@SessionAttribute(name="student") Long stuId, Integer grade, Integer semester, Long subjectId) {
-        List<ViewTimetableResponseDto> viewTimetableResponseDtos = timetableService.deleteTimetable(stuId, grade, semester, subjectId);
-        return ApiResponse.onSuccess(viewTimetableResponseDtos);
+    public ApiResponse<Void> deleteTimetable(@SessionAttribute(name = "student") Long stuId, Integer grade, Integer semester, Long subjectId) {
+        timetableService.deleteTimetable(stuId, grade, semester, subjectId);
+        return ApiResponse.onSuccess(null);
     }
+
+ */
+@DeleteMapping(value = "/plans/timetable/{subjectId}")
+public ApiResponse<UpdateTimetableResponseDto.updateResponseDtoList> deleteTimetable(@PathVariable Long subjectId, @SessionAttribute(name = "student") Long stuId) {
+    UpdateTimetableResponseDto.updateResponseDtoList updateResponseDtoList = timetableService.deleteTimetable(subjectId, stuId);
+    return ApiResponse.onSuccess(updateResponseDtoList);
+}
+
 }

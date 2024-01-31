@@ -11,4 +11,5 @@ import java.util.Optional;
 @Repository
 public interface SubjectRepository extends JpaRepository<Subject, Long> {
     Optional<Subject> findByIdAndSemester_id(Long id, Long Semester_id);
+    List<Subject> findBySemester(Semester semester);
 }
