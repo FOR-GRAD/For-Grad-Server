@@ -43,8 +43,8 @@ public class CertificateController {
     }
 
     @DeleteMapping(value = "/plans/certifications")
-    public ApiResponse<List<DeleteCertificateResponseDto>> deleteCertificate(@SessionAttribute(name="student") Long stuId, @RequestParam Long certificateId) {
-        List<Certificate> certificates = certificateService.deletCertificate(stuId);
-        return ApiResponse.onSuccess(CertificateConverter.toDeleteResultDto(certificates));
+    public ApiResponse<List<ViewCertificateResponseDto>> deleteCertificate(@SessionAttribute(name="student") Long stuId, @RequestParam Long certificateId) {
+        certificateService.deleteCertificate(stuId, certificateId);
+        return viewCertificate(stuId);
     }
 }

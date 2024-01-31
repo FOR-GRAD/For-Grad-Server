@@ -12,13 +12,13 @@ public class CertificateConverter {
     public static AddCertificateResponseDto toAddResultDto(Certificate certificate) {
         return AddCertificateResponseDto.builder()
                 .certificateId(certificate.getId())
-                .createdAt(LocalDateTime.now())
+                .createdAt(certificate.getCreatedAt())
                 .build();
     }
     public static UpdateCertificateResponseDto toUpdateResultDto(Certificate certificate) {
         return UpdateCertificateResponseDto.builder()
                 .certificateId(certificate.getId())
-                .updatedAt(LocalDateTime.now())
+                .updatedAt(certificate.getUpdatedAt())
                 .build();
     }
 

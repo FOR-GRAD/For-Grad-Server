@@ -47,15 +47,15 @@ public class CertificateService {
 
     @Transactional(readOnly = true)
     public List<Certificate> viewCertificate(Long stuId) {
-        Student student = studentRepository.findById(stuId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 학번이 존재하지 않습니다. id=" + stuId));
+        //Student student = studentRepository.findById(stuId)
+        //        .orElseThrow(() -> new IllegalArgumentException("해당 학번이 존재하지 않습니다. id=" + stuId));
         return certificateRepository.findAllByStudent_id(stuId);
     }
 
     @Transactional
-    public List<Certificate> deleteCertificate(Long stuId, Long certificateId) {
+    public void deleteCertificate(Long stuId, Long certificateId) {
         Student student = studentRepository.findById(stuId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 학번이 존재하지 않습니다. id=" + stuId));
-
+        certificateRepository.deleteByIdAndStudent(certificateId, student);
     }
 }
