@@ -50,6 +50,7 @@ public class StudentCommandServiceImpl implements StudentCommandService {
         ResponseEntity<String> hsportalResponse = getHsportalResponse(loginRequestDto);
         Document hsportalDocument = Jsoup.parse(Objects.requireNonNull(hsportalResponse.getBody()));
 
+
         // response의 "success" 값 추출
         Element body = hsportalDocument.body();
         String jsonString = body.getAllElements().text();

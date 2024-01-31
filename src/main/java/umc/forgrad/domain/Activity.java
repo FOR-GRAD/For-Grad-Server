@@ -6,10 +6,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import software.amazon.ion.Decimal;
 import umc.forgrad.domain.common.BaseEntity;
 import umc.forgrad.domain.enums.Award;
 import umc.forgrad.domain.enums.Category;
 import umc.forgrad.domain.enums.CertificationType;
+import umc.forgrad.dto.activity.PostActivityResponse;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
