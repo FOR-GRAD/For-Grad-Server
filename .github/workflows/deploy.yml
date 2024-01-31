@@ -1,10 +1,12 @@
 name: Deploy
 
-# pr이 merged 되었을 때 동작
+# main 브랜치에 pr이 생겼을 때 동작
 on:
   pull_request:
     branches:
       - main
+    types:
+      - closed
 
 permissions:
   contents: read
@@ -12,7 +14,7 @@ permissions:
 jobs:
   run-docker-image-on-ec2:
     # merge 되었을 때 실행
-#    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true
 
     runs-on: self-hosted
     steps:
