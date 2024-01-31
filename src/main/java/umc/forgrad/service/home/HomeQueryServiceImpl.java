@@ -64,18 +64,6 @@ public class HomeQueryServiceImpl implements HomeQueryService {
         // 종정시 사진 to base64Image
         String base64Image = getBase64Image(studentId, session);
 
-        // 졸업요건 조회
-        String gradUrl = "https://info.hansung.ac.kr/jsp_21/student/graduation/graduation_requirement.jsp";
-        Connection.Response gradResponse = getResponse(session, gradUrl);
-
-        Document gradDocument = gradResponse.parse();
-        String track1 = gradDocument.select("#div_print_area > div > div._obj._objHtml._absolute > ul > div > div > div > table > tbody > tr:nth-child(2) > td:nth-child(2)").text();
-        String track2 = gradDocument.select("#div_print_area > div > div._obj._objHtml._absolute > ul > div > div > div > table > tbody > tr:nth-child(3) > td:nth-child(2)").text();
-        String trackRequirement1 = gradDocument.select("#div_print_area > div > div._obj._objHtml._absolute > ul > div > div > div > table > tbody > tr:nth-child(2) > td:nth-child(3)").text();
-        String trackRequirement2 = gradDocument.select("#div_print_area > div > div._obj._objHtml._absolute > ul > div > div > div > table > tbody > tr:nth-child(3) > td:nth-child(3)").text();
-        String note1 = gradDocument.select("#div_print_area > div > div._obj._objHtml._absolute > ul > div > div > div > table > tbody > tr:nth-child(2) > td:nth-child(4)").text();
-        String note2 = gradDocument.select("#div_print_area > div > div._obj._objHtml._absolute > ul > div > div > div > table > tbody > tr:nth-child(3) > td:nth-child(4)").text();
-
         // 응원의 한마디 조회
         Optional<Student> optionalStudent = studentRepository.findById(studentId);
         Student student = optionalStudent.orElseThrow(() -> new GeneralException(ErrorStatus.STUDENT_NOT_FOUND));
@@ -102,13 +90,7 @@ public class HomeQueryServiceImpl implements HomeQueryService {
                 .grade(grade)
                 .status(status)
                 .message(message)
-                .track1(track1)
-                .track2(track2)
                 .base64Image(base64Image)
-                .trackRequirement1(trackRequirement1)
-                .trackRequirement2(trackRequirement2)
-                .note1(note1)
-                .note2(note2)
                 .futureTimeTableDto(futureTimeTableDto)
                 .build();
 
