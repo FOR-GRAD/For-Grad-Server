@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddCertificateResponseDto {
+public class UpdateCertificateResponseDto {
     private Long certificateId;
-    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
