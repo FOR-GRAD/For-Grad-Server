@@ -163,31 +163,7 @@ public class TimetableService {
         List<Subject> subjects = semesterE.getSubjectList();
         return TimetableConverter.toViewResultDto(subjects);
     }
-
-
     @Transactional
-    public UpdateTimetableResponseDto.updateResponseDtoList deleteTimetable(long subjectId, Long stuId) {
-        Student student = studentRepository.findById(stuId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 학번이 존재하지 않습니다. id=" + stuId));
-
-        Semester semester = semesterRepository.findById(1L).orElseThrow();
-
-        subjectRepository.deleteById(subjectId);
-
-        List<Subject> subjectList = subjectRepository.findBySemester(semester);
-
-        List<UpdateTimetableResponseDto.updateResponseDto> updateResponseDtoLists = new ArrayList<>();
-        subjectList.forEach(subject -> {
-            UpdateTimetableResponseDto.updateResponseDto build = UpdateTimetableResponseDto.updateResponseDto.builder()
-                    .updatedAt(subject.getUpdatedAt())
-                    .subjectId(subject.getId())
-                    .build();
-            updateResponseDtoLists.add(build);
-        });
-        return UpdateTimetableResponseDto.updateResponseDtoList.builder().updateResponseDtos(updateResponseDtoLists).build();
-    }
-
-    /*@Transactional
     public void deleteTimetable(Long stuId, Integer grade, Integer semester, Long subjectId) {
         Student student = studentRepository.findById(stuId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 학번이 존재하지 않습니다. id=" + stuId));
@@ -197,6 +173,4 @@ public class TimetableService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 과목이 존재하지 않습니다."));
         subjectRepository.delete(subject);
     }
-
-     */
 }

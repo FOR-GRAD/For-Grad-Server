@@ -23,7 +23,7 @@ public class Subject extends BaseEntity {
     @Column(nullable = false)
     private Integer credit;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "semester_id")
     private Semester semester;
 
