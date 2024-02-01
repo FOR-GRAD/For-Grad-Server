@@ -3,10 +3,6 @@ package umc.forgrad.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import umc.forgrad.domain.common.BaseEntity;
-import umc.forgrad.domain.mapping.SemesterSubject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -27,7 +23,14 @@ public class Subject extends BaseEntity {
     @Column(nullable = false)
     private Integer credit;
 
-    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
-    private List<SemesterSubject> semesterSubjectList = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "semester_id")
+    private Semester semester;
+
+    public void update(String type, String name, Integer credit) {
+        this.type = type;
+        this.name = name;
+        this.credit = credit;
+    }
 
 }
