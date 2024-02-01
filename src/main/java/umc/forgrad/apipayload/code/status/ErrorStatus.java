@@ -17,7 +17,7 @@ public enum ErrorStatus implements BaseCode {
     LOGIN_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "LOGIN FAIL", "아이디 또는 비밀번호를 확인하세요"),
 
     // 세션 에러
-    LOGOUT_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED", "유효하지 않은 세션입니다."),
+    SESSION_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED", "유효하지 않은 세션입니다."),
 
     // 학생 관련
     STUDENT_NOT_FOUND(HttpStatus.NOT_FOUND, "STUDENT NOT FOUNT", "존재하지 않는 학생입니다."),
@@ -26,7 +26,13 @@ public enum ErrorStatus implements BaseCode {
     SEMESTER_NOT_FOUND(HttpStatus.NOT_FOUND, "SEMESTER NOT FOUND", "존재하지 않는 학기 입니다."),
 
     // 과목 관련
-    SUBJECT_NOT_FOUND(HttpStatus.NOT_FOUND, "SUBJECT NOT FOUND", "존재하지 않는 과목입니다.");
+    SUBJECT_NOT_FOUND(HttpStatus.NOT_FOUND, "SUBJECT NOT FOUND", "존재하지 않는 과목입니다."),
+
+    //활동
+    ACTIVITY_NOT_FOUND(HttpStatus.NOT_FOUND, "ACTIVITY NOT FOUND","존재하지 않는 활동입니다."),
+
+    //카테고리별리스트
+    ACTIVITYLIST_EMPTY(HttpStatus.NO_CONTENT, "ACTIVITYLIST EMPTY", "아무 활동도 등록되어있지않습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
