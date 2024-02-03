@@ -5,6 +5,7 @@ import lombok.*;
 import umc.forgrad.domain.common.BaseEntity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -24,4 +25,9 @@ public class Certificate extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id")
     private Student student; //Student 엔티티와 연결
+
+    public void update(String name, LocalDate date) {
+        this.name = name;
+        this.date = date;
+    }
 }

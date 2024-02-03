@@ -22,14 +22,16 @@ public enum ErrorStatus implements BaseCode {
     // 학생 관련
     STUDENT_NOT_FOUND(HttpStatus.NOT_FOUND, "STUDENT NOT FOUNT", "존재하지 않는 학생입니다."),
 
-    // 학기 관련
-    SEMESTER_NOT_FOUND(HttpStatus.NOT_FOUND, "SEMESTER NOT FOUND", "존재하지 않는 학기 입니다."),
-
     // 과목 관련
     SUBJECT_NOT_FOUND(HttpStatus.NOT_FOUND, "SUBJECT NOT FOUND", "존재하지 않는 과목입니다."),
 
+    // 시간표 관련
+    SEMESTER_NOT_FOUND(HttpStatus.NOT_FOUND, "TIMETABLE NOT FOUNT", "존재하지 않는 시간표 입니다."),
+
     //활동
+
     ACTIVITY_NOT_FOUND(HttpStatus.NOT_FOUND, "ACTIVITY4001","해당 activityid로 커리어를 찾을수 없습니다"),
+
 
     //카테고리별리스트
     ACTIVITYLIST_EMPTY(HttpStatus.NO_CONTENT, "ACTIVITYLIST EMPTY", "아무 활동도 등록되어있지않습니다."),

@@ -1,9 +1,6 @@
 package umc.forgrad.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -16,6 +13,11 @@ public class Free {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "free")
+    @JoinColumn(name = "student_id")
+    private Student student;
+
     private String memo;
 
 }
