@@ -16,8 +16,6 @@ public interface SubjectRepository extends JpaRepository<Subject, Long> {
 
     List<Subject> findByTimetable(Timetable timetable);
 
-    List<Subject> findByTimetable(Timetable timetable);
-
     @Query("SELECT SUM(s.credit) FROM Subject s WHERE s IN :subjects")
     Optional<Integer> sumCredits(@Param("subjects") List<Subject> subjectList);
 
