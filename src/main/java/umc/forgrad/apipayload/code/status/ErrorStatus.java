@@ -25,6 +25,9 @@ public enum ErrorStatus implements BaseCode {
     // 과목 관련
     SUBJECT_NOT_FOUND(HttpStatus.NOT_FOUND, "SUBJECT NOT FOUND", "존재하지 않는 과목입니다."),
 
+    // 시간표 관련
+    SEMESTER_NOT_FOUND(HttpStatus.NOT_FOUND, "TIMETABLE NOT FOUNT", "존재하지 않는 시간표 입니다."),
+
     //활동
     ACTIVITY_NOT_FOUND(HttpStatus.NOT_FOUND, "ACTIVITY NOT FOUND", "존재하지 않는 활동입니다."),
 
