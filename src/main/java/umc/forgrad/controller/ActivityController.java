@@ -8,6 +8,7 @@ import umc.forgrad.apipayload.ApiResponse;
 import umc.forgrad.converter.ActivityConverter;
 import umc.forgrad.domain.Activity;
 import umc.forgrad.domain.enums.Category;
+import umc.forgrad.dto.GetFileIdAndUrl;
 import umc.forgrad.dto.activity.DeleteActivityRequest;
 import umc.forgrad.dto.activity.PostActivityRequest;
 import umc.forgrad.dto.activity.PostActivityResponse;
@@ -37,10 +38,18 @@ public class ActivityController {
 
     }
 
+//    @GetMapping("/career-detail")
+//    public ApiResponse<PostActivityResponse.ActivityDetailDto> getActivityDetail(@RequestParam Long activityId) throws IOException {
+//        Activity activity = activityQueryService.findActivity(activityId);
+//        List<String> fileUrls = activityFileService.getFileUrls(activityId);
+//
+//        return ApiResponse.onSuccess(ActivityConverter.activityDetailDto(activity, fileUrls));
+//    }
+
     @GetMapping("/career-detail")
     public ApiResponse<PostActivityResponse.ActivityDetailDto> getActivityDetail(@RequestParam Long activityId) throws IOException {
         Activity activity = activityQueryService.findActivity(activityId);
-        List<String> fileUrls = activityFileService.getFileUrls(activityId);
+        List<GetFileIdAndUrl> fileUrls = activityFileService.getFileUrls(activityId);
 
         return ApiResponse.onSuccess(ActivityConverter.activityDetailDto(activity, fileUrls));
     }
@@ -74,6 +83,19 @@ public class ActivityController {
                 .studentId(studentId)
                 .build();
         return ApiResponse.onSuccess(activityCommandService.deleteActivity(build));
+    }
+
+    @PatchMapping("/career-update")
+    public ApiResponse<Long> updateActivity(@RequestPart Long activityId,
+                                              @RequestPart(value = "updateDto", required = false) PostActivityRequest.UpdateDto updateDto,
+                                              @RequestPart(value = "addFiles", required = false) List<MultipartFile> multipartFiles,
+                                              @RequestPart(value = "deleteFiles", required = false) List<Long> deleteFileIds,
+                                              @SessionAttribute(name = "student") long studentId) throws IOException
+    {
+
+        Long updatedActivityId = activityCommandService.updateActivity(activityId, studentId, updateDto, multipartFiles, deleteFileIds);
+        return ApiResponse.onSuccess(updatedActivityId);
+
     }
 
 

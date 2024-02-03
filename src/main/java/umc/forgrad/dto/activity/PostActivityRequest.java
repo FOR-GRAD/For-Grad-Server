@@ -3,6 +3,7 @@ package umc.forgrad.dto.activity;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import umc.forgrad.domain.enums.Award;
@@ -10,6 +11,7 @@ import umc.forgrad.domain.enums.Category;
 import umc.forgrad.domain.enums.CertificationType;
 
 import java.time.LocalDate;
+import java.util.List;
 
 
 public class PostActivityRequest {
@@ -38,5 +40,33 @@ public class PostActivityRequest {
         private Award award;
 
         private CertificationType certificationType;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UpdateDto {
+
+        Long id;
+        String title;
+
+        String content;
+
+        Category category;
+
+        LocalDate startDate;
+
+        LocalDate endDate;
+
+        List<String> fileUrls;
+
+        Award award;
+
+        CertificationType certificationType;
+
+        Integer volunteerHour;
+
+
     }
 }

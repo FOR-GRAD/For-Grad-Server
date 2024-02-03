@@ -85,4 +85,34 @@ public class ActivityCommandService {
         }
 
     }
+
+    public Long updateActivity(Long activityId, Long studentId, PostActivityRequest.UpdateDto updateDto,
+                                 List<MultipartFile> multipartFiles, List<Long> deleteFileIds) throws IOException {
+
+        Activity activity = activityQueryService.findActivity(activityId);
+        Student author = activity.getStudent();
+        Student user = activityQueryService.findStudent(studentId);
+        if (author == user) {
+            activity.update(updateDto);
+            if (deleteFileIds != null) {
+                activityFileService.deleteSeveralActivityFiles(deleteFileIds);
+            }
+
+            if (multipartFiles != null) {
+                List<GetS3Res> imgUrls = s3Service.uploadFile(multipartFiles);
+                activityFileService.saveAllActivityFileByActivity(imgUrls, activity);
+
+            }
+
+            return activityId;
+        }
+        else {
+            throw new GeneralException(ErrorStatus.USER_WITHOUT_PERMISSION);
+        }
+
+
+
+
+
+    }
 }
