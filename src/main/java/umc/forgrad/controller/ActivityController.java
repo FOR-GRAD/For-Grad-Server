@@ -2,6 +2,8 @@ package umc.forgrad.controller;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import umc.forgrad.apipayload.ApiResponse;
@@ -18,9 +20,11 @@ import umc.forgrad.service.activityService.ActivityQueryService;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Logger;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class ActivityController {
 
     private final ActivityCommandService activityCommandService;
@@ -67,7 +71,6 @@ public class ActivityController {
     public ApiResponse<PostActivityResponse.onlyAccumulatedList> getActivitySearchResult(@PathVariable Category category,
                                                                                          @RequestParam String searchWord,
                                                                                          @SessionAttribute(name = "student") long studentId
-
 
                                                                                    ) throws IOException{
         List<PostActivityResponse.ActivityWithAccumulatedHours> searchedList = activityQueryService.getActivitiesByTitleAndCategory(searchWord, category, studentId);

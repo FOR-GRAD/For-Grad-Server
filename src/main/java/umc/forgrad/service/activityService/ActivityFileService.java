@@ -43,19 +43,17 @@ public class ActivityFileService {
     }
 
 //    @Transactional(readOnly = true)
-//    public List<String> getFileUrls(Long activityId) {
-//        List<ActivityFile> allByActivityId = activityFileRepository.findAllByActivityId(activityId);
-//        List<String> fileUrls = new ArrayList<>();
-//        List<GetFileIdAndUrl> fileIdAndUrls = new ArrayList<>();
-//        for (ActivityFile activityFile : allByActivityId) {
-////            fileUrls.add(activityFile.getFileUrl());
-////            fileUrls.add(activityFile.getId());
-//            GetFileIdAndUrl getFileIdAndUrl = new GetFileIdAndUrl(activityFile.getId(), activityFile.getFileUrl());
-//            fileIdAndUrls.add(getFileIdAndUrl);
-//
-//        }
-//        return fileUrls;
-//    }
+//    public List<GetFileIdAndUrl> getFileUrls(Long activityId) {
+//        return activityFileRepository.findAllByActivityId(activityId).stream()
+//                .map(activityFile -> {
+//                    log.info(activityFile.getFileName());
+//                    log.info(activityFile.getFileUrl());
+//                    log.info(String.valueOf(activityFile.getId()));
+//                    return new GetFileIdAndUrl(activityFile.getId(), activityFile.getFileUrl());
+//                })
+//                .collect(Collectors.toList());
+//    } getfileurls 개선된코드
+
 
     @Transactional(readOnly = true)
     public List<GetFileIdAndUrl> getFileUrls(Long activityId) {
@@ -63,11 +61,6 @@ public class ActivityFileService {
         List<String> fileUrls = new ArrayList<>();
         List<GetFileIdAndUrl> fileIdAndUrls = new ArrayList<>();
         for (ActivityFile activityFile : allByActivityId) {
-//            fileUrls.add(activityFile.getFileUrl());
-//            fileUrls.add(activityFile.getId());
-            log.info(activityFile.getFileName());
-            log.info(activityFile.getFileUrl());
-            log.info(String.valueOf(activityFile.getId()));
             GetFileIdAndUrl getFileIdAndUrl = new GetFileIdAndUrl(activityFile.getId(), activityFile.getFileUrl());
             fileIdAndUrls.add(getFileIdAndUrl);
 
@@ -81,10 +74,16 @@ public class ActivityFileService {
 
     }
 
-    public void deleteAllActivityFilesInS3(List<ActivityFile> activityFiles) {
+    public List<ActivityFile> findSeveralByActivityFileIds(List<Long> ids){
+        List<ActivityFile> allById = activityFileRepository.findAllById(ids);
+        return allById;
+    }
+
+    public void deleteActivityFilesInS3(List<ActivityFile> activityFiles) {
 
         for (ActivityFile activityFile : activityFiles) {
             s3Service.deleteFile(activityFile.getFileName());
+            log.info(activityFile.getFileName());
         }
     }
     public List<Long> findAllId(Long id){
@@ -99,4 +98,6 @@ public class ActivityFileService {
     public void deleteSeveralActivityFiles(List<Long> ids){
         activityFileRepository.deleteAllById(ids);
     }
+
+
 }

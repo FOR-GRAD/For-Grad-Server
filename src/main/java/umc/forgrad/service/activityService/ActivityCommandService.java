@@ -69,7 +69,7 @@ public class ActivityCommandService {
         if (author.getId() == user.getId()) {
             //s3의 파일들 삭제
             List<ActivityFile> allByActivityId = activityFileService.findAllByActivityId(activity.getId());
-            activityFileService.deleteAllActivityFilesInS3(allByActivityId);
+            activityFileService.deleteActivityFilesInS3(allByActivityId);
 
             List<Long> ids = activityFileService.findAllId(activity.getId());
             activityFileService.deleteAllActivityFiles(ids);
@@ -95,7 +95,13 @@ public class ActivityCommandService {
         if (author == user) {
             activity.update(updateDto);
             if (deleteFileIds != null) {
-                activityFileService.deleteSeveralActivityFiles(deleteFileIds);
+
+                List<ActivityFile> activityFiles = activityFileService.findSeveralByActivityFileIds(deleteFileIds);//파일객체찾고
+                //이러면 activityfile에서 이미 delete하고나서 findid하고s3에서 지우니까, several은 비어서, s3는 못지우는거같은데? 수정해야될듯.'김종현'
+                //s3에서 지우는걸 먼저하고, 리포지토리삭제를 뒤로하면 될거같음. 이렇게 안하면 리포지토리에서 먼지지우면 findseveralActivityFile해봤자. 무조건빔.
+                activityFileService.deleteActivityFilesInS3(activityFiles);//s3에서 파일객체로 지우고
+                activityFileService.deleteSeveralActivityFiles(deleteFileIds);//db에서 id로 지운다.
+
             }
 
             if (multipartFiles != null) {
@@ -106,7 +112,7 @@ public class ActivityCommandService {
 
             return activityId;
         }
-        else {
+        else {//삭제할 권한없을때
             throw new GeneralException(ErrorStatus.USER_WITHOUT_PERMISSION);
         }
 

@@ -14,6 +14,7 @@ import umc.forgrad.dto.activity.PostActivityResponse;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Builder
 @Entity
@@ -38,7 +39,6 @@ public class Activity extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private Category category; //CERTIFICATIONS, COMPETITIONS, VOLUNTEERS, AWARDS;
-
 
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -66,67 +66,50 @@ public class Activity extends BaseEntity {
     private Integer volunteerHour;
 
 
-    public void update(PostActivityRequest.UpdateDto updateDto)
-    {
-        updateTitle(updateDto.getTitle());
-        updateContent(updateDto.getContent());
-        updatestartDate(updateDto.getStartDate());
-        updateEndDate(updateDto.getEndDate());
-        updateCategory(updateDto.getCategory());
-        updateAward(updateDto.getAward());
-        updateCertificationType(updateDto.getCertificationType());
-        updateVolunteerHour(updateDto.getVolunteerHour());
-
+    public void update(PostActivityRequest.UpdateDto updateDto) {
+        if (updateDto != null) {
+            Optional.ofNullable(updateDto.getTitle()).ifPresent(this::updateTitle);
+            Optional.ofNullable(updateDto.getContent()).ifPresent(this::updateContent);
+            Optional.ofNullable(updateDto.getStartDate()).ifPresent(this::updatestartDate);
+            Optional.ofNullable(updateDto.getEndDate()).ifPresent(this::updateEndDate);
+            Optional.ofNullable(updateDto.getCategory()).ifPresent(this::updateCategory);
+            Optional.ofNullable(updateDto.getAward()).ifPresent(this::updateAward);
+            Optional.ofNullable(updateDto.getCertificationType()).ifPresent(this::updateCertificationType);
+            Optional.ofNullable(updateDto.getVolunteerHour()).ifPresent(this::updateVolunteerHour);
+        }
     }
 
     private void updateTitle(String title) {
-        if(title!=null){
-            this.title = title;
-        }
+        this.title = title;
     }
-    private void updateContent(String content){
-        if(content!=null){
-            this.content = content;
-        }
+
+    private void updateContent(String content) {
+        this.content = content;
     }
 
     private void updatestartDate(LocalDate startDate) {
-        if(startDate!=null){
-            this.startDate = startDate;
-        }
+        this.startDate = startDate;
+
     }
 
     private void updateEndDate(LocalDate endDate) {
-        if (endDate!=null) {
-            this.endDate = endDate;
-        }
+        this.endDate = endDate;
     }
 
-    private void updateCategory(Category category){
-        if (category != null) {
-            this.category = category;
-        }
+    private void updateCategory(Category category) {
+        this.category = category;
     }
+
     private void updateAward(Award award) {
-        if (award != null) {
-            this.award = award;
-
-        }
+        this.award = award;
     }
 
     private void updateCertificationType(CertificationType certificationType) {
-        if(certificationType!=null){
         this.certificationType = certificationType;
-
-        }
-
     }
 
     private void updateVolunteerHour(Integer volunteerHour) {
-        if(volunteerHour!=null){
-            this.volunteerHour = volunteerHour;
-
-        }
+        this.volunteerHour = volunteerHour;
     }
 
 }
