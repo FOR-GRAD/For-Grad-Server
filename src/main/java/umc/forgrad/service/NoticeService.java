@@ -5,6 +5,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
+import umc.forgrad.apipayload.code.status.ErrorStatus;
+import umc.forgrad.exception.GeneralException;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -29,7 +31,10 @@ public class NoticeService {
         }
     }
 
-    public String getLink(String department) {
+    public String getLink(String department)  {
+        if (departmentLinks.get(department) == null) {
+            throw new GeneralException(ErrorStatus.NOTICE_ERROR);
+        }
         return departmentLinks.get(department);
     }
 

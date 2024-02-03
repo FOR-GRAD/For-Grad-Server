@@ -36,22 +36,12 @@ public class ActivityController {
                                                                                     @RequestPart(value = "image", required = false) List<MultipartFile> multipartFiles,
                                                                                     @SessionAttribute(name = "student") long studentId) throws IOException {
 
-
         Activity activity = activityCommandService.createBoard(registActivity, multipartFiles, studentId);
         return ApiResponse.onSuccess(ActivityConverter.activityResultDto(activity));
 
     }
-
-//    @GetMapping("/career-detail")
-//    public ApiResponse<PostActivityResponse.ActivityDetailDto> getActivityDetail(@RequestParam Long activityId) throws IOException {
-//        Activity activity = activityQueryService.findActivity(activityId);
-//        List<String> fileUrls = activityFileService.getFileUrls(activityId);
-//
-//        return ApiResponse.onSuccess(ActivityConverter.activityDetailDto(activity, fileUrls));
-//    }
-
     @GetMapping("/career-detail")
-    public ApiResponse<PostActivityResponse.ActivityDetailDto> getActivityDetail(@RequestParam Long activityId) throws IOException {
+    public ApiResponse<PostActivityResponse.ActivityDetailDto> getActivityDetail(@RequestParam Long activityId)  {
         Activity activity = activityQueryService.findActivity(activityId);
         List<GetFileIdAndUrl> fileUrls = activityFileService.getFileUrls(activityId);
 
@@ -89,7 +79,7 @@ public class ActivityController {
     }
 
     @PatchMapping("/career-update")
-    public ApiResponse<Long> updateActivity(@RequestPart Long activityId,
+    public ApiResponse<String> updateActivity(@RequestPart Long activityId,
                                               @RequestPart(value = "updateDto", required = false) PostActivityRequest.UpdateDto updateDto,
                                               @RequestPart(value = "addFiles", required = false) List<MultipartFile> multipartFiles,
                                               @RequestPart(value = "deleteFiles", required = false) List<Long> deleteFileIds,
@@ -97,7 +87,7 @@ public class ActivityController {
     {
 
         Long updatedActivityId = activityCommandService.updateActivity(activityId, studentId, updateDto, multipartFiles, deleteFileIds);
-        return ApiResponse.onSuccess(updatedActivityId);
+        return ApiResponse.onSuccess(String.format("id %s 커리어 삭제 완료", updatedActivityId));
 
     }
 

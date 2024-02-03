@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import umc.forgrad.apipayload.ApiResponse;
+import umc.forgrad.apipayload.code.status.ErrorStatus;
 import umc.forgrad.service.NoticeService;
 
 @RestController
@@ -15,7 +16,8 @@ public class NoticeController {
     @GetMapping("/departmentUrl/{department}")
     public ApiResponse<String> getUrl(@PathVariable String department){
         String link = noticeService.getLink(department);
-        return ApiResponse.onSuccess(link);
+              return ApiResponse.onSuccess(link);
+
     }
 
 }

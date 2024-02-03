@@ -59,7 +59,7 @@ public class ActivityCommandService {
 
 
 
-    public String deleteActivity(DeleteActivityRequest deleteActivityRequest) throws IOException{
+    public String deleteActivity(DeleteActivityRequest deleteActivityRequest) throws GeneralException{
 
         Activity activity = activityQueryService.findActivity(deleteActivityRequest.getActivityId());
 
