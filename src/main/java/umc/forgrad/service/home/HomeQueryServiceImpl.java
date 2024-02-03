@@ -71,8 +71,7 @@ public class HomeQueryServiceImpl implements HomeQueryService {
 
         // 시간표 조회
         // 학생의 학년과 학기로 해당 학기 찾기
-        Optional<Semester> optionalSemester = semesterRepository.findByStudentAndGradeAndSemester(student, nextGrade, nextSemester);
-        Semester semester = optionalSemester.orElseThrow(() -> new GeneralException(ErrorStatus.SEMESTER_NOT_FOUND));
+        Semester semester = semesterRepository.findByStudentAndGradeAndSemester(student, nextGrade, nextSemester);
 
         // 해당 학기에 속하는 과목 리스트 찾기
         List<Subject> subjectList = subjectRepository.findBySemester(semester);
