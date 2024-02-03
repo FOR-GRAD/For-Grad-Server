@@ -12,7 +12,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Semester extends BaseEntity {
+public class Timetable extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +24,7 @@ public class Semester extends BaseEntity {
     @Column(nullable = false)
     private Integer semester;
 
-    @OneToMany(mappedBy = "semester", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "timetable", cascade = CascadeType.ALL)
     private List<Subject> subjectList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
