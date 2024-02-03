@@ -19,12 +19,10 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
 
     Page<Activity> findAllByCategoryOrderByStartDateDesc(Category category, Pageable pageable);
 
-    int countByCategory(Category category);
-
     @Query("SELECT a FROM Activity a " +
             "WHERE (a.category = :category and a.student.id = :studentId)" +
             "ORDER BY a.startDate DESC")
-    List<Activity> getActivitiesWithAccumulatedHours(@Param("category") Category category, Long studentId);
+    List<Activity> getActivities(@Param("category") Category category, Long studentId);
 
     List<Activity> findByTitleContainingAndCategoryAndStudentId(String title, Category category, Long studentId);
 

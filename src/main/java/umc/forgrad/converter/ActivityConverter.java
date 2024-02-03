@@ -1,19 +1,14 @@
 package umc.forgrad.converter;
 
-import lombok.Builder;
-import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
-import umc.forgrad.controller.ActivityController;
 import umc.forgrad.domain.Activity;
 import umc.forgrad.domain.Student;
-import umc.forgrad.domain.enums.Category;
+import umc.forgrad.dto.GetFileIdAndUrl;
 import umc.forgrad.dto.activity.PostActivityRequest;
 import umc.forgrad.dto.activity.PostActivityResponse;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ActivityConverter {
     public static Activity toActivity(PostActivityRequest.RegistActivity registActivity, List<MultipartFile> multipartFiles, Student student) {
@@ -50,7 +45,7 @@ public class ActivityConverter {
     }
 
 
-    public static PostActivityResponse.ActivityDetailDto activityDetailDto(Activity activity, List<String> fileUrls){
+    public static PostActivityResponse.ActivityDetailDto activityDetailDto(Activity activity, List<GetFileIdAndUrl> fileUrls){
 
         return PostActivityResponse.ActivityDetailDto.builder()
                 .fileUrls(fileUrls)
