@@ -2,7 +2,6 @@ package umc.forgrad.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import umc.forgrad.domain.Student;
 import umc.forgrad.domain.common.BaseEntity;
 
 import java.util.ArrayList;
@@ -14,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Semester extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
