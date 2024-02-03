@@ -35,19 +35,7 @@ public class StudentResponseDto {
 
         private String message; // 응원의 한마디
 
-        private String track1; // 1트랙 이름
-
-        private String track2; // 2트랙 이름
-
         private String base64Image; // 종정시 사진
-
-        private String trackRequirement1; // 1트랙 졸업요건
-
-        private String trackRequirement2; // 2트랙 졸업요건
-
-        private String note1; // 1트랙 졸업요건 비고
-
-        private String note2; // 2트랙 졸업요건 비고
 
         private Map<String, FutureTimeTableDto> futureTimeTableDto; // key: 학년학기
     }
