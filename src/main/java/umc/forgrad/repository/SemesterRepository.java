@@ -9,6 +9,6 @@ import java.util.Optional;
 
 public interface SemesterRepository extends JpaRepository<Semester, Long> {
 
-    Optional<Semester> findByStudentAndGradeAndSemester(Student student, Integer grade, Integer semester);
+    Semester findByStudentAndGradeAndSemester(Student student, Integer grade, Integer semester);
 
 }
