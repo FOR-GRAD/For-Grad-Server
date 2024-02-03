@@ -27,13 +27,12 @@ public class Student {
     private String track2; // 2트랙
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
-    private List<Semester> semesterList = new ArrayList<>();
+    private List<Timetable> timetableList = new ArrayList<>();
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private List<Activity> activityList = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "memo_id")
     private Free free;
 
 }
