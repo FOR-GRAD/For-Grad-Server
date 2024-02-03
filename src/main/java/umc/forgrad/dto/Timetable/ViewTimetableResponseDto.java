@@ -3,8 +3,6 @@ package umc.forgrad.dto.Timetable;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import umc.forgrad.domain.Semester;
-import umc.forgrad.domain.Subject;
 
 @Getter
 @NoArgsConstructor
