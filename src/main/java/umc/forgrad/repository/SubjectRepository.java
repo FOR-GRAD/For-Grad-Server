@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Repository
 public interface SubjectRepository extends JpaRepository<Subject, Long> {
-    Optional<Subject> findByIdAndTimetableId(Long id, Long timetableId);
+    Optional<Subject> findByIdAndTimetable_id(Long id, Long timetableId);
 
     List<Subject> findByTimetable(Timetable timetable);
 

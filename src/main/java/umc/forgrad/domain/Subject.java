@@ -10,7 +10,6 @@ import umc.forgrad.domain.common.BaseEntity;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Subject extends BaseEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,7 +24,7 @@ public class Subject extends BaseEntity {
     private Integer credit;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "timetbale_id")
+    @JoinColumn(name = "timetable_id")
     private Timetable timetable;
 
     public void update(String type, String name, Integer credit) {
