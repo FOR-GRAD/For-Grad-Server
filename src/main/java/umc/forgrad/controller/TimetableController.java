@@ -34,14 +34,14 @@ public class TimetableController {
     }
 
     @PostMapping(value = "/plans/timetable")
-    public ApiResponse<AddTimetableResponseDto.addResponseDtoList> addTimetable(@RequestBody TimetableRequestDto.TimetableDto timetableDto, @SessionAttribute(name = "student") Long stuId) {
-        AddTimetableResponseDto.addResponseDtoList addResponseDtoList = timetableService.addTimetable(timetableDto, stuId);
+    public ApiResponse<AddTimetableResponseDto.addResponseDtoList> addTimetable(@RequestBody TimetableRequestDto.RealTimetableDto realTimetableDto, @SessionAttribute(name = "student") Long stuId) {
+        AddTimetableResponseDto.addResponseDtoList addResponseDtoList = timetableService.addTimetable(realTimetableDto, stuId);
         return ApiResponse.onSuccess(addResponseDtoList);
     }
 
     @PatchMapping(value = "/plans/timetable")
-    public ApiResponse<UpdateTimetableResponseDto.updateResponseDtoList> updateTimetable(@RequestBody TimetableRequestDto.TimetableDto timetableDto, @SessionAttribute(name="student") Long stuId) {
-        UpdateTimetableResponseDto.updateResponseDtoList updateResponseDtoList = timetableService.updateTimetable(timetableDto, stuId);
+    public ApiResponse<UpdateTimetableResponseDto.updateResponseDtoList> updateTimetable(@RequestBody TimetableRequestDto.RealTimetableDto realTimetableDto, @SessionAttribute(name="student") Long stuId) {
+        UpdateTimetableResponseDto.updateResponseDtoList updateResponseDtoList = timetableService.updateTimetable(realTimetableDto, stuId);
         return ApiResponse.onSuccess(updateResponseDtoList);
     }
 

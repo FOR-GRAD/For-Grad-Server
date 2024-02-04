@@ -10,23 +10,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import umc.forgrad.apipayload.code.status.ErrorStatus;
 import umc.forgrad.converter.FuturePlansCoverter;
-import umc.forgrad.domain.Semester;
 import umc.forgrad.domain.Student;
 import umc.forgrad.domain.Subject;
-import umc.forgrad.domain.mapping.SemesterSubject;
+import umc.forgrad.domain.Timetable;
 import umc.forgrad.dto.student.StudentResponseDto;
 import umc.forgrad.exception.GeneralException;
-import umc.forgrad.repository.SemesterRepository;
-import umc.forgrad.repository.SemesterSubjectRepository;
 import umc.forgrad.repository.StudentRepository;
 import umc.forgrad.repository.SubjectRepository;
+import umc.forgrad.repository.TimetableRepository;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 import static umc.forgrad.service.common.ConnectionResponse.getResponse;
 
@@ -35,9 +30,8 @@ import static umc.forgrad.service.common.ConnectionResponse.getResponse;
 public class HomeQueryServiceImpl implements HomeQueryService {
 
     private final StudentRepository studentRepository;
-    private final SemesterRepository semesterRepository;
+    private final TimetableRepository timetableRepository;
     private final SubjectRepository subjectRepository;
-    private final SemesterSubjectRepository semesterSubjectRepository;
 
     @Override
     public StudentResponseDto.HomeResponseDto queryHome(long studentId, HttpSession session) throws IOException {
@@ -67,18 +61,6 @@ public class HomeQueryServiceImpl implements HomeQueryService {
         // 종정시 사진 to base64Image
         String base64Image = getBase64Image(studentId, session);
 
-        // 졸업요건 조회
-        String gradUrl = "https://info.hansung.ac.kr/jsp_21/student/graduation/graduation_requirement.jsp";
-        Connection.Response gradResponse = getResponse(session, gradUrl);
-
-        Document gradDocument = gradResponse.parse();
-        String track1 = gradDocument.select("#div_print_area > div > div._obj._objHtml._absolute > ul > div > div > div > table > tbody > tr:nth-child(2) > td:nth-child(2)").text();
-        String track2 = gradDocument.select("#div_print_area > div > div._obj._objHtml._absolute > ul > div > div > div > table > tbody > tr:nth-child(3) > td:nth-child(2)").text();
-        String trackRequirement1 = gradDocument.select("#div_print_area > div > div._obj._objHtml._absolute > ul > div > div > div > table > tbody > tr:nth-child(2) > td:nth-child(3)").text();
-        String trackRequirement2 = gradDocument.select("#div_print_area > div > div._obj._objHtml._absolute > ul > div > div > div > table > tbody > tr:nth-child(3) > td:nth-child(3)").text();
-        String note1 = gradDocument.select("#div_print_area > div > div._obj._objHtml._absolute > ul > div > div > div > table > tbody > tr:nth-child(2) > td:nth-child(4)").text();
-        String note2 = gradDocument.select("#div_print_area > div > div._obj._objHtml._absolute > ul > div > div > div > table > tbody > tr:nth-child(3) > td:nth-child(4)").text();
-
         // 응원의 한마디 조회
         Optional<Student> optionalStudent = studentRepository.findById(studentId);
         Student student = optionalStudent.orElseThrow(() -> new GeneralException(ErrorStatus.STUDENT_NOT_FOUND));
@@ -86,16 +68,19 @@ public class HomeQueryServiceImpl implements HomeQueryService {
 
         // 시간표 조회
         // 학생의 학년과 학기로 해당 학기 찾기
-        Optional<List<Semester>> optionalSemester = semesterRepository.findByStudentAndGradeAndSemester(student, nextGrade, nextSemester);
-        List<Semester> semester = optionalSemester.orElseThrow(() -> new GeneralException(ErrorStatus.SEMESTER_NOT_FOUND));
+        Optional<Timetable> optionalTimetable = timetableRepository.findByStudentAndGradeAndSemester(student, nextGrade, nextSemester);
 
-        // 해당 학기에 속하는 과목 리스트 찾기
-        List<SemesterSubject> semesterSubjectList = semesterSubjectRepository.findBySemesterIn(semester);
+        List<Subject> subjectList = new ArrayList<>();
 
-        // list로 변경
-        List<Subject> subjectList = semesterSubjectList.stream()
-                .map(SemesterSubject::getSubject)
-                .toList();
+        if (optionalTimetable.isPresent()) {
+
+            Timetable timetable = optionalTimetable.get();
+
+            // 해당 학기에 속하는 과목 리스트 찾기
+            subjectList = subjectRepository.findByTimetable(timetable);
+
+
+        }
 
         // 향후 계획 시간표 학점 총 합 계산하기
         Integer sumCredits = subjectRepository.sumCredits(subjectList).orElse(0);
@@ -110,13 +95,7 @@ public class HomeQueryServiceImpl implements HomeQueryService {
                 .grade(grade)
                 .status(status)
                 .message(message)
-                .track1(track1)
-                .track2(track2)
                 .base64Image(base64Image)
-                .trackRequirement1(trackRequirement1)
-                .trackRequirement2(trackRequirement2)
-                .note1(note1)
-                .note2(note2)
                 .futureTimeTableDto(futureTimeTableDto)
                 .build();
 
