@@ -9,12 +9,12 @@ import umc.forgrad.repository.StudentRepository;
 
 @Service
 @RequiredArgsConstructor
-public class GradDateServiceImpl implements GradDateService{
+public class GradDateServiceImpl implements GradDateService {
 
     private final StudentRepository studentRepository;
 
     @Override
-    public StudentResponseDto.GradDateResponseDto addGradDate(StudentRequestDto.GradDateRequestDto gradDateRequestDto, Long stuId){
+    public StudentResponseDto.GradDateResponseDto updateGradDate(StudentRequestDto.GradDateRequestDto gradDateRequestDto, Long stuId) {
 
         Student student = studentRepository.findById(stuId).orElseThrow();
 
@@ -23,7 +23,7 @@ public class GradDateServiceImpl implements GradDateService{
 //
 //        studentRepository.save(student);
 
-        Student newStudent = Student.builder()
+        Student updatedStudent = Student.builder()
                 .id(student.getId())
                 .gradDate(gradDateRequestDto.getGradDate())
                 .message(gradDateRequestDto.getMessage())
@@ -31,16 +31,26 @@ public class GradDateServiceImpl implements GradDateService{
                 .track2(student.getTrack2())
                 .timetableList(student.getTimetableList())
                 .activityList(student.getActivityList())
-                .free(student.getFree())
                 .build();
 
-        studentRepository.save(newStudent);
+        updatedStudent = studentRepository.save(updatedStudent);
 
         return StudentResponseDto.GradDateResponseDto.builder()
-                .gradDate(newStudent.getGradDate())
-                .message(newStudent.getMessage())
+                .gradDate(updatedStudent.getGradDate())
+                .message(updatedStudent.getMessage())
                 .build();
 
     }
 
+    @Override
+    public StudentResponseDto.GradDateResponseDto findGradDate(Long stuId) {
+
+        Student student = studentRepository.findById(stuId).orElseThrow();
+
+        return StudentResponseDto.GradDateResponseDto.builder()
+                .gradDate(student.getGradDate())
+                .message(student.getMessage())
+                .build();
+
+    }
 }

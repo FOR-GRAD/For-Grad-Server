@@ -5,7 +5,8 @@ import umc.forgrad.dto.student.StudentResponseDto;
 
 public interface GradDateService {
 
-    StudentResponseDto.GradDateResponseDto addGradDate(StudentRequestDto.GradDateRequestDto gradDateRequestDto, Long stuId);
+    StudentResponseDto.GradDateResponseDto updateGradDate(StudentRequestDto.GradDateRequestDto gradDateRequestDto, Long stuId);
 
+    StudentResponseDto.GradDateResponseDto findGradDate(Long stuId);
 
 }
