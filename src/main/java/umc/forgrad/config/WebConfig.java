@@ -14,15 +14,15 @@ public class WebConfig implements WebMvcConfigurer {
     private final HttpSessionInterceptor httpSessionInterceptor;
     private final LoggingInterceptor loggingInterceptor;
 
-//    @Override
-//    public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(httpSessionInterceptor)
-//                .excludePathPatterns("/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs/**")
-//                .excludePathPatterns("/login");
-//
-//        registry.addInterceptor(loggingInterceptor)
-//                .excludePathPatterns("/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs/**")
-//                .excludePathPatterns("/login");
-//    }
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(httpSessionInterceptor)
+                .excludePathPatterns("/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs/**")
+                .excludePathPatterns("/login");
+
+        registry.addInterceptor(loggingInterceptor)
+                .excludePathPatterns("/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs/**")
+                .excludePathPatterns("/login");
+    }
 
 }
