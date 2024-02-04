@@ -6,10 +6,9 @@ import lombok.*;
 @Entity
 @Getter
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Free {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

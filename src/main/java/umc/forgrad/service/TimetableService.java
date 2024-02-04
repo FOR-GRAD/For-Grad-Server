@@ -146,7 +146,7 @@ public class TimetableService {
         List<TimetableRequestDto.SubjectDto> subjectDtoList = realTimetableDto.getSubjectDtoList();
         List<Subject> subjects = new ArrayList<>();
         for(TimetableRequestDto.SubjectDto dto: subjectDtoList) {
-            Subject subject = subjectRepository.findByIdAndSemester_id(dto.getSubjuctId(), timetable.getId())
+            Subject subject = subjectRepository.findByIdAndTimetable_id(dto.getSubjuctId(), timetable.getId())
                     .orElseThrow(() -> new IllegalArgumentException("해당 과목이 존재하지 않습니다."));
             subject.update(dto.getType(), dto.getName(), dto.getCredit());
             subjects.add(subject);
@@ -169,7 +169,7 @@ public class TimetableService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 학번이 존재하지 않습니다. id=" + stuId));
         Optional<Timetable> optionalTimetable = timetableRepository.findByStudentAndGradeAndSemester(student, grade, semester);
         Timetable timetableE = optionalTimetable.get();
-        Subject subject = subjectRepository.findByIdAndSemester_id(subjectId, timetableE.getId())
+        Subject subject = subjectRepository.findByIdAndTimetable_id(subjectId, timetableE.getId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 과목이 존재하지 않습니다."));
         subjectRepository.delete(subject);
     }

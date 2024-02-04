@@ -32,7 +32,4 @@ public class Student {
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private List<Activity> activityList = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY) //mappedBy = "student"
-    private Free free;
-
 }

@@ -15,6 +15,10 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+    configureEach {
+            exclude group: 'commons-logging', module: 'commons-logging'
+        }
+
 }
 
 repositories {
@@ -66,3 +70,4 @@ tasks {
         duplicatesStrategy = DuplicatesStrategy.INCLUDE
     }
 }
+

@@ -47,23 +47,24 @@ public class StudentCommandServiceImpl implements StudentCommandService {
         String redirectUrl = Objects.requireNonNull(jjsDocument.body().select("a").first()).attr("href");
 
         // 비교과 포인트 로그인
-        ResponseEntity<String> hsportalResponse = getHsportalResponse(loginRequestDto);
-        Document hsportalDocument = Jsoup.parse(Objects.requireNonNull(hsportalResponse.getBody()));
+//        ResponseEntity<String> hsportalResponse = getHsportalResponse(loginRequestDto);
+//        Document hsportalDocument = Jsoup.parse(Objects.requireNonNull(hsportalResponse.getBody()));
 
 
         // response의 "success" 값 추출
-        Element body = hsportalDocument.body();
-        String jsonString = body.getAllElements().text();
-        JSONObject jsonObject = new JSONObject(jsonString);
-        boolean success = jsonObject.getBoolean("success");
+//        Element body = hsportalDocument.body();
+//        String jsonString = body.getAllElements().text();
+//        JSONObject jsonObject = new JSONObject(jsonString);
+//        boolean success = jsonObject.getBoolean("success");
 
         // 세션에 쿠키 설정
-        setCookieToSession(session, jjsResponse, hsportalResponse);
+//        setCookieToSession(session, jjsResponse, hsportalResponse);
 
         // 학번, 1트랙, 2트랙으로 학생 정보 만들기
+        session.setAttribute("cookies", getCookies(jjsResponse));
         Student student = getStudent(session, stuId);
 
-        if (redirectUrl.equals("http://info.hansung.ac.kr/h_dae/dae_main.html") && success) {
+        if (redirectUrl.equals("http://info.hansung.ac.kr/h_dae/dae_main.html")) {
             return studentRepository.findById(stuId).orElse(studentRepository.save(student));
         } else {
             throw new GeneralException(ErrorStatus.LOGIN_UNAUTHORIZED);
