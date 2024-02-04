@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import umc.forgrad.apipayload.ApiResponse;
 import umc.forgrad.apipayload.code.status.ErrorStatus;
 import umc.forgrad.service.NoticeService;
@@ -13,9 +14,9 @@ import umc.forgrad.service.NoticeService;
 public class NoticeController {
 
     private final NoticeService noticeService;
-    @GetMapping("/departmentUrl/{department}")
-    public ApiResponse<String> getUrl(@PathVariable String department){
-        String link = noticeService.getLink(department);
+    @GetMapping("/departmentUrl")
+    public ApiResponse<String> getUrl(@SessionAttribute(name = "student") Long studentId){
+        String link = noticeService.getLink(studentId);
               return ApiResponse.onSuccess(link);
 
     }
