@@ -2,11 +2,8 @@ package umc.forgrad.converter;
 
 import umc.forgrad.domain.Certificate;
 import umc.forgrad.domain.Student;
-import umc.forgrad.dto.Certificate.AddCertificateRequestDto;
-import umc.forgrad.dto.Certificate.AddCertificateResponseDto;
-import umc.forgrad.dto.Certificate.ViewCertificateResponseDto;
+import umc.forgrad.dto.Certificate.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,7 +11,13 @@ public class CertificateConverter {
     public static AddCertificateResponseDto toAddResultDto(Certificate certificate) {
         return AddCertificateResponseDto.builder()
                 .certificateId(certificate.getId())
-                .createdAt(LocalDateTime.now())
+                .createdAt(certificate.getCreatedAt())
+                .build();
+    }
+    public static UpdateCertificateResponseDto toUpdateResultDto(Certificate certificate) {
+        return UpdateCertificateResponseDto.builder()
+                .certificateId(certificate.getId())
+                .updatedAt(certificate.getUpdatedAt())
                 .build();
     }
 

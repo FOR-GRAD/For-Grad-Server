@@ -40,19 +40,22 @@ public class ActivityQueryService {
 
 
     }
-    public Activity findActivity(Long activityId) throws IOException {
+    public Activity findActivity(Long activityId) throws GeneralException{
         return activityRepository.findById(activityId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.ACTIVITY_NOT_FOUND));
     }
 
+    public Student findStudent(Long studentId) {
+        return studentRepository.findById(studentId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.STUDENT_NOT_FOUND));
+    }
 
 
     //수정중
 
     public List<PostActivityResponse.ActivityWithAccumulatedHours> getActivities(Category category, Long studentId) throws IOException{
         Student student = studentRepository.findById(studentId).orElseThrow(() -> new GeneralException(ErrorStatus.STUDENT_NOT_FOUND));
-        System.out.println(studentId);
-        List<Activity> activities = activityRepository.getActivitiesWithAccumulatedHours(category, studentId );
+        List<Activity> activities = activityRepository.getActivities(category, studentId );
 
         return createActivitiesAccumulated(activities);
     }
@@ -70,10 +73,10 @@ public class ActivityQueryService {
         int toIndex= totalActivities;
 
 
-
-        for (int i = 0; i < totalActivities; i++) {
-            Activity activity = activities.get(i);
-            accumulatedHours += activity.getVolunteerHour();
+        for (Activity activity : activities) {
+            if (activity.getVolunteerHour() != null) {
+                accumulatedHours += activity.getVolunteerHour();
+            }
 
             result.add(PostActivityResponse.ActivityWithAccumulatedHours.builder()
                     .id(activity.getId())
@@ -88,7 +91,7 @@ public class ActivityQueryService {
                     .build()
             );
             toIndex -= 1;
-            }
+        }
 
 
 

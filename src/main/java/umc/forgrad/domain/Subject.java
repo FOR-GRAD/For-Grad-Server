@@ -25,7 +25,13 @@ public class Subject extends BaseEntity {
     private Integer credit;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "semester_id")
-    private Semester semester;
+    @JoinColumn(name = "timetbale_id")
+    private Timetable timetable;
+
+    public void update(String type, String name, Integer credit) {
+        this.type = type;
+        this.name = name;
+        this.credit = credit;
+    }
 
 }

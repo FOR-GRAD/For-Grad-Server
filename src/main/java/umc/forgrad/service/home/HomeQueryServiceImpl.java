@@ -10,21 +10,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import umc.forgrad.apipayload.code.status.ErrorStatus;
 import umc.forgrad.converter.FuturePlansCoverter;
-import umc.forgrad.domain.Semester;
 import umc.forgrad.domain.Student;
 import umc.forgrad.domain.Subject;
+import umc.forgrad.domain.Timetable;
 import umc.forgrad.dto.student.StudentResponseDto;
 import umc.forgrad.exception.GeneralException;
-import umc.forgrad.repository.SemesterRepository;
 import umc.forgrad.repository.StudentRepository;
 import umc.forgrad.repository.SubjectRepository;
+import umc.forgrad.repository.TimetableRepository;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 import static umc.forgrad.service.common.ConnectionResponse.getResponse;
 
@@ -33,7 +30,7 @@ import static umc.forgrad.service.common.ConnectionResponse.getResponse;
 public class HomeQueryServiceImpl implements HomeQueryService {
 
     private final StudentRepository studentRepository;
-    private final SemesterRepository semesterRepository;
+    private final TimetableRepository timetableRepository;
     private final SubjectRepository subjectRepository;
 
     @Override
@@ -71,10 +68,19 @@ public class HomeQueryServiceImpl implements HomeQueryService {
 
         // 시간표 조회
         // 학생의 학년과 학기로 해당 학기 찾기
-        Semester semester = semesterRepository.findByStudentAndGradeAndSemester(student, nextGrade, nextSemester);
+        Optional<Timetable> optionalTimetable = timetableRepository.findByStudentAndGradeAndSemester(student, nextGrade, nextSemester);
 
-        // 해당 학기에 속하는 과목 리스트 찾기
-        List<Subject> subjectList = subjectRepository.findBySemester(semester);
+        List<Subject> subjectList = new ArrayList<>();
+
+        if (optionalTimetable.isPresent()) {
+
+            Timetable timetable = optionalTimetable.get();
+
+            // 해당 학기에 속하는 과목 리스트 찾기
+            subjectList = subjectRepository.findByTimetable(timetable);
+
+
+        }
 
         // 향후 계획 시간표 학점 총 합 계산하기
         Integer sumCredits = subjectRepository.sumCredits(subjectList).orElse(0);
