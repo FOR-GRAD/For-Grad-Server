@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 
 @RestController
 @RequiredArgsConstructor
-@Slf4j
 public class ActivityController {
 
     private final ActivityCommandService activityCommandService;
