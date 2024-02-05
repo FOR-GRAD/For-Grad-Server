@@ -14,9 +14,9 @@ import umc.forgrad.service.NoticeService;
 public class NoticeController {
 
     private final NoticeService noticeService;
-    @GetMapping("/departmentUrl")
-    public ApiResponse<String> getUrl(@SessionAttribute(name = "student") Long studentId){
-        String link = noticeService.getLink(studentId);
+    @GetMapping("/departmentUrl/{trackNum}")
+    public ApiResponse<String> getUrl(@PathVariable int trackNum, @SessionAttribute(name = "student") Long studentId){
+        String link = noticeService.getLink(trackNum,studentId);
               return ApiResponse.onSuccess(link);
 
     }
