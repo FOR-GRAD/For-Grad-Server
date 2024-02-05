@@ -87,7 +87,7 @@ public class ActivityController {
     {
 
         Long updatedActivityId = activityCommandService.updateActivity(activityId, studentId, updateDto, multipartFiles, deleteFileIds);
-        return ApiResponse.onSuccess(String.format("id %s 커리어 삭제 완료", updatedActivityId));
+        return ApiResponse.onSuccess(String.format("id %s 커리어 업데이트 완료", updatedActivityId));
 
     }
 

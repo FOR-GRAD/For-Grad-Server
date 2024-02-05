@@ -58,7 +58,6 @@ public class ActivityFileService {
     @Transactional(readOnly = true)
     public List<GetFileIdAndUrl> getFileUrls(Long activityId) {
         List<ActivityFile> allByActivityId = activityFileRepository.findAllByActivityId(activityId);
-        List<String> fileUrls = new ArrayList<>();
         List<GetFileIdAndUrl> fileIdAndUrls = new ArrayList<>();
         for (ActivityFile activityFile : allByActivityId) {
             GetFileIdAndUrl getFileIdAndUrl = new GetFileIdAndUrl(activityFile.getId(), activityFile.getFileUrl());
