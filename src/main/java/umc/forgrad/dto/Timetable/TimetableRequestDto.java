@@ -7,7 +7,7 @@ import java.util.List;
 public class TimetableRequestDto {
     @Getter
     @Builder
-    public static class SemesterDto {
+    public static class TimetableDto {
         private Integer grade;
         private Integer semester;
     }
@@ -28,8 +28,8 @@ public class TimetableRequestDto {
 
     @Getter
     @Builder
-    public static class TimetableDto {
-        private SemesterDto semesterDto;
+    public static class RealTimetableDto {
+        private TimetableDto semesterDto;
         private List<SubjectDto> subjectDtoList;
     }
     @Getter

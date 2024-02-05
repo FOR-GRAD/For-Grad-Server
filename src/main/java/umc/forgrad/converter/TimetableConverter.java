@@ -1,14 +1,12 @@
 package umc.forgrad.converter;
 
+import umc.forgrad.domain.Timetable;
 import umc.forgrad.domain.Student;
 import umc.forgrad.domain.Subject;
-import umc.forgrad.domain.Timetable;
 import umc.forgrad.dto.Timetable.TimetableRequestDto;
 import umc.forgrad.dto.Timetable.AddTimetableResponseDto;
 import umc.forgrad.dto.Timetable.UpdateTimetableResponseDto;
 import umc.forgrad.dto.Timetable.ViewTimetableResponseDto;
-
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,10 +25,10 @@ public class TimetableConverter {
                 .addResponseDtos(addResponseDtos)
                 .build();
     }
-    public static Timetable toSemester(TimetableRequestDto.SemesterDto semesterDto, Student student) {
+    public static Timetable toTimetable(TimetableRequestDto.TimetableDto timetableDto, Student student) {
         return Timetable.builder()
-                .grade(semesterDto.getGrade())
-                .semester(semesterDto.getSemester())
+                .grade(timetableDto.getGrade())
+                .semester(timetableDto.getSemester())
                 .student(student)
                 .build();
     }
