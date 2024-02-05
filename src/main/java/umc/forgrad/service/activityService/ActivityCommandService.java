@@ -115,10 +115,5 @@ public class ActivityCommandService {
         else {//삭제할 권한없을때
             throw new GeneralException(ErrorStatus.USER_WITHOUT_PERMISSION);
         }
-
-
-
-
-
     }
 }
