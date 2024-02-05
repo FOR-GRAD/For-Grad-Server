@@ -3,6 +3,7 @@ package umc.forgrad.dto.student;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -39,6 +40,15 @@ public class StudentResponseDto {
 
         private Map<String, FutureTimeTableDto> futureTimeTableDto; // key: 학년학기
     }
+
+    @Getter
+    @Builder
+    public static class GradDateResponseDto{
+        private LocalDate gradDate; // 졸업 예정일
+
+        private String message; // 응원의 한마디
+    }
+
 
     @Getter
     @Builder
