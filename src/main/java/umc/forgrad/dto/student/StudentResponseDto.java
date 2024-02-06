@@ -36,6 +36,8 @@ public class StudentResponseDto {
 
         private String message; // 응원의 한마디
 
+        private Integer dDay; // 졸업까지 남은 날짜
+
         private String base64Image; // 종정시 사진
 
         private Map<String, FutureTimeTableDto> futureTimeTableDto; // key: 학년학기
@@ -43,10 +45,22 @@ public class StudentResponseDto {
 
     @Getter
     @Builder
-    public static class GradDateResponseDto{
+    public static class GradDateAndMessageResponseDto {
+        private LocalDate nowDate; // 현재 날짜
+
         private LocalDate gradDate; // 졸업 예정일
 
+        private int dDay; // d-day 계산
+
         private String message; // 응원의 한마디
+    }
+
+    @Getter
+    @Builder
+    public static class GradUpdatedResponseDto {
+        private LocalDate gradDate;
+
+        private String message;
     }
 
 

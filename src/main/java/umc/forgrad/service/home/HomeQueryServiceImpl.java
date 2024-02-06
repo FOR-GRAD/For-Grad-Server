@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import umc.forgrad.apipayload.code.status.ErrorStatus;
 import umc.forgrad.converter.FuturePlansCoverter;
+import umc.forgrad.converter.GradDateAndMessageConverter;
 import umc.forgrad.domain.Student;
 import umc.forgrad.domain.Subject;
 import umc.forgrad.domain.Timetable;
@@ -95,6 +96,7 @@ public class HomeQueryServiceImpl implements HomeQueryService {
                 .grade(grade)
                 .status(status)
                 .message(message)
+                .dDay(GradDateAndMessageConverter.getBetween(student))
                 .base64Image(base64Image)
                 .futureTimeTableDto(futureTimeTableDto)
                 .build();
