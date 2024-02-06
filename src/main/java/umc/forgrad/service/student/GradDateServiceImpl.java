@@ -2,6 +2,7 @@ package umc.forgrad.service.student;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import umc.forgrad.converter.GradDateAndMessageConverter;
 import umc.forgrad.domain.Student;
 import umc.forgrad.dto.student.StudentRequestDto;
 import umc.forgrad.dto.student.StudentResponseDto;
@@ -14,43 +15,28 @@ public class GradDateServiceImpl implements GradDateService {
     private final StudentRepository studentRepository;
 
     @Override
-    public StudentResponseDto.GradDateResponseDto updateGradDate(StudentRequestDto.GradDateRequestDto gradDateRequestDto, Long stuId) {
+    public StudentResponseDto.GradUpdatedResponseDto updateGradDate(StudentRequestDto.GradDateRequestDto gradDateRequestDto, Long stuId) {
 
         Student student = studentRepository.findById(stuId).orElseThrow();
 
-//        student.setGradDate(gradDateRequestDto.getGradDate());
-//        student.setMessage(gradDateRequestDto.getMessage());
-//
-//        studentRepository.save(student);
+        // 졸업 예정일 & 응원의 한마디 업데이트
+        student.updateGradDate(gradDateRequestDto.getGradDate());
+        student.updateMessage(gradDateRequestDto.getMessage());
 
-        Student updatedStudent = Student.builder()
-                .id(student.getId())
-                .gradDate(gradDateRequestDto.getGradDate())
-                .message(gradDateRequestDto.getMessage())
-                .track1(student.getTrack1())
-                .track2(student.getTrack2())
-                .timetableList(student.getTimetableList())
-                .activityList(student.getActivityList())
-                .build();
+        Student updatedStudent = studentRepository.save(student);
 
-        updatedStudent = studentRepository.save(updatedStudent);
-
-        return StudentResponseDto.GradDateResponseDto.builder()
-                .gradDate(updatedStudent.getGradDate())
-                .message(updatedStudent.getMessage())
-                .build();
+        return GradDateAndMessageConverter.toUpdatedDto(updatedStudent);
 
     }
+
 
     @Override
-    public StudentResponseDto.GradDateResponseDto findGradDate(Long stuId) {
+    public StudentResponseDto.GradDateAndMessageResponseDto findGradDateAndMessage(Long stuId) {
 
         Student student = studentRepository.findById(stuId).orElseThrow();
 
-        return StudentResponseDto.GradDateResponseDto.builder()
-                .gradDate(student.getGradDate())
-                .message(student.getMessage())
-                .build();
+        return GradDateAndMessageConverter.toQueryDto(student);
 
     }
+
 }
