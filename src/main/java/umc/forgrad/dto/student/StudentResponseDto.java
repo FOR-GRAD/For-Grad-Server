@@ -36,6 +36,8 @@ public class StudentResponseDto {
 
         private String message; // 응원의 한마디
 
+        private Integer dDay; // 졸업까지 남은 날짜
+
         private String base64Image; // 종정시 사진
 
         private Map<String, FutureTimeTableDto> futureTimeTableDto; // key: 학년학기

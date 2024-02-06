@@ -20,8 +20,12 @@ public class GradDateAndMessageConverter {
                 .nowDate(LocalDate.now())
                 .gradDate(student.getGradDate())
                 .message(student.getMessage())
-                .dDay((int) ChronoUnit.DAYS.between(LocalDate.now(), student.getGradDate()))
+                .dDay(getBetween(student))
                 .build();
+    }
+
+    public static int getBetween(Student student) {
+        return (int) ChronoUnit.DAYS.between(LocalDate.now(), student.getGradDate());
     }
 
 }
