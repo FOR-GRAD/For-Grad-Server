@@ -15,10 +15,10 @@ public class StudentRequestDto {
     }
 
     @Getter
-    @Builder
-    public static class GradDateRequestDto{
+    public static class GradDateRequestDto {
         private LocalDate gradDate; // 졸업 예정일
 
         private String message; // 응원의 한마디
     }
+
 }

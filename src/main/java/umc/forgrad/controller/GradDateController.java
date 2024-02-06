@@ -13,15 +13,16 @@ public class GradDateController {
 
     private final GradDateService gradDateService;
 
-    @PatchMapping("/grad-date")
-    public ApiResponse<StudentResponseDto.GradDateResponseDto> update(@RequestBody StudentRequestDto.GradDateRequestDto gradDateRequestDto, @SessionAttribute(name="student") Long stuId){
+    @GetMapping("/grad")
+    public ApiResponse<StudentResponseDto.GradDateAndMessageResponseDto> getGradDate(@SessionAttribute(name = "student") Long stuId) {
+
+        return ApiResponse.onSuccess(gradDateService.findGradDateAndMessage(stuId));
+    }
+
+    @PatchMapping("/grad")
+    public ApiResponse<StudentResponseDto.GradUpdatedResponseDto> updateGradDate(@RequestBody StudentRequestDto.GradDateRequestDto gradDateRequestDto, @SessionAttribute(name = "student") Long stuId) {
 
         return ApiResponse.onSuccess(gradDateService.updateGradDate(gradDateRequestDto, stuId));
     }
 
-    @GetMapping("/grad-date")
-    public ApiResponse<StudentResponseDto.GradDateResponseDto> getGradDate(@SessionAttribute(name="student") Long stuId){
-
-        return ApiResponse.onSuccess(gradDateService.findGradDate(stuId));
-    }
 }

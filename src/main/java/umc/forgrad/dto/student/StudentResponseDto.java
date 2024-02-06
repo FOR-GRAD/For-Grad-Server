@@ -43,10 +43,22 @@ public class StudentResponseDto {
 
     @Getter
     @Builder
-    public static class GradDateResponseDto{
+    public static class GradDateAndMessageResponseDto {
+        private LocalDate nowDate; // 현재 날짜
+
         private LocalDate gradDate; // 졸업 예정일
 
+        private int dDay; // d-day 계산
+
         private String message; // 응원의 한마디
+    }
+
+    @Getter
+    @Builder
+    public static class GradUpdatedResponseDto {
+        private LocalDate gradDate;
+
+        private String message;
     }
 
 
