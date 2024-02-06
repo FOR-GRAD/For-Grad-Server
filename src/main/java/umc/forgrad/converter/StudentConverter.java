@@ -3,6 +3,8 @@ package umc.forgrad.converter;
 import umc.forgrad.domain.Student;
 import umc.forgrad.dto.student.StudentResponseDto;
 
+import java.time.LocalDate;
+
 public class StudentConverter {
 
     public static Student toStudent(Long id, String track1, String track2) {
@@ -10,6 +12,7 @@ public class StudentConverter {
                 .id(id)
                 .track1(track1)
                 .track2(track2)
+                .gradDate(LocalDate.now())
                 .build();
     }
 

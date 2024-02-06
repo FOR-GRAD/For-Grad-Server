@@ -32,4 +32,14 @@ public class Student {
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private List<Activity> activityList = new ArrayList<>();
 
+    // 졸업예정일 업데이트
+    public void updateGradDate(LocalDate updatedLocalDate) {
+        gradDate = updatedLocalDate;
+    }
+
+    // 응원의 한마디 업데이트
+    public void updateMessage(String updatedMessage) {
+        message = updatedMessage;
+    }
+
 }
