@@ -45,6 +45,9 @@ public class StudentCommandServiceImpl implements StudentCommandService {
         Document jjsDocument = Jsoup.parse(Objects.requireNonNull(jjsResponse.getBody()));
         // redirectUrl 추출
         String redirectUrl = Objects.requireNonNull(jjsDocument.body().select("a").first()).attr("href");
+        if (redirectUrl.equals("null")) {
+            throw new GeneralException(ErrorStatus.LOGIN_UNAUTHORIZED);
+        }
 
         // 비교과 포인트 로그인
         ResponseEntity<String> hsportalResponse = getHsportalResponse(loginRequestDto);
