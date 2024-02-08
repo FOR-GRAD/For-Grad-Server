@@ -77,7 +77,7 @@ public class ActivityController {
         return ApiResponse.onSuccess(activityCommandService.deleteActivity(build));
     }
 
-    @PatchMapping("/career-update")
+    @PostMapping("/career-update")
     public ApiResponse<String> updateActivity(@RequestPart Long activityId,
                                               @RequestPart(value = "updateDto", required = false) PostActivityRequest.UpdateDto updateDto,
                                               @RequestPart(value = "addFiles", required = false) List<MultipartFile> multipartFiles,
