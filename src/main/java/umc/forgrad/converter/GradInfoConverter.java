@@ -2,6 +2,7 @@ package umc.forgrad.converter;
 
 import umc.forgrad.dto.gradinfo.GradInfoResponseDto;
 
+import java.util.List;
 import java.util.Map;
 
 public class GradInfoConverter {
@@ -22,11 +23,11 @@ public class GradInfoConverter {
                 .build();
     }
 
-    public static GradInfoResponseDto.CompletionStatusDto toCompletionDto(GradInfoResponseDto.GeneralCompletionDto generalCompletionDto, GradInfoResponseDto.MajorCompletionDto majorCompletionDto) {
+    public static GradInfoResponseDto.CompletionStatusDto toCompletionDto(List<Map<String, List<String>>> generalCompletionDto, List<String> titleList) {
 
         return GradInfoResponseDto.CompletionStatusDto.builder()
-                .generalCompletionDto(generalCompletionDto)
-                .majorCompletionDto(majorCompletionDto)
+                .completionDtoMap(generalCompletionDto)
+                .titleList(titleList)
                 .build();
 
     }
