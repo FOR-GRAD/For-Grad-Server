@@ -27,61 +27,78 @@ public class GradesQueryServiceImpl implements GradesQueryService {
         // 학기별 정보 저장
         Map<String, GradInfoResponseDto.GradesListDtoAndTotalDto> myGradesInfoListDto = new HashMap<>();
 
-        String gradesUrl = "https://info.hansung.ac.kr/jsp_21/student/grade/total_grade.jsp";
+        String gradesUrl = "https://info.hansung.ac.kr/fuz/seongjeok/seongjeok.jsp";
         Connection.Response gradesResponse = ConnectionResponse.getResponse(session, gradesUrl);
 
         Document gradesDocument = gradesResponse.parse();
 
-        // 학기별 요소들을 순회하며 정보 추출
-        Elements semesters = gradesDocument.select("#div_print_area > div > div._obj._objHtml._absolute > div > div.row").select("div.col-12.col-lg-6.col-print-6");
-        for (Element semester : semesters) {
+        Elements center = gradesDocument.select("body > font > center");
+        for (Element rows : center) {
+            Elements tables = rows.children();
 
-            // 각 학기별 새로운 Map과 List 생성
-            List<GradInfoResponseDto.GradesDto> gradesDtoList = new ArrayList<>();
+            int totalTableSize = tables.size() - 5; // -5는 <br>태그와 마지막 총 성적 내역 제거
 
-            String semesterName = semester.select("div.card-header.bgh-blue span.objHeading_h3").text(); // 학기
-            String appliedCredits = semester.select("div.div_sub_subdiv.card.card-info:contains(신청학점) div.card-body").text(); // 신청학점
-            String acquiredCredits = semester.select("div.div_sub_subdiv.card.card-info:contains(취득학점) div.card-body").text(); // 취득학점
-            String totalGrade = semester.select("div.div_sub_subdiv.card.card-info:contains(평점총계) div.card-body").text(); // 평점총계
-            String averageGrade = semester.select("div.div_sub_subdiv.card.card-info:contains(평균평점) div.card-body").text(); // 평균평점
-            String percentile = semester.select("div.div_sub_subdiv.card.card-info:contains(백분위) div.card-body").text(); // 백분위
+            // 2018 학년도 1 학기, [신청학점, 취득학점, 평점총계, 평균평점, 백분위점수] 행 추출
+            for (int i = 0, j = 1; i < totalTableSize; i += 2, j += 2) {
+                // 각 학기별 새로운 Map과 List 생성
+                List<GradInfoResponseDto.GradesDto> gradesDtoList = new ArrayList<>();
 
-            GradInfoResponseDto.GradesTotalDto gradesTotalDto = GradInfoResponseDto.GradesTotalDto.builder()
-                    .appliedCredits(appliedCredits)
-                    .acquiredCredits(acquiredCredits)
-                    .totalGrade(totalGrade)
-                    .averageGrade(averageGrade)
-                    .percentile(percentile)
-                    .build();
+                Element oddTable = tables.get(i);
+
+                // 학기 정보 추출
+                String semester = oddTable.select("td[align=left]").text();
+
+                // 합계 정보 추출
+                Elements totalElements = oddTable.select("td[align=center]");
+
+                String appliedCredits = totalElements.get(0).text();
+                String acquiredCredits = totalElements.get(1).text();
+                String totalGrade = totalElements.get(2).text();
+                String averageGrade = totalElements.get(3).text();
+                String percentile = totalElements.get(4).text();
+
+                GradInfoResponseDto.GradesTotalDto gradesTotalDto = GradInfoResponseDto.GradesTotalDto.builder()
+                        .appliedCredits(appliedCredits)
+                        .acquiredCredits(acquiredCredits)
+                        .totalGrade(totalGrade)
+                        .averageGrade(averageGrade)
+                        .percentile(percentile)
+                        .build();
 
 
-            Elements subjects = semester.select("table.table_1 tbody tr");
-            for (Element subject : subjects) {
+                // [교과명, 이수구분, 학점, 성적] 행 추출
+                Element evenTable = tables.get(j);
 
-                String classification = subject.select("td").get(0).text(); // 구분(선필교, 전필, 일선, ...)
-                String subjectName = subject.select("td.text-start").text(); // 교과명
-                String credits = subject.select("td").get(3).text(); // 학점
-                String grade = subject.select("td").get(4).text(); // 성적
-                String track = subject.select("td").get(5).text(); // 현재트랙
+                Elements tr = evenTable.select("tr");
+                for (int k = 1; k < tr.size(); k++) {
+                    Elements td = tr.get(k).children();
 
-                gradesDtoList.add(
-                        GradInfoResponseDto.GradesDto.builder()
-                                .classification(classification)
-                                .subjectName(subjectName)
-                                .credits(credits)
-                                .grade(grade)
-                                .track(track)
-                                .build()
-                );
+                    String classification = td.get(0).text();
+                    String subjectName = td.get(2).text();
+                    String credits = td.get(3).text();
+                    String grade = td.get(4).text();
 
+                    gradesDtoList.add(
+                            GradInfoResponseDto.GradesDto.builder()
+                                    .classification(classification)
+                                    .subjectName(subjectName)
+                                    .credits(credits)
+                                    .grade(grade)
+                                    .build()
+                    );
+
+                }
+
+                // 최종 리턴 dto 생성
+                GradInfoResponseDto.GradesListDtoAndTotalDto gradesListDtoAndTotalDto = GradInfoResponseDto.GradesListDtoAndTotalDto.builder()
+                        .gradesDtoList(gradesDtoList)
+                        .gradesTotalDto(gradesTotalDto)
+                        .build();
+
+                // map에 dto 추가
+                myGradesInfoListDto.put(semester, gradesListDtoAndTotalDto);
             }
 
-            GradInfoResponseDto.GradesListDtoAndTotalDto gradesListDtoAndTotalDto = GradInfoResponseDto.GradesListDtoAndTotalDto.builder()
-                    .gradesDtoList(gradesDtoList)
-                    .gradesTotalDto(gradesTotalDto)
-                    .build();
-
-            myGradesInfoListDto.put(semesterName, gradesListDtoAndTotalDto);
 
         }
 
