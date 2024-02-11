@@ -16,7 +16,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class ActivityFileService {
     private final ActivityFileRepository activityFileRepository;
     private final S3Service s3Service;
@@ -52,13 +51,11 @@ public class ActivityFileService {
 //                    return new GetFileIdAndUrl(activityFile.getId(), activityFile.getFileUrl());
 //                })
 //                .collect(Collectors.toList());
-//    } getfileurls 개선된코드
-
+//    } getfileurls랑 기능 같은데 java8이용한 코드임.
 
     @Transactional(readOnly = true)
     public List<GetFileIdAndUrl> getFileUrls(Long activityId) {
         List<ActivityFile> allByActivityId = activityFileRepository.findAllByActivityId(activityId);
-        List<String> fileUrls = new ArrayList<>();
         List<GetFileIdAndUrl> fileIdAndUrls = new ArrayList<>();
         for (ActivityFile activityFile : allByActivityId) {
             GetFileIdAndUrl getFileIdAndUrl = new GetFileIdAndUrl(activityFile.getId(), activityFile.getFileUrl());
@@ -83,7 +80,6 @@ public class ActivityFileService {
 
         for (ActivityFile activityFile : activityFiles) {
             s3Service.deleteFile(activityFile.getFileName());
-            log.info(activityFile.getFileName());
         }
     }
     public List<Long> findAllId(Long id){

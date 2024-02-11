@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 
 @RestController
 @RequiredArgsConstructor
-@Slf4j
 public class ActivityController {
 
     private final ActivityCommandService activityCommandService;
@@ -78,16 +77,15 @@ public class ActivityController {
         return ApiResponse.onSuccess(activityCommandService.deleteActivity(build));
     }
 
-    @PatchMapping("/career-update")
+    @PostMapping("/career-update")
     public ApiResponse<String> updateActivity(@RequestPart Long activityId,
                                               @RequestPart(value = "updateDto", required = false) PostActivityRequest.UpdateDto updateDto,
                                               @RequestPart(value = "addFiles", required = false) List<MultipartFile> multipartFiles,
-                                              @RequestPart(value = "deleteFiles", required = false) List<Long> deleteFileIds,
                                               @SessionAttribute(name = "student") long studentId) throws IOException
     {
 
-        Long updatedActivityId = activityCommandService.updateActivity(activityId, studentId, updateDto, multipartFiles, deleteFileIds);
-        return ApiResponse.onSuccess(String.format("id %s 커리어 삭제 완료", updatedActivityId));
+        Long updatedActivityId = activityCommandService.updateActivity(activityId, studentId, updateDto, multipartFiles);
+        return ApiResponse.onSuccess(String.format("id %s 커리어 업데이트 완료", updatedActivityId));
 
     }
 

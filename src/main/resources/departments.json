@@ -19,7 +19,7 @@
   "공공행정트랙": "https://www.hansung.ac.kr/SclScn/1422/subview.do",
   "법&정책 트랙": "https://www.hansung.ac.kr/SclScn/1429/subview.do",
   "부동산트랙": "https://www.hansung.ac.kr/SclScn/1436/subview.do",
-  "스마트도시ㆍ교통계획트랙": "https://www.hansung.ac.kr/SclScn/7969/subview.do",
+  "스마트도시·교통계획트랙": "https://www.hansung.ac.kr/SclScn/7969/subview.do",
   "기업경영트랙": "https://www.hansung.ac.kr/SclScn/1450/subview.do",
   "벤처경영트랙": "https://www.hansung.ac.kr/SclScn/7659/subview.do",
   "회계·재무경영트랙": "https://www.hansung.ac.kr/SclScn/7660/subview.do",
@@ -36,7 +36,9 @@
   "문학문화콘텐츠학과": "https://hansung.ac.kr/CreCon/8729/subview.do",
   "AI응용학과" : "https://hansung.ac.kr/CreCon/8021/subview.do",
   "융합보안학과": "https://hansung.ac.kr/CreCon/9397/subview.do",
-  "미래 모빌리티학과": "https://hansung.ac.kr/CreCon/9782/subview.do"
+  "미래 모빌리티학과": "https://hansung.ac.kr/CreCon/9782/subview.do",
+
+  "미래플러스대학" : "https://futureplus.hansung.ac.kr/ko/info/notice"
 
 
 }

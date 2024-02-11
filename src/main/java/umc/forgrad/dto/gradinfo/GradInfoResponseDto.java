@@ -69,9 +69,7 @@ public class GradInfoResponseDto {
 
         private String credits; // 학점
 
-        private String grade; // 성정(A+, A, B, ...)
-
-        private String track; // 현재 트랙(해당 과목이 어떤 트랙에 속해있는지에 대한 정보)
+        private String grade; // 성적(A+, A, B, ...)
     }
 
     @Getter
@@ -91,21 +89,9 @@ public class GradInfoResponseDto {
     @Getter
     @Builder
     public static class CompletionStatusDto {
-        private GeneralCompletionDto generalCompletionDto;
+        private List<String> titleList;
 
-        private MajorCompletionDto majorCompletionDto;
-    }
-
-    @Getter
-    @Builder
-    public static class GeneralCompletionDto {
-        private Map<String, Map<String, String>> generalMap; // 교양 이수학점
-    }
-
-    @Getter
-    @Builder
-    public static class MajorCompletionDto {
-        private Map<String, List<String>> majorMap; // 전공 이수학점
+        private List<Map<String, List<String>>> completionDtoMap;
     }
 
 }
