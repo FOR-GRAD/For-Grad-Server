@@ -95,13 +95,13 @@ public class ActivityCommandService {
         if (author == user) {
             activity.update(updateDto);
 
-            List<ActivityFile> allByActivityId = activityFileService.findAllByActivityId(activity.getId());
-            activityFileService.deleteActivityFilesInS3(allByActivityId);
-
-            List<Long> ids = activityFileService.findAllId(activity.getId());
-            activityFileService.deleteAllActivityFiles(ids);
-
             if (multipartFiles != null) {
+
+                List<ActivityFile> allByActivityId = activityFileService.findAllByActivityId(activity.getId());
+                activityFileService.deleteActivityFilesInS3(allByActivityId);
+                List<Long> ids = activityFileService.findAllId(activity.getId());
+                activityFileService.deleteAllActivityFiles(ids);
+
                 List<GetS3Res> imgUrls = s3Service.uploadFile(multipartFiles);
                 activityFileService.saveAllActivityFileByActivity(imgUrls, activity);
 
