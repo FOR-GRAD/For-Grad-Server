@@ -96,7 +96,7 @@ public class HomeQueryServiceImpl implements HomeQueryService {
                 .grade(grade)
                 .status(status)
                 .message(message)
-                .dDay(GradDateAndMessageConverter.getBetween(student))
+                .dDay(GradDateAndMessageConverter.getBetween(student.getGradDate()))
                 .base64Image(base64Image)
                 .futureTimeTableDto(futureTimeTableDto)
                 .build();

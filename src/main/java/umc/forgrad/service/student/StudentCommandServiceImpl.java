@@ -70,10 +70,16 @@ public class StudentCommandServiceImpl implements StudentCommandService {
         session.setAttribute("cookies", cookies);
 
         // 학생정보 생성
-        Student student = getStudent(session, stuId);
+        Student student = getNewStudent(session, stuId);
+
+        // 학생 정보가 존재하면 해당 학생 정보를 가져옴
+        if (session.getAttribute("student") != null) {
+            long studentId = (long) session.getAttribute("student");
+            student = studentRepository.findById(studentId).orElseThrow(() -> new GeneralException(ErrorStatus.STUDENT_NOT_FOUND));
+        }
 
         if (redirectUrl.equals("http://info.hansung.ac.kr/h_dae/dae_main.html") && success) {
-            return studentRepository.findById(stuId).orElse(studentRepository.save(student));
+            return student;
         } else {
             throw new GeneralException(ErrorStatus.LOGIN_UNAUTHORIZED);
         }
@@ -135,7 +141,7 @@ public class StudentCommandServiceImpl implements StudentCommandService {
         session.setAttribute("cookies", cookies);
     }
 
-    private static Student getStudent(HttpSession session, long stuId) throws IOException {
+    private static Student getNewStudent(HttpSession session, long stuId) throws IOException {
         String jjsUrl = "https://info.hansung.ac.kr/jsp_21/index.jsp";
         Connection.Response response = ConnectionResponse.getResponse(session, jjsUrl);
 
