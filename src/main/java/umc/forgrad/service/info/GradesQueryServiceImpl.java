@@ -13,7 +13,7 @@ import umc.forgrad.service.common.ConnectionResponse;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +25,7 @@ public class GradesQueryServiceImpl implements GradesQueryService {
     public GradInfoResponseDto.MyGradesInfoDto queryGrades(HttpSession session) throws IOException {
 
         // 학기별 정보 저장
-        Map<String, GradInfoResponseDto.GradesListDtoAndTotalDto> myGradesInfoListDto = new HashMap<>();
+        Map<String, GradInfoResponseDto.GradesListDtoAndTotalDto> myGradesInfoListDto = new LinkedHashMap<>();
 
         String gradesUrl = "https://info.hansung.ac.kr/fuz/seongjeok/seongjeok.jsp";
         Connection.Response gradesResponse = ConnectionResponse.getResponse(session, gradesUrl);
