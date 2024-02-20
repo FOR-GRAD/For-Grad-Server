@@ -147,7 +147,10 @@ public class TimetableService {
         List<Subject> subjects = new ArrayList<>();
         for(TimetableRequestDto.SubjectDto dto: subjectDtoList) {
             Subject subject = subjectRepository.findByIdAndTimetable_id(dto.getSubjuctId(), timetable.getId())
-                    .orElseThrow(() -> new IllegalArgumentException("해당 과목이 존재하지 않습니다."));
+                    .orElseGet(() -> {
+                        Subject newSubject = new Subject(dto.getSubjuctId(), dto.getType(), dto.getName(), dto.getCredit(), timetable);
+                        return subjectRepository.save(newSubject);
+                    });
             subject.update(dto.getType(), dto.getName(), dto.getCredit());
             subjects.add(subject);
         }
