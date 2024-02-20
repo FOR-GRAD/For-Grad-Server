@@ -39,7 +39,9 @@ public enum ErrorStatus implements BaseCode {
     NOTICE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON001", "서버 자료 부족으로 해당 트랙은 게시판을 제공하지 않습니다."),
 
     //작성자가 아닌 사람이 글 수정, 삭제를 시도.
-    USER_WITHOUT_PERMISSION(HttpStatus.UNAUTHORIZED, "USER WITHOUT PERMISSION", "해당 활동을 관리할 권한이 없습니다");
+    USER_WITHOUT_PERMISSION(HttpStatus.UNAUTHORIZED, "USER WITHOUT PERMISSION", "해당 활동을 관리할 권한이 없습니다"),
+
+    CERTIFICATE_NOT_FOUND(HttpStatus.NOT_FOUND, "CERTIFICATE NOT FOUND", "존재하지 않는 자격증입니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

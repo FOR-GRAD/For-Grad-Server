@@ -19,4 +19,6 @@ public interface SubjectRepository extends JpaRepository<Subject, Long> {
     @Query("SELECT SUM(s.credit) FROM Subject s WHERE s IN :subjects")
     Optional<Integer> sumCredits(@Param("subjects") List<Subject> subjectList);
 
+    Optional<Subject> findByNameAndTimetable(String name, Timetable timetable);
+
 }

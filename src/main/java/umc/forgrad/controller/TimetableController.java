@@ -39,7 +39,7 @@ public class TimetableController {
         return ApiResponse.onSuccess(addResponseDtoList);
     }
 
-    @PutMapping(value = "/plans/timetable")
+    @PatchMapping(value = "/plans/timetable")
     public ApiResponse<UpdateTimetableResponseDto.updateResponseDtoList> updateTimetable(@RequestBody TimetableRequestDto.RealTimetableDto realTimetableDto, @SessionAttribute(name="student") Long stuId) {
         UpdateTimetableResponseDto.updateResponseDtoList updateResponseDtoList = timetableService.updateTimetable(realTimetableDto, stuId);
         return ApiResponse.onSuccess(updateResponseDtoList);
