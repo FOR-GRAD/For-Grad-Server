@@ -77,8 +77,7 @@ public class StudentCommandServiceImpl implements StudentCommandService {
             long studentId = (long) session.getAttribute("student");
             student = studentRepository.findById(studentId).orElseThrow(() -> new GeneralException(ErrorStatus.STUDENT_NOT_FOUND));
         } else {
-            student = getNewStudent(session, stuId);
-            studentRepository.save(student);
+            student = studentRepository.save(getNewStudent(session, stuId));
         }
 
         if (redirectUrl.equals("http://info.hansung.ac.kr/h_dae/dae_main.html") && success) {
