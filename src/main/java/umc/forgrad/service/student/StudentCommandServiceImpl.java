@@ -70,12 +70,15 @@ public class StudentCommandServiceImpl implements StudentCommandService {
         session.setAttribute("cookies", cookies);
 
         // 학생정보 생성
-        Student student = getNewStudent(session, stuId);
+        Student student;
 
         // 학생 정보가 존재하면 해당 학생 정보를 가져옴
         if (session.getAttribute("student") != null) {
             long studentId = (long) session.getAttribute("student");
             student = studentRepository.findById(studentId).orElseThrow(() -> new GeneralException(ErrorStatus.STUDENT_NOT_FOUND));
+        } else {
+            student = getNewStudent(session, stuId);
+            studentRepository.save(student);
         }
 
         if (redirectUrl.equals("http://info.hansung.ac.kr/h_dae/dae_main.html") && success) {
