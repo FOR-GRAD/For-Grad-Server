@@ -22,10 +22,7 @@ import umc.forgrad.repository.StudentRepository;
 import umc.forgrad.service.common.ConnectionResponse;
 
 import java.io.IOException;
-import java.util.AbstractMap;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -63,7 +60,6 @@ public class StudentCommandServiceImpl implements StudentCommandService {
         // 세션에 쿠키 설정
         setCookieToSession(session, jjsResponse, hsportalResponse);
 
-        // 학번, 1트랙, 2트랙으로 학생 정보 만들기
         Map<String, String> cookies = new HashMap<>();
         cookies.putAll(getCookies(jjsResponse));
         cookies.putAll(getCookies(hsportalResponse));
@@ -73,10 +69,11 @@ public class StudentCommandServiceImpl implements StudentCommandService {
         Student student;
 
         // 학생 정보가 존재하면 해당 학생 정보를 가져옴
-        if (session.getAttribute("student") != null) {
-            long studentId = (long) session.getAttribute("student");
-            student = studentRepository.findById(studentId).orElseThrow(() -> new GeneralException(ErrorStatus.STUDENT_NOT_FOUND));
+        Optional<Student> optionalStudent = studentRepository.findById(stuId);
+        if (optionalStudent.isPresent()) {
+            student = optionalStudent.get();
         } else {
+            // 학번, 1트랙, 2트랙으로 학생 정보 만들기
             student = studentRepository.save(getNewStudent(session, stuId));
         }
 
